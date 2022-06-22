@@ -6,6 +6,14 @@ const AddGroupModal = ({modalVisible, setModalVisible}) => {
     const [groupName, setGroupName] = useState('')
     const [groupDesc, setGroupDesc] = useState('')
 
+    const handleAdd = () => {
+        setModalVisible(!modalVisible)
+    }
+
+    const handleCancel = () => {
+        setModalVisible(!modalVisible)
+    }
+
     return (
         <View style={styles.centeredView}>
             <Modal
@@ -26,13 +34,13 @@ const AddGroupModal = ({modalVisible, setModalVisible}) => {
                         }}>
                             <Pressable
                                 style={styles.buttonCancel}
-                                onPress={() => setModalVisible(!modalVisible)}
+                                onPress={handleCancel}
                             >
                                 <Text style={styles.textButton}>Cancel</Text>
                             </Pressable>
                             <Pressable
                                 style={styles.buttonAdd}
-                                onPress={() => setModalVisible(!modalVisible)}
+                                onPress={handleAdd}
                             >
                                 <Text style={styles.textButton}>Add</Text>
                             </Pressable>

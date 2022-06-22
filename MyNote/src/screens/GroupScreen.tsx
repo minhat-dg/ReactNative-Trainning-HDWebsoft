@@ -62,13 +62,13 @@ const data = [
 
 ]
 
-const GroupScreen = () => {
+const GroupScreen = ({navigation}) => {
     const [noteGroups, setNoteGroups] = useState(data);
-    const navigation = useNavigation();
 
     const renderNoteGroup = ({item}) => {
         const handleGroupPress = () => {
-            navigation.navigate("Note");
+            console.log("navigate with item: " + item)
+            navigation.navigate("Note", {note: item});
         }
 
         return (
@@ -82,7 +82,7 @@ const GroupScreen = () => {
     }
 
     const navigateToNoteScreen = (check: boolean) => {
-        navigation.navigate("Note")
+        navigation.navigate("Note", {})
     }
     
     return (

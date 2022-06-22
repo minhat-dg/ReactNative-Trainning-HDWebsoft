@@ -66,10 +66,9 @@ const data = [
 
 ]
 
-const HomeScreen = () => {
+const HomeScreen = ({navigation}) => {
     const [noteGroups, setNoteGroups] = useState(data);
     const [modalVisible, setModalVisible] = useState(false);
-    const navigation = useNavigation();
 
 
     const renderNoteGroup = ({ item }) => {
