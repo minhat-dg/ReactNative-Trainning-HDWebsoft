@@ -3,29 +3,49 @@ import { SafeAreaView, StyleSheet, Text, View } from "react-native";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import CustomButton from "../components/CustomButton";
 import CustomInput from "../components/CustomInput";
+import auth from "@react-native-firebase/auth";
 
-const SignupScreen = ({navigation}) => {
+const SignupScreen = ({ navigation }) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
-    const onSignUpPressed = () => {
-        navigation.navigate('Home')
+
+    const handleSignUp = () => {
+        console.log("PRESSED SIGNUP")
+        console.log(email + " " + password)
+
+        auth()
+            .createUserWithEmailAndPassword(email, password)
+            .then(() => {
+                console.log('User account created & signed in!');
+                navigation.navigate('Home');
+            })
+            .catch(error => {
+                if (error.code === 'auth/email-already-in-use') {
+                    console.log('That email address is already in use!');
+                }
+
+                if (error.code === 'auth/invalid-email') {
+                    console.log('That email address is invalid!');
+                }
+
+                console.error(error);
+            });
     }
 
-    const handleLogIn = () => {
+    const handleNavLogIn = () => {
         navigation.navigate('Login')
     }
-    
+
     return (
         <SafeAreaView style={styles.root}>
             <Text style={styles.header}>SignUp</Text>
             <CustomInput placeHolder="Email" value={email} setValue={setEmail} secureText={false} />
             <CustomInput placeHolder="Password" value={password} setValue={setPassword} secureText={true} />
-            <CustomButton text="SignUp" onPress={onSignUpPressed} />
-            
+            <CustomButton text="SignUp" onPress={handleSignUp} />
             <Text style={styles.textContainer}>
                 <Text style={styles.caption}>Already have an account? </Text>
-                <Text style={styles.signup} onPress={handleLogIn}>LogIn</Text>
+                <Text style={styles.signup} onPress={handleNavLogIn}>LogIn</Text>
             </Text>
         </SafeAreaView>
     )
