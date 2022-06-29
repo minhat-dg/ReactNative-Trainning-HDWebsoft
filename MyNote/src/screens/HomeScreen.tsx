@@ -5,6 +5,8 @@ import CustomFloatButton from "../components/CustomFloatButton";
 import { SwipeListView } from "react-native-swipe-list-view";
 import FontAwesome from 'react-native-vector-icons/FontAwesome'
 import AddGroupModal from "../components/AddGroupModal";
+import { useAppDispatch } from "../app/hook";
+import { authActions } from "../features/auth/authSlice";
 
 
 const data = [
@@ -66,9 +68,26 @@ const data = [
 
 ]
 
-const HomeScreen = ({navigation}) => {
+const HomeScreen = ({ navigation }) => {
     const [noteGroups, setNoteGroups] = useState(data);
     const [modalVisible, setModalVisible] = useState(false);
+
+    const [count, setCount] = React.useState(0);
+
+    const dispatch = useAppDispatch();
+
+    const handleLogOut = () => {
+        console.log("LOGING OUT")
+        dispatch(authActions.logOut())
+    }
+
+    React.useLayoutEffect(() => {
+        navigation.setOptions({
+            headerRight: () => (
+                <FontAwesome name="sign-out" color={'#DFF6FF'} size={20} onPress={handleLogOut}/>
+            ),
+        });
+    }, [navigation]);
 
 
     const renderNoteGroup = ({ item }) => {
@@ -77,12 +96,12 @@ const HomeScreen = ({navigation}) => {
         }
 
         return (
-            <TouchableOpacity activeOpacity={100}  style={styles.itemContainer} onPress={handleGroupPress}>
+            <TouchableOpacity activeOpacity={100} style={styles.itemContainer} onPress={handleGroupPress}>
                 <Text style={styles.itemTextName}>{item.name}</Text>
                 <Text style={styles.itemTextDescription}>{item.description}</Text>
                 <Text style={styles.itemNoteCount}>Include {item.noteCount} {item.noteCount > 1 ? "notes" : "note"}</Text>
             </TouchableOpacity>
-        
+
         )
     }
 
@@ -115,11 +134,9 @@ const HomeScreen = ({navigation}) => {
 
     return (
         <SafeAreaView style={styles.root}>
-            <Text style={styles.header}>Note Groups</Text>
-            {/* <FlatList data={noteGroups} renderItem={renderNoteGroup} numColumns={1}/> */}
-            <SwipeListView data={noteGroups} renderItem={renderNoteGroup} renderHiddenItem={renderHiddenItem} rightOpenValue={-75}/>
-            <CustomFloatButton onPress={setModalVisible}/>
-            <AddGroupModal modalVisible={modalVisible} setModalVisible={setModalVisible}/>
+            <SwipeListView data={noteGroups} renderItem={renderNoteGroup} renderHiddenItem={renderHiddenItem} rightOpenValue={-75} />
+            <CustomFloatButton onPress={setModalVisible} />
+            <AddGroupModal modalVisible={modalVisible} setModalVisible={setModalVisible} />
         </SafeAreaView>
     )
 }

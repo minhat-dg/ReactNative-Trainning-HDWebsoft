@@ -1,97 +1,80 @@
+import auth from "@react-native-firebase/auth";
 import { useNavigation } from "@react-navigation/native";
 import React, { useState } from "react";
 import { SafeAreaView, StyleSheet, Text, View } from "react-native";
-import CustomButton from "../components/CustomButton";
-import CustomInput from "../components/CustomInput";
-import FontAwesome from 'react-native-vector-icons/FontAwesome'
-import auth from "@react-native-firebase/auth";
-import { GoogleSignin } from "@react-native-google-signin/google-signin";
-import { LoginManager, AccessToken } from 'react-native-fbsdk-next';
+import { AccessToken, LoginManager } from 'react-native-fbsdk-next';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import { useAppDispatch } from "../../../app/hook";
+import CustomButton from "../../../components/CustomButton";
+import CustomInput from "../../../components/CustomInput";
+import { authActions } from "../authSlice";
 
 const LoginScreen = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
     const navigation = useNavigation();
+    const dispatch = useAppDispatch();
 
-    GoogleSignin.configure({
-        webClientId: '504738882802-oo8l931hqhg0u6s4pu8gl957ok2rsvdi.apps.googleusercontent.com',
-    });
-
-    const handleLogin = () => {
-        auth().signInWithEmailAndPassword(email, password)
-            .then(() => {
-                console.log('User account created & signed in!');
-                navigation.navigate('Home')
-            })
-            .catch(error => {
-                if (error.code === 'auth/email-already-in-use') {
-                    console.log('That email address is already in use!');
-                }
-
-                if (error.code === 'auth/invalid-email') {
-                    console.log('That email address is invalid!');
-                }
-
-                console.error(error);
-            });
+    const handleLoginPress = () => {
+        dispatch(authActions.login({
+            type: 'email',
+            email: email,
+            password: password
+        }))
     }
 
     const handleNavSignup = () => {
         navigation.navigate('Signup')
     }
 
-
-    const onGoogleButtonPress = async() => {
-        // Get the users ID token
-        const { idToken } = await GoogleSignin.signIn();
-
-        // Create a Google credential with the token
-        const googleCredential = auth.GoogleAuthProvider.credential(idToken);
-
-        // Sign-in the user with the credential
-        return auth().signInWithCredential(googleCredential);
+    const handleGooglePress = () => {
+        dispatch(authActions.login({
+            type: 'google',
+            email: '',
+            password: ''
+        }))
     }
 
-    const handleGoogleLogin = () => {
-        onGoogleButtonPress().then(() => {
-            console.log('Signed in with Google!');
-            navigation.navigate('Home')
-        })
-    }
-
-    const onFacebookButtonPress = async() => {
+    const onFacebookButtonPress = async () => {
         // Attempt login with permissions
         const result = await LoginManager.logInWithPermissions(['public_profile', 'email']);
-      
+
         if (result.isCancelled) {
-          throw 'User cancelled the login process';
+            throw 'User cancelled the login process';
         }
-      
+
         // Once signed in, get the users AccesToken
         const data = await AccessToken.getCurrentAccessToken();
-      
+
         if (!data) {
-          throw 'Something went wrong obtaining access token';
+            throw 'Something went wrong obtaining access token';
         }
-      
+
         // Create a Firebase credential with the AccessToken
         const facebookCredential = auth.FacebookAuthProvider.credential(data.accessToken);
         console.log(facebookCredential)
-      
+
         // Sign-in the user with the credential
-        return auth().signInWithCredential(facebookCredential).then(()=>{
-            console.log("OK")
+        return auth().signInWithCredential(facebookCredential).then(() => {
+            navigation.navigate('Home')
         }).catch((error) => {
             console.log(error)
         });
-      }
+    }
 
     const handleFacebookLogin = () => {
         onFacebookButtonPress().catch((error) => {
             console.log(error);
-            
         })
+    }
+
+    const handleFacebookPress = () => {
+        dispatch(authActions.login({
+            type: 'facebook',
+            email: '',
+            password: ''
+        }))
     }
 
     return (
@@ -99,11 +82,11 @@ const LoginScreen = () => {
             <Text style={styles.header}>Login</Text>
             <CustomInput placeHolder="Email" value={email} setValue={setEmail} secureText={false} />
             <CustomInput placeHolder="Password" value={password} setValue={setPassword} secureText={true} />
-            <CustomButton text="LogIn" onPress={handleLogin} />
+            <CustomButton text="LogIn" onPress={handleLoginPress} />
             <Text style={styles.caption}>or</Text>
             <View style={styles.iconContainer}>
-                <FontAwesome name="google-plus-square" color={'#1363DF'} size={30} onPress={handleGoogleLogin} />
-                <FontAwesome name="facebook-official" color={'#1363DF'} size={30} onPress={handleFacebookLogin} />
+                <FontAwesome name="google-plus-square" color={'#1363DF'} size={30} onPress={handleGooglePress} />
+                <FontAwesome name="facebook-official" color={'#1363DF'} size={30} onPress={handleFacebookPress} />
             </View>
             <Text style={styles.textContainer}>
                 <Text style={styles.caption}>Don't have an account? </Text>

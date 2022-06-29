@@ -1,9 +1,8 @@
-import React, { useState } from "react";
-import { SafeAreaView, StyleSheet, Text, View } from "react-native";
-import FontAwesome from "react-native-vector-icons/FontAwesome";
-import CustomButton from "../components/CustomButton";
-import CustomInput from "../components/CustomInput";
 import auth from "@react-native-firebase/auth";
+import React, { useState } from "react";
+import { SafeAreaView, StyleSheet, Text } from "react-native";
+import CustomButton from "../../../components/CustomButton";
+import CustomInput from "../../../components/CustomInput";
 
 const SignupScreen = ({ navigation }) => {
     const [email, setEmail] = useState('');

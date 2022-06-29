@@ -17,7 +17,7 @@ const CustomInput = ({value, setValue, placeHolder, secureText}: {value: string,
 const style = StyleSheet.create({
     container: {
         width: '100%',
-        marginVertical: 5,
+        marginBottom: 10,
         borderColor: '#1363DF',
         borderWidth: 1,
         borderRadius: 5,
