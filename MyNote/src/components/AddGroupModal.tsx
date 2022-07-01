@@ -1,13 +1,26 @@
 import React, { useState } from "react";
-import { Alert, Modal, Pressable, StyleSheet, Text, View } from "react-native";
-import CustomInput from "./CustomInput";
+import { Modal, Pressable, StyleSheet, Text, View } from "react-native";
+import CustomInput from "./CustomInput/CustomInput";
+import { useAppDispatch, useAppSelector } from "../app/hook";
+import { groupAction } from "../features/group/groupSlice";
 
-const AddGroupModal = ({modalVisible, setModalVisible}) => {
+const AddGroupModal = ({ modalVisible, setModalVisible }) => {
     const [groupName, setGroupName] = useState('')
     const [groupDesc, setGroupDesc] = useState('')
 
+    const dispatch = useAppDispatch()
+    const uid = useAppSelector(state => state.auth.currentUser?.uid)
+
     const handleAdd = () => {
         setModalVisible(!modalVisible)
+        dispatch(groupAction.addGroup({
+            name: groupName,
+            description: groupDesc,
+            count: 0,
+            uid: uid
+        }))
+        setGroupName('')
+        setGroupDesc('')
     }
 
     const handleCancel = () => {
@@ -87,7 +100,7 @@ const styles = StyleSheet.create({
         marginBottom: 10,
         textAlign: "center",
         color: 'white',
-        fontSize:20
+        fontSize: 20
     },
     buttonAdd: {
         borderRadius: 10,
@@ -97,7 +110,7 @@ const styles = StyleSheet.create({
         width: '30%',
         marginHorizontal: 5,
     },
-    buttonCancel:{
+    buttonCancel: {
         borderRadius: 10,
         borderColor: '#47B5FF',
         borderWidth: 1,

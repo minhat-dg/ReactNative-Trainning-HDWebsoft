@@ -1,12 +1,11 @@
-import auth from "@react-native-firebase/auth";
 import { useNavigation } from "@react-navigation/native";
 import React, { useState } from "react";
 import { SafeAreaView, StyleSheet, Text, View } from "react-native";
-import { AccessToken, LoginManager } from 'react-native-fbsdk-next';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
-import { useAppDispatch } from "../../../app/hook";
-import CustomButton from "../../../components/CustomButton";
-import CustomInput from "../../../components/CustomInput";
+import { useAppDispatch, useAppSelector } from "../../../app/hook";
+import CustomButton from "../../../components/CustomButton/CustomButton";
+import CustomInput from "../../../components/CustomInput/CustomInput";
+import ProgressBar from "../../../components/ProgressBar/ProgressBar";
 import { authActions } from "../authSlice";
 
 const LoginScreen = () => {
@@ -15,6 +14,7 @@ const LoginScreen = () => {
 
     const navigation = useNavigation();
     const dispatch = useAppDispatch();
+    const isLogging = useAppSelector(state => state.auth.logging)
 
     const handleLoginPress = () => {
         dispatch(authActions.login({
@@ -22,10 +22,6 @@ const LoginScreen = () => {
             email: email,
             password: password
         }))
-    }
-
-    const handleNavSignup = () => {
-        navigation.navigate('Signup')
     }
 
     const handleGooglePress = () => {
@@ -36,45 +32,16 @@ const LoginScreen = () => {
         }))
     }
 
-    const onFacebookButtonPress = async () => {
-        // Attempt login with permissions
-        const result = await LoginManager.logInWithPermissions(['public_profile', 'email']);
-
-        if (result.isCancelled) {
-            throw 'User cancelled the login process';
-        }
-
-        // Once signed in, get the users AccesToken
-        const data = await AccessToken.getCurrentAccessToken();
-
-        if (!data) {
-            throw 'Something went wrong obtaining access token';
-        }
-
-        // Create a Firebase credential with the AccessToken
-        const facebookCredential = auth.FacebookAuthProvider.credential(data.accessToken);
-        console.log(facebookCredential)
-
-        // Sign-in the user with the credential
-        return auth().signInWithCredential(facebookCredential).then(() => {
-            navigation.navigate('Home')
-        }).catch((error) => {
-            console.log(error)
-        });
-    }
-
-    const handleFacebookLogin = () => {
-        onFacebookButtonPress().catch((error) => {
-            console.log(error);
-        })
-    }
-
     const handleFacebookPress = () => {
         dispatch(authActions.login({
             type: 'facebook',
             email: '',
             password: ''
         }))
+    }
+
+    const handleNavSignup = () => {
+        navigation.navigate('Signup')
     }
 
     return (
@@ -92,6 +59,7 @@ const LoginScreen = () => {
                 <Text style={styles.caption}>Don't have an account? </Text>
                 <Text style={styles.signup} onPress={handleNavSignup}>SignUp</Text>
             </Text>
+            {isLogging ? <ProgressBar /> : <View></View>}
         </SafeAreaView>
 
     )

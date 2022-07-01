@@ -1,7 +1,6 @@
-import { useNavigation } from "@react-navigation/native";
 import React, { useState } from "react";
 import { FlatList, SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import CustomFloatButton from "../components/CustomFloatButton";
+import CustomFloatButton from "../components/CustomButton/CustomFloatButton";
 
 const data = [
     {

@@ -1,76 +1,38 @@
-import { useNavigation } from "@react-navigation/native";
-import React, { useState } from "react";
-import { Alert, FlatList, SafeAreaView, StyleSheet, Text, Touchable, TouchableHighlight, TouchableOpacity, View } from "react-native";
-import CustomFloatButton from "../components/CustomFloatButton";
+import React, { useEffect, useState } from "react";
+import { Alert, SafeAreaView, StyleSheet, Text, TouchableOpacity } from "react-native";
 import { SwipeListView } from "react-native-swipe-list-view";
-import FontAwesome from 'react-native-vector-icons/FontAwesome'
-import AddGroupModal from "../components/AddGroupModal";
-import { useAppDispatch } from "../app/hook";
-import { authActions } from "../features/auth/authSlice";
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import { useAppDispatch } from "../../../app/hook";
+import AddGroupModal from "../../../components/AddGroupModal";
+import CustomFloatButton from "../../../components/CustomButton/CustomFloatButton";
+import { authActions } from "../../auth/authSlice";
+
+import firestore from '@react-native-firebase/firestore';
 
 
-const data = [
-    {
-        name: "NOTE 1",
-        description: "Note about the study",
-        noteCount: 1,
-    },
-    {
-        name: "NOTE 1",
-        description: "Note about the study",
-        noteCount: 2,
-    },
-    {
-        name: "NOTE 1",
-        description: "Note about the study",
-        noteCount: 0,
-    },
-    {
-        name: "NOTE 1",
-        description: "Note about the study",
-        noteCount: 2,
-    },
-    {
-        name: "NOTE 1",
-        description: "Note about the study",
-        noteCount: 2,
-    },
-    {
-        name: "NOTE 1",
-        description: "Note about the study",
-        noteCount: 2,
-    },
-    {
-        name: "NOTE 1",
-        description: "Note about the study",
-        noteCount: 2,
-    },
-    {
-        name: "NOTE 1",
-        description: "Note about the study",
-        noteCount: 2,
-    },
-    {
-        name: "NOTE 1",
-        description: "Note about the study",
-        noteCount: 2,
-    },
-    {
-        name: "NOTE 1",
-        description: "Note about the study",
-        noteCount: 2,
-    },
-    {
-        name: "NOTE 1",
-        description: "Note about the study",
-        noteCount: 2,
-    },
-
-]
 
 const HomeScreen = ({ navigation }) => {
-    const [noteGroups, setNoteGroups] = useState(data);
+    const [noteGroups, setNoteGroups] = useState([]);
     const [modalVisible, setModalVisible] = useState(false);
+
+    useEffect(() => {
+        const subscriber = firestore()
+            .collection('Groups')
+            .onSnapshot(querySnapshot => {
+                const groups = [];
+
+                querySnapshot.forEach(documentSnapshot => {
+                    groups.push({
+                        ...documentSnapshot.data(),
+                        id: documentSnapshot.id
+                    });
+                });
+                setNoteGroups(groups)
+            });
+
+        // Unsubscribe from events when no longer in use
+        return () => subscriber();
+    }, []);
 
     const [count, setCount] = React.useState(0);
 
@@ -84,7 +46,7 @@ const HomeScreen = ({ navigation }) => {
     React.useLayoutEffect(() => {
         navigation.setOptions({
             headerRight: () => (
-                <FontAwesome name="sign-out" color={'#DFF6FF'} size={20} onPress={handleLogOut}/>
+                <FontAwesome name="sign-out" color={'#DFF6FF'} size={20} onPress={handleLogOut} />
             ),
         });
     }, [navigation]);
@@ -99,13 +61,13 @@ const HomeScreen = ({ navigation }) => {
             <TouchableOpacity activeOpacity={100} style={styles.itemContainer} onPress={handleGroupPress}>
                 <Text style={styles.itemTextName}>{item.name}</Text>
                 <Text style={styles.itemTextDescription}>{item.description}</Text>
-                <Text style={styles.itemNoteCount}>Include {item.noteCount} {item.noteCount > 1 ? "notes" : "note"}</Text>
+                <Text style={styles.itemNoteCount}>Include {item.count} {item.count > 1 ? "notes" : "note"}</Text>
             </TouchableOpacity>
 
         )
     }
 
-    const createConfirmDialog = () => {
+    const createConfirmDialog = (id: string) => {
         Alert.alert(
             "Delete group?",
             "Are you sure to delete this group?",
@@ -115,13 +77,21 @@ const HomeScreen = ({ navigation }) => {
                     onPress: () => console.log("Cancel Pressed"),
                     style: "cancel"
                 },
-                { text: "OK", onPress: () => console.log("OK Pressed") }
+                {
+                    text: "OK", onPress: () => {
+                        firestore()
+                            .collection('Groups').doc(id).delete().then(() => {
+                                console.log('User deleted!');
+                            });
+                    }
+                }
             ])
     }
 
     const renderHiddenItem = ({ item }) => {
         const handleDeleteItem = () => {
-            createConfirmDialog();
+            console.log(item.name)
+            createConfirmDialog(item.id);
         }
 
         return (

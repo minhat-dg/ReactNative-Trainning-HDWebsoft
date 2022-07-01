@@ -1,35 +1,24 @@
-import auth from "@react-native-firebase/auth";
 import React, { useState } from "react";
-import { SafeAreaView, StyleSheet, Text } from "react-native";
-import CustomButton from "../../../components/CustomButton";
-import CustomInput from "../../../components/CustomInput";
+import { SafeAreaView, StyleSheet, Text, View } from "react-native";
+import { useAppDispatch, useAppSelector } from "../../../app/hook";
+import CustomButton from "../../../components/CustomButton/CustomButton";
+import CustomInput from "../../../components/CustomInput/CustomInput";
+import ProgressBar from "../../../components/ProgressBar/ProgressBar";
+import { authActions } from "../authSlice";
 
 const SignupScreen = ({ navigation }) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
+    const dispatch = useAppDispatch();
+    const isLogging = useAppSelector(state => state.auth.logging)
 
-    const handleSignUp = () => {
-        console.log("PRESSED SIGNUP")
-        console.log(email + " " + password)
-
-        auth()
-            .createUserWithEmailAndPassword(email, password)
-            .then(() => {
-                console.log('User account created & signed in!');
-                navigation.navigate('Home');
-            })
-            .catch(error => {
-                if (error.code === 'auth/email-already-in-use') {
-                    console.log('That email address is already in use!');
-                }
-
-                if (error.code === 'auth/invalid-email') {
-                    console.log('That email address is invalid!');
-                }
-
-                console.error(error);
-            });
+    const handleSignUpPress = () => {
+        dispatch(authActions.login({
+            type: 'signup',
+            email: email,
+            password: password
+        }))
     }
 
     const handleNavLogIn = () => {
@@ -41,11 +30,12 @@ const SignupScreen = ({ navigation }) => {
             <Text style={styles.header}>SignUp</Text>
             <CustomInput placeHolder="Email" value={email} setValue={setEmail} secureText={false} />
             <CustomInput placeHolder="Password" value={password} setValue={setPassword} secureText={true} />
-            <CustomButton text="SignUp" onPress={handleSignUp} />
+            <CustomButton text="SignUp" onPress={handleSignUpPress} />
             <Text style={styles.textContainer}>
                 <Text style={styles.caption}>Already have an account? </Text>
                 <Text style={styles.signup} onPress={handleNavLogIn}>LogIn</Text>
             </Text>
+            {isLogging ? <ProgressBar /> : <View></View>}
         </SafeAreaView>
     )
 }
@@ -55,19 +45,19 @@ const styles = StyleSheet.create({
         fontSize: 30,
         marginTop: 100,
         color: '#DFF6FF',
-        marginBottom: 30
+        marginBottom: 30,
     },
     root: {
         alignItems: 'center',
         padding: 20,
         backgroundColor: '#06283D',
         height: '100%',
+        justifyContent: 'center'
     },
     caption: {
         color: '#DFF6FF',
         fontWeight: 'normal',
         fontSize: 16,
-        marginBottom: 20
     },
     textContainer: {
         textAlignVertical: 'bottom',
@@ -77,7 +67,7 @@ const styles = StyleSheet.create({
         color: '#1363DF',
         fontWeight: 'bold',
         fontSize: 16
-    },
+    }
 })
 
 export default SignupScreen;

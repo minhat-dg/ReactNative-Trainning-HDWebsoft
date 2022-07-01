@@ -1,36 +1,31 @@
-import auth from '@react-native-firebase/auth';
 import { NavigationContainer } from '@react-navigation/native';
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import {
   StatusBar
 } from 'react-native';
 import { Provider } from 'react-redux';
+import { useAppSelector } from './app/hook';
 import { store } from './app/store';
 import AuthStack from './navigation/AuthStack';
 import MainStack from './navigation/MainStack';
 
 const App = () => {
+  const isLoggedIn = useAppSelector(state => state.auth.isLoggedIn)
 
-  const [initializing, setInitializing] = useState(true);
-  const [user, setUser] = useState();
-
-  const onAuthStateChanged = (user) => {
-    setUser(user);
-    if (initializing) setInitializing(false);
-  }
-
-  useEffect(() => {
-    const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
-    return subscriber; // unsubscribe on unmount
-  }, []);
   return (
-    <Provider store={store}>
-      <NavigationContainer>
-        <StatusBar barStyle="dark-content" />
-        {!user ? <AuthStack /> : <MainStack />}
-      </NavigationContainer>
-    </Provider>
+    <NavigationContainer>
+      <StatusBar barStyle="dark-content" />
+      {!isLoggedIn ? <AuthStack /> : <MainStack />}
+    </NavigationContainer>
   );
 };
 
-export default App;
+const AppWrapper = () => {
+  return (
+    <Provider store={store}>
+      <App />
+    </Provider>
+  )
+}
+
+export default AppWrapper;

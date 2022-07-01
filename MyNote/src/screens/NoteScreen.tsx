@@ -1,10 +1,9 @@
-import { useNavigation } from "@react-navigation/native";
 import React, { useState } from "react";
-import { Alert, SafeAreaView, StyleSheet, Text, View } from "react-native";
-import CustomButton from "../components/CustomButton";
-import CustomButtonBorder from "../components/CustomButtonBorder";
-import CustomInput from "../components/CustomInput";
-import CustomInputLarge from "../components/CustomInputLarge";
+import { Alert, SafeAreaView, StyleSheet, Text } from "react-native";
+import CustomButton from "../components/CustomButton/CustomButton";
+import CustomButtonBorder from "../components/CustomButton/CustomButtonBorder";
+import CustomInput from "../components/CustomInput/CustomInput";
+import CustomInputLarge from "../components/CustomInput/CustomInputLarge";
 
 const NoteScreen = ({ navigation, route }) => {
     const note = route.params.note
