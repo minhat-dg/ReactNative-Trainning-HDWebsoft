@@ -2,7 +2,7 @@ import auth from "@react-native-firebase/auth";
 import { GoogleSignin } from "@react-native-google-signin/google-signin";
 import { PayloadAction } from "@reduxjs/toolkit";
 import { AccessToken, LoginManager } from "react-native-fbsdk-next";
-import { call, fork, put, take } from "redux-saga/effects";
+import { call, fork, put, take, takeEvery } from "redux-saga/effects";
 import { authActions, LogginPayload } from "./authSlice";
 
 function* handleLogin(payload: LogginPayload) {

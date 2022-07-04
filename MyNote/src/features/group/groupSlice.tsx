@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
 
 export interface GroupState{
-    loading: boolean
+    loading: boolean,
 }
 
 
@@ -13,7 +13,7 @@ export interface GroupPayload {
 }
 
 const initialState: GroupState ={
-    loading: false
+    loading: false,
 }
 
 const groupSlice = createSlice({
@@ -32,10 +32,11 @@ const groupSlice = createSlice({
         getAllGroup(state){
             state.loading = true;
         },
-        getSuccess(state){
+        getSuccess(state, action){
             state.loading = false;
+            state.groups = action.payload;
         },
-        getFailed(state){
+        getFailed(state, error){
             state.loading = false;
         }
     }

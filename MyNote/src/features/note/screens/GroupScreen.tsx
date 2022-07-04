@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { FlatList, SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import CustomFloatButton from "../components/CustomButton/CustomFloatButton";
+import CustomFloatButton from "../../../components/CustomButton/CustomFloatButton";
 
 const data = [
     {
@@ -61,13 +61,18 @@ const data = [
 
 ]
 
-const GroupScreen = ({navigation}) => {
-    const [noteGroups, setNoteGroups] = useState(data);
+const GroupScreen = ({ route, navigation }) => {
+    const [notes, setNotes] = useState(data);
 
-    const renderNoteGroup = ({item}) => {
+    const { groupName, groupId } = route.params;
+    console.log(groupName, " ", groupId)
+
+    const renderNotes = ({ item }) => {
         const handleGroupPress = () => {
-            console.log("navigate with item: " + item)
-            navigation.navigate("Note", {note: item});
+            navigation.navigate("Note", { 
+                groupId: groupId, 
+                note: item 
+            });
         }
 
         return (
@@ -81,14 +86,16 @@ const GroupScreen = ({navigation}) => {
     }
 
     const navigateToNoteScreen = (check: boolean) => {
-        navigation.navigate("Note", {})
+        navigation.navigate("Note", {
+            groupId: groupId, 
+        })
     }
-    
+
     return (
         <SafeAreaView style={styles.root}>
-            <Text style={styles.header}>Group Name</Text>
-            <FlatList data={noteGroups} renderItem={renderNoteGroup} numColumns={2}/>
-            <CustomFloatButton onPress={navigateToNoteScreen}/>
+            <Text style={styles.header}>{groupName}</Text>
+            <FlatList data={notes} renderItem={renderNotes} numColumns={2} />
+            <CustomFloatButton onPress={navigateToNoteScreen} />
         </SafeAreaView>
     )
 }
@@ -105,12 +112,12 @@ const styles = StyleSheet.create({
         color: '#DFF6FF',
         marginBottom: 20
     },
-    itemContainer:{
+    itemContainer: {
         flex: 0.5,
         alignItems: 'center',
         padding: 10
     },
-    itemCard:{
+    itemCard: {
         backgroundColor: '#47B5FF',
         borderRadius: 10,
         height: 150,

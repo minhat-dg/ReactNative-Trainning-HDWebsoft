@@ -2,39 +2,22 @@ import React, { useEffect, useState } from "react";
 import { Alert, SafeAreaView, StyleSheet, Text, TouchableOpacity } from "react-native";
 import { SwipeListView } from "react-native-swipe-list-view";
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
-import { useAppDispatch } from "../../../app/hook";
+import { useAppDispatch, useAppSelector } from "../../../app/hook";
 import AddGroupModal from "../../../components/AddGroupModal";
 import CustomFloatButton from "../../../components/CustomButton/CustomFloatButton";
 import { authActions } from "../../auth/authSlice";
 
-import firestore from '@react-native-firebase/firestore';
-
-
+import { deleteGroup, getAllGroups } from "../groupApi";
 
 const HomeScreen = ({ navigation }) => {
     const [noteGroups, setNoteGroups] = useState([]);
     const [modalVisible, setModalVisible] = useState(false);
 
+    const uid = useAppSelector(state => state.auth.currentUser?.uid)
+
     useEffect(() => {
-        const subscriber = firestore()
-            .collection('Groups')
-            .onSnapshot(querySnapshot => {
-                const groups = [];
-
-                querySnapshot.forEach(documentSnapshot => {
-                    groups.push({
-                        ...documentSnapshot.data(),
-                        id: documentSnapshot.id
-                    });
-                });
-                setNoteGroups(groups)
-            });
-
-        // Unsubscribe from events when no longer in use
-        return () => subscriber();
+        getAllGroups(setNoteGroups, uid)
     }, []);
-
-    const [count, setCount] = React.useState(0);
 
     const dispatch = useAppDispatch();
 
@@ -54,7 +37,10 @@ const HomeScreen = ({ navigation }) => {
 
     const renderNoteGroup = ({ item }) => {
         const handleGroupPress = () => {
-            navigation.navigate("Group");
+            navigation.navigate("Group", {
+                groupName: item.name,
+                groupId: item.id
+            });
         }
 
         return (
@@ -79,10 +65,7 @@ const HomeScreen = ({ navigation }) => {
                 },
                 {
                     text: "OK", onPress: () => {
-                        firestore()
-                            .collection('Groups').doc(id).delete().then(() => {
-                                console.log('User deleted!');
-                            });
+                        deleteGroup(id)
                     }
                 }
             ])

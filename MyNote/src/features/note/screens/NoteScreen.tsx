@@ -1,17 +1,26 @@
 import React, { useState } from "react";
 import { Alert, SafeAreaView, StyleSheet, Text } from "react-native";
-import CustomButton from "../components/CustomButton/CustomButton";
-import CustomButtonBorder from "../components/CustomButton/CustomButtonBorder";
-import CustomInput from "../components/CustomInput/CustomInput";
-import CustomInputLarge from "../components/CustomInput/CustomInputLarge";
+import { useAppDispatch } from "../../../app/hook";
+import CustomButton from "../../../components/CustomButton/CustomButton";
+import CustomButtonBorder from "../../../components/CustomButton/CustomButtonBorder";
+import CustomInput from "../../../components/CustomInput/CustomInput";
+import CustomInputLarge from "../../../components/CustomInput/CustomInputLarge";
+import { noteAction } from "../noteSlice";
 
-const NoteScreen = ({ navigation, route }) => {
-    const note = route.params.note
+const NoteScreen = ({route, navigation }) => {
+    const {groupId, note} = route.params;
     const [title, setTitle] = useState(note !== undefined ? note.name : '')
     const [content, setContent] = useState(note !== undefined ? note.description : '')
 
+    const dispatch = useAppDispatch();
+
     const handleSaveNote = () => {
-        navigation.navigate("Group")
+        dispatch(noteAction.addNote({
+            title: title,
+            content: content,
+            groupId: groupId
+        }))
+        navigation.goBack();
     }
 
     const handelCancel = () => {
