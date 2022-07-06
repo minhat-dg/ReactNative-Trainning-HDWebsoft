@@ -8,7 +8,7 @@ import CustomInputLarge from "../../../components/CustomInput/CustomInputLarge";
 import { noteAction } from "../noteSlice";
 
 const NoteScreen = ({ route, navigation }) => {
-    const { groupId, count, note } = route.params;
+    const { groupId, note } = route.params;
 
     const [title, setTitle] = useState(note !== undefined ? note.title : '')
     const [content, setContent] = useState(note !== undefined ? note.content : '')
@@ -21,7 +21,6 @@ const NoteScreen = ({ route, navigation }) => {
                 title: title,
                 content: content,
                 groupId: groupId,
-                count: count
             }))
         } else {
             dispatch(noteAction.updateNote({

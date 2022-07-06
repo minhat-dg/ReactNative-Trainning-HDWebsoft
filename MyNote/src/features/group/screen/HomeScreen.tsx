@@ -3,7 +3,7 @@ import { Alert, SafeAreaView, StyleSheet, Text, TouchableOpacity } from "react-n
 import { SwipeListView } from "react-native-swipe-list-view";
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { useAppDispatch, useAppSelector } from "../../../app/hook";
-import AddGroupModal from "../../../components/AddGroupModal";
+import AddGroupModal from "../components/AddGroupModal";
 import CustomFloatButton from "../../../components/CustomButton/CustomFloatButton";
 import { authActions } from "../../auth/authSlice";
 

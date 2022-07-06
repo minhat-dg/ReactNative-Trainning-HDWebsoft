@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { Modal, Pressable, StyleSheet, Text, View } from "react-native";
-import CustomInput from "./CustomInput/CustomInput";
-import { useAppDispatch, useAppSelector } from "../app/hook";
-import { groupAction } from "../features/group/groupSlice";
+import CustomInput from "../../../components/CustomInput/CustomInput";
+import { useAppDispatch, useAppSelector } from "../../../app/hook";
+import { groupAction } from "../groupSlice";
 
 const AddGroupModal = ({ modalVisible, setModalVisible }) => {
     const [groupName, setGroupName] = useState('')

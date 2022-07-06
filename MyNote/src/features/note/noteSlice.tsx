@@ -9,7 +9,6 @@ export interface AddNotePayload {
     title: string,
     content: string,
     groupId: string,
-    count: number
 }
 
 export interface UpdateNotePayload {

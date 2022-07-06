@@ -3,6 +3,7 @@ import { call, fork, take } from "redux-saga/effects";
 import { noteAction, AddNotePayload, UpdateNotePayload } from "./noteSlice";
 import firestore from '@react-native-firebase/firestore';
 
+const increasement = firestore.FieldValue.increment(1);
 
 function* watchAddNote(){
     while(true){
@@ -18,7 +19,7 @@ function* handleAddNote(payload: AddNotePayload){
         groupId: payload.groupId
     }).then(() => {
         firestore().collection('Groups').doc(payload.groupId).update({
-            count: payload.count+1
+            count: increasement
         })
         console.log("Added Note")
     })

@@ -1,67 +1,81 @@
 import React, { useEffect, useState } from "react";
-import { Alert, FlatList, SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { Alert, FlatList, SafeAreaView, StyleSheet, Text } from "react-native";
 import CustomFloatButton from "../../../components/CustomButton/CustomFloatButton";
-import { deleteNote, getAllNotes } from "../notesApi";
+import GroupMenu from "../components/GroupsMenu";
+import NoteItem from "../components/NoteItem";
+import NoteOption from "../components/NoteOption";
+import { deleteNote, getAllNotes, getGroupList, moveNote } from "../notesApi";
 
 const GroupScreen = ({ route, navigation }) => {
-    const { groupName, groupId, count } = route.params;
+    const { groupName, groupId } = route.params;
     const [notes, setNotes] = useState([]);
+    const [groups, setGroups] = useState([])
+    const [optionVisible, setOptionVisible] = useState(false);
+    const [groupMenuVisible, setGroupMenuVisible] = useState(false);
+    const [currentNote, setCurrentNote] = useState()
 
     useEffect(() => {
         getAllNotes(setNotes, groupId);
+        getGroupList(setGroups)
     }, []);
 
-    const renderNotes = ({ item }) => {
-        const handleGroupPress = () => {
-            navigation.navigate("Note", { 
-                groupId: groupId, 
-                count : count,
-                note: item ,
-            });
-        }
+    const handleOnPress = (item) => {
+        navigation.navigate("Note", {
+            groupId: groupId,
+            note: item,
+        });
+    }
 
-        const handleDeleteNote = () => {
-            Alert.alert(
-                "Delete Note?",
-                "Are you sure to delete this note?",
-                [
-                    {
-                        text: "Cancel",
-                        onPress: () => console.log("Cancel Pressed"),
-                        style: "cancel"
-                    },
-                    {
-                        text: "OK", onPress: () => {
-                            console.log(item.id)
-                            deleteNote(item.id, groupId, count)
-                        }
+    const handleOnLongPress = (item) => {
+        setOptionVisible(true)
+        setCurrentNote(item)
+    }
+
+    const handleDeleteNote = (item) => {
+        Alert.alert(
+            "Delete Note?",
+            "Are you sure to delete " + item.title + "?",
+            [
+                {
+                    text: "Cancel",
+                    onPress: () => console.log("Cancel Pressed"),
+                    style: "cancel"
+                },
+                {
+                    text: "OK", onPress: () => {
+                        console.log(item.id)
+                        deleteNote(item.id, groupId)
                     }
-                ])
-        }
-
-        return (
-            <TouchableOpacity style={styles.itemContainer} onPress={handleGroupPress} onLongPress={handleDeleteNote}>
-                <View style={styles.itemCard}>
-                    <Text style={styles.itemTextDescription}>{item.content}</Text>
-                </View>
-                <Text style={styles.itemTextName}>{item.title}</Text>
-            </TouchableOpacity>
-        )
+                }
+            ])
+        setOptionVisible(false)
     }
 
     const navigateToNoteScreen = () => {
         navigation.navigate("Note", {
-            groupId: groupId, 
-            count: count,
+            groupId: groupId,
             note: undefined
         })
+    }
+
+    const moveNoteChose = () => {
+        setOptionVisible(false)
+        setGroupMenuVisible(true)
+    }
+
+    const handleMoveNote = (newGroupId) => {
+        console.log(currentNote)
+        moveNote(currentNote.id, currentNote.groupId, newGroupId)
+        setGroupMenuVisible(false)
     }
 
     return (
         <SafeAreaView style={styles.root}>
             <Text style={styles.header}>{groupName}</Text>
-            <FlatList data={notes} renderItem={renderNotes} numColumns={2} />
+            <FlatList data={notes} renderItem={(item) => NoteItem(item, handleOnPress, handleOnLongPress)} numColumns={2} />
             <CustomFloatButton onPress={navigateToNoteScreen} />
+            <NoteOption modalVisible={optionVisible} setModalVisible={setOptionVisible} handleDeleteNote={handleDeleteNote} handleMoveNote={moveNoteChose} item={currentNote} />
+            <GroupMenu modalVisible={groupMenuVisible} setModalVisible={setGroupMenuVisible} groups={groups} moveNote={handleMoveNote} />
         </SafeAreaView>
     )
 }

@@ -29,16 +29,6 @@ const groupSlice = createSlice({
         addFailed(state){
             state.loading = false;
         },
-        getAllGroup(state){
-            state.loading = true;
-        },
-        getSuccess(state, action){
-            state.loading = false;
-            state.groups = action.payload;
-        },
-        getFailed(state, error){
-            state.loading = false;
-        }
     }
 })
 
