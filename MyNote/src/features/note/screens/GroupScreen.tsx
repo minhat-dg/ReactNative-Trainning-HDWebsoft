@@ -1,93 +1,59 @@
-import React, { useState } from "react";
-import { FlatList, SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import React, { useEffect, useState } from "react";
+import { Alert, FlatList, SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import CustomFloatButton from "../../../components/CustomButton/CustomFloatButton";
-
-const data = [
-    {
-        name: "NOTE 1",
-        description: "Note about the study",
-        noteCount: 1,
-    },
-    {
-        name: "NOTE 1",
-        description: "Note about the study aaa aaaaaa aaaaaaaaa aaaaaaa aaaaaaaaaa aaaaaaaaaa aaaaaaaa aaaaaaaaaa aaaaaaaaaa aaaaaaaa aaaaa aaaa aaaaaaaaaa aaaaaaaaaa aaaaaaaaa aaaaaaa aaaaaaaaa bbbbbbbbb",
-        noteCount: 2,
-    },
-    {
-        name: "NOTE 1",
-        description: "Note about the study",
-        noteCount: 2,
-    },
-    {
-        name: "NOTE 1",
-        description: "Note about the study",
-        noteCount: 2,
-    },
-    {
-        name: "NOTE 1",
-        description: "Note about the study",
-        noteCount: 2,
-    },
-    {
-        name: "NOTE 1",
-        description: "Note about the study",
-        noteCount: 2,
-    },
-    {
-        name: "NOTE 1",
-        description: "Note about the study",
-        noteCount: 2,
-    },
-    {
-        name: "NOTE 1",
-        description: "Note about the study",
-        noteCount: 2,
-    },
-    {
-        name: "NOTE 1",
-        description: "Note about the study",
-        noteCount: 2,
-    },
-    {
-        name: "NOTE 1",
-        description: "Note about the study",
-        noteCount: 2,
-    },
-    {
-        name: "NOTE 1",
-        description: "Note about the study",
-        noteCount: 2,
-    },
-
-]
+import { deleteNote, getAllNotes } from "../notesApi";
 
 const GroupScreen = ({ route, navigation }) => {
-    const [notes, setNotes] = useState(data);
+    const { groupName, groupId, count } = route.params;
+    const [notes, setNotes] = useState([]);
 
-    const { groupName, groupId } = route.params;
-    console.log(groupName, " ", groupId)
+    useEffect(() => {
+        getAllNotes(setNotes, groupId);
+    }, []);
 
     const renderNotes = ({ item }) => {
         const handleGroupPress = () => {
             navigation.navigate("Note", { 
                 groupId: groupId, 
-                note: item 
+                count : count,
+                note: item ,
             });
         }
 
+        const handleDeleteNote = () => {
+            Alert.alert(
+                "Delete Note?",
+                "Are you sure to delete this note?",
+                [
+                    {
+                        text: "Cancel",
+                        onPress: () => console.log("Cancel Pressed"),
+                        style: "cancel"
+                    },
+                    {
+                        text: "OK", onPress: () => {
+                            console.log(item.id)
+                            deleteNote(item.id, groupId, count)
+                        }
+                    }
+                ])
+        }
+
         return (
-            <TouchableOpacity style={styles.itemContainer} onPress={handleGroupPress}>
+            <TouchableOpacity style={styles.itemContainer} onPress={handleGroupPress} onLongPress={handleDeleteNote}>
                 <View style={styles.itemCard}>
-                    <Text style={styles.itemTextDescription}>{item.description}</Text>
+                    <Text style={styles.itemTextDescription}>{item.content}</Text>
                 </View>
-                <Text style={styles.itemTextName}>{item.name}</Text>
+                <Text style={styles.itemTextName}>{item.title}</Text>
             </TouchableOpacity>
         )
     }
 
-    const navigateToNoteScreen = (check: boolean) => {
+    const navigateToNoteScreen = () => {
         navigation.navigate("Note", {
             groupId: groupId, 
+            count: count,
+            note: undefined
         })
     }
 

@@ -39,7 +39,8 @@ const HomeScreen = ({ navigation }) => {
         const handleGroupPress = () => {
             navigation.navigate("Group", {
                 groupName: item.name,
-                groupId: item.id
+                groupId: item.id,
+                count: item.count
             });
         }
 

@@ -14,7 +14,7 @@ const App = () => {
 
   return (
     <NavigationContainer>
-      <StatusBar barStyle="dark-content" />
+      <StatusBar barStyle="default" />
       {!isLoggedIn ? <AuthStack /> : <MainStack />}
     </NavigationContainer>
   );

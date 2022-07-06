@@ -7,19 +7,29 @@ import CustomInput from "../../../components/CustomInput/CustomInput";
 import CustomInputLarge from "../../../components/CustomInput/CustomInputLarge";
 import { noteAction } from "../noteSlice";
 
-const NoteScreen = ({route, navigation }) => {
-    const {groupId, note} = route.params;
-    const [title, setTitle] = useState(note !== undefined ? note.name : '')
-    const [content, setContent] = useState(note !== undefined ? note.description : '')
+const NoteScreen = ({ route, navigation }) => {
+    const { groupId, count, note } = route.params;
+
+    const [title, setTitle] = useState(note !== undefined ? note.title : '')
+    const [content, setContent] = useState(note !== undefined ? note.content : '')
 
     const dispatch = useAppDispatch();
 
     const handleSaveNote = () => {
-        dispatch(noteAction.addNote({
-            title: title,
-            content: content,
-            groupId: groupId
-        }))
+        if (note === undefined) {
+            dispatch(noteAction.addNote({
+                title: title,
+                content: content,
+                groupId: groupId,
+                count: count
+            }))
+        } else {
+            dispatch(noteAction.updateNote({
+                title: title,
+                content: content,
+                id: note.id
+            }))
+        }
         navigation.goBack();
     }
 
@@ -36,22 +46,22 @@ const NoteScreen = ({route, navigation }) => {
                 },
                 {
                     text: "OK", onPress: () => {
-                        navigation.navigate("Group")
+                        navigation.goBack()
                     }
                 }
             ])
     }
 
-return (
-    <SafeAreaView style={styles.root}>
-        <Text style={styles.header}>Title:</Text>
-        <CustomInput placeHolder="Note title" value={title} setValue={setTitle} secureText={false} />
-        <Text style={styles.header}>Content:</Text>
-        <CustomInputLarge placeHolder="Note content" value={content} setValue={setContent} secureText={false} />
-        <CustomButton text="Save" onPress={handleSaveNote} />
-        <CustomButtonBorder text="Cancel" onPress={handelCancel} />
-    </SafeAreaView>
-)
+    return (
+        <SafeAreaView style={styles.root}>
+            <Text style={styles.header}>Title:</Text>
+            <CustomInput placeHolder="Note title" value={title} setValue={setTitle} secureText={false} />
+            <Text style={styles.header}>Content:</Text>
+            <CustomInputLarge placeHolder="Note content" value={content} setValue={setContent} secureText={false} />
+            <CustomButton text="Save" onPress={handleSaveNote} />
+            <CustomButtonBorder text="Cancel" onPress={handelCancel} />
+        </SafeAreaView>
+    )
 }
 
 const styles = StyleSheet.create({
