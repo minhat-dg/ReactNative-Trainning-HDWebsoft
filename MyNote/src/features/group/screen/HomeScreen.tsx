@@ -1,16 +1,17 @@
 import React, { useEffect, useState } from "react";
-import { Alert, SafeAreaView, StyleSheet, Text, TouchableOpacity } from "react-native";
+import { Alert, SafeAreaView, Text, TouchableOpacity } from "react-native";
 import { SwipeListView } from "react-native-swipe-list-view";
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { useAppDispatch, useAppSelector } from "../../../app/hook";
-import AddGroupModal from "../components/AddGroupModal";
+import { homeStyle } from "../../../assets/style";
 import CustomFloatButton from "../../../components/CustomButton/CustomFloatButton";
+import { Group } from "../../../models/group";
 import { authActions } from "../../auth/authSlice";
-
+import AddGroupModal from "../components/AddGroupModal";
 import { deleteGroup, getAllGroups } from "../groupApi";
 
 const HomeScreen = ({ navigation }) => {
-    const [noteGroups, setNoteGroups] = useState([]);
+    const [noteGroups, setNoteGroups] = useState<Group[]>([]);
     const [modalVisible, setModalVisible] = useState(false);
 
     const uid = useAppSelector(state => state.auth.currentUser?.uid)
@@ -35,7 +36,7 @@ const HomeScreen = ({ navigation }) => {
     }, [navigation]);
 
 
-    const renderNoteGroup = ({ item }) => {
+    const renderNoteGroup = ({ item }: { item: Group }) => {
         const handleGroupPress = () => {
             navigation.navigate("Group", {
                 groupName: item.name,
@@ -45,10 +46,10 @@ const HomeScreen = ({ navigation }) => {
         }
 
         return (
-            <TouchableOpacity activeOpacity={100} style={styles.itemContainer} onPress={handleGroupPress}>
-                <Text style={styles.itemTextName}>{item.name}</Text>
-                <Text style={styles.itemTextDescription}>{item.description}</Text>
-                <Text style={styles.itemNoteCount}>Include {item.count} {item.count > 1 ? "notes" : "note"}</Text>
+            <TouchableOpacity activeOpacity={100} style={homeStyle.itemContainer} onPress={handleGroupPress}>
+                <Text style={homeStyle.itemTextName}>{item.name}</Text>
+                <Text style={homeStyle.itemTextDescription}>{item.description}</Text>
+                <Text style={homeStyle.itemNoteCount}>Include {item.count} {item.count > 1 ? "notes" : "note"}</Text>
             </TouchableOpacity>
 
         )
@@ -79,7 +80,7 @@ const HomeScreen = ({ navigation }) => {
         }
 
         return (
-            <TouchableOpacity style={styles.hiddenItemContainer} onPress={handleDeleteItem}>
+            <TouchableOpacity style={homeStyle.hiddenItemContainer} onPress={handleDeleteItem}>
                 <FontAwesome name="trash" color={'#FFFFFF'} size={25} />
             </TouchableOpacity>
         )
@@ -87,60 +88,12 @@ const HomeScreen = ({ navigation }) => {
 
 
     return (
-        <SafeAreaView style={styles.root}>
+        <SafeAreaView style={homeStyle.root}>
             <SwipeListView data={noteGroups} renderItem={renderNoteGroup} renderHiddenItem={renderHiddenItem} rightOpenValue={-75} />
             <CustomFloatButton onPress={setModalVisible} />
             <AddGroupModal modalVisible={modalVisible} setModalVisible={setModalVisible} />
         </SafeAreaView>
     )
 }
-
-const styles = StyleSheet.create({
-    root: {
-        padding: 20,
-        backgroundColor: '#06283D',
-        height: '100%',
-    },
-    header: {
-        fontWeight: '500',
-        fontSize: 25,
-        color: '#DFF6FF',
-        marginBottom: 20
-    },
-    itemContainer: {
-        backgroundColor: '#47B5FF',
-        borderRadius: 10,
-        flex: 1,
-        height: 100,
-        margin: 10,
-        padding: 10
-    },
-    itemTextName: {
-        color: '#DFF6FF',
-        fontSize: 20,
-        fontWeight: '500',
-    },
-    itemTextDescription: {
-        color: '#06283D',
-        fontSize: 16,
-        fontWeight: 'normal',
-        marginTop: 5
-    },
-    itemNoteCount: {
-        color: '#DFF6FF',
-        fontSize: 14,
-        fontWeight: 'bold',
-        marginTop: 5
-    },
-    hiddenItemContainer: {
-        alignItems: 'flex-end',
-        height: 100,
-        margin: 10,
-        padding: 25,
-        borderRadius: 10,
-        backgroundColor: '#FF0000',
-        justifyContent: 'center'
-    },
-})
 
 export default HomeScreen;

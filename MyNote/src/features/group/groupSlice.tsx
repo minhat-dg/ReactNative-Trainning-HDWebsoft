@@ -1,6 +1,6 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit"
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-export interface GroupState{
+export interface GroupState {
     loading: boolean,
 }
 
@@ -9,10 +9,10 @@ export interface GroupPayload {
     name: string,
     description: string,
     count: number,
-    uid: string
+    uid: string | undefined
 }
 
-const initialState: GroupState ={
+const initialState: GroupState = {
     loading: false,
 }
 
@@ -20,13 +20,13 @@ const groupSlice = createSlice({
     name: 'group',
     initialState: initialState,
     reducers: {
-        addGroup(state, action: PayloadAction<GroupPayload>){
+        addGroup(state, action: PayloadAction<GroupPayload>) {
             state.loading = true;
         },
-        addSuccess(state){
+        addSuccess(state) {
             state.loading = false;
         },
-        addFailed(state){
+        addFailed(state) {
             state.loading = false;
         },
     }
@@ -37,4 +37,4 @@ export default groupReducer;
 
 export const groupAction = groupSlice.actions;
 
-export const selectLoading = (state) => state.group.loading;
+export const selectLoading = (state: { group: { loading: boolean; }; }) => state.group.loading;

@@ -2,7 +2,7 @@ import auth from "@react-native-firebase/auth";
 import { GoogleSignin } from "@react-native-google-signin/google-signin";
 import { PayloadAction } from "@reduxjs/toolkit";
 import { AccessToken, LoginManager } from "react-native-fbsdk-next";
-import { call, fork, put, take, takeEvery } from "redux-saga/effects";
+import { call, fork, put, take } from "redux-saga/effects";
 import { authActions, LogginPayload } from "./authSlice";
 
 function* handleLogin(payload: LogginPayload) {
@@ -15,9 +15,9 @@ function* handleLogin(payload: LogginPayload) {
             break;
         case 'facebook':
             yield fork(loginWithFacebook);
-            break; 
+            break;
         case 'signup':
-            yield fork (signUp, payload.email, payload.password);
+            yield fork(signUp, payload.email, payload.password);
             break;
     }
 
@@ -77,7 +77,7 @@ function* loginWithFacebook() {
     }
 }
 
-function* signUp (email: string, password: string) {
+function* signUp(email: string, password: string) {
     try {
         yield call([auth(), 'createUserWithEmailAndPassword'], email, password);
         yield put(authActions.loginSuccess({
@@ -97,7 +97,7 @@ function* handleLogout() {
 }
 
 function* checkLoginStatus() {
-    if (auth().currentUser){
+    if (auth().currentUser) {
         yield put(authActions.loginSuccess({
             uid: auth().currentUser?.uid,
             email: auth().currentUser?.email

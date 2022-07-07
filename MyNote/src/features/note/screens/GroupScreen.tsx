@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { Alert, FlatList, SafeAreaView, StyleSheet, Text } from "react-native";
+import { Alert, FlatList, SafeAreaView, Text } from "react-native";
+import { groupStyle } from "../../../assets/style";
 import CustomFloatButton from "../../../components/CustomButton/CustomFloatButton";
+import { Group } from "../../../models/group";
+import { Note } from "../../../models/note";
 import GroupMenu from "../components/GroupsMenu";
 import NoteItem from "../components/NoteItem";
 import NoteOption from "../components/NoteOption";
@@ -8,30 +11,30 @@ import { deleteNote, getAllNotes, getGroupList, moveNote } from "../notesApi";
 
 const GroupScreen = ({ route, navigation }) => {
     const { groupName, groupId } = route.params;
-    const [notes, setNotes] = useState([]);
-    const [groups, setGroups] = useState([])
+    const [notes, setNotes] = useState<Note[]>([]);
+    const [groups, setGroups] = useState<Group[]>([])
     const [optionVisible, setOptionVisible] = useState(false);
     const [groupMenuVisible, setGroupMenuVisible] = useState(false);
-    const [currentNote, setCurrentNote] = useState()
+    const [currentNote, setCurrentNote] = useState<Note>()
 
     useEffect(() => {
         getAllNotes(setNotes, groupId);
         getGroupList(setGroups)
     }, []);
 
-    const handleOnPress = (item) => {
+    const handleOnPress = (item: Note) => {
         navigation.navigate("Note", {
             groupId: groupId,
             note: item,
         });
     }
 
-    const handleOnLongPress = (item) => {
+    const handleOnLongPress = (item: Note) => {
         setOptionVisible(true)
         setCurrentNote(item)
     }
 
-    const handleDeleteNote = (item) => {
+    const handleDeleteNote = (item: Note) => {
         Alert.alert(
             "Delete Note?",
             "Are you sure to delete " + item.title + "?",
@@ -63,15 +66,15 @@ const GroupScreen = ({ route, navigation }) => {
         setGroupMenuVisible(true)
     }
 
-    const handleMoveNote = (newGroupId) => {
+    const handleMoveNote = (newGroupId: string) => {
         console.log(currentNote)
-        moveNote(currentNote.id, currentNote.groupId, newGroupId)
+        moveNote(currentNote?.id, currentNote?.groupId, newGroupId)
         setGroupMenuVisible(false)
     }
 
     return (
-        <SafeAreaView style={styles.root}>
-            <Text style={styles.header}>{groupName}</Text>
+        <SafeAreaView style={groupStyle.root}>
+            <Text style={groupStyle.header}>{groupName}</Text>
             <FlatList data={notes} renderItem={(item) => NoteItem(item, handleOnPress, handleOnLongPress)} numColumns={2} />
             <CustomFloatButton onPress={navigateToNoteScreen} />
             <NoteOption modalVisible={optionVisible} setModalVisible={setOptionVisible} handleDeleteNote={handleDeleteNote} handleMoveNote={moveNoteChose} item={currentNote} />
@@ -79,45 +82,5 @@ const GroupScreen = ({ route, navigation }) => {
         </SafeAreaView>
     )
 }
-
-const styles = StyleSheet.create({
-    root: {
-        padding: 10,
-        backgroundColor: '#06283D',
-        height: '100%',
-    },
-    header: {
-        fontWeight: '500',
-        fontSize: 25,
-        color: '#DFF6FF',
-        marginBottom: 20
-    },
-    itemContainer: {
-        flex: 0.5,
-        alignItems: 'center',
-        padding: 10
-    },
-    itemCard: {
-        backgroundColor: '#47B5FF',
-        borderRadius: 10,
-        height: 150,
-        width: '100%',
-        alignItems: 'center',
-        padding: 5
-    },
-    itemTextName: {
-        color: '#DFF6FF',
-        fontSize: 20,
-        fontWeight: '500',
-    },
-    itemTextDescription: {
-        color: '#06283D',
-        fontSize: 16,
-        fontWeight: 'normal',
-        marginTop: 5,
-        flexShrink: 1
-    },
-})
-
 
 export default GroupScreen;

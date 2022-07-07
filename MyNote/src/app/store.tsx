@@ -8,12 +8,12 @@ import rootSaga from "./rootSaga";
 const sagaMiddleware = createSagaMiddleware();
 
 export const store = configureStore({
-    reducer:{
+    reducer: {
         auth: authReducer,
         group: groupReducer,
         note: noteReducer
     },
-    middleware: (getDefaultMiddleware) => 
+    middleware: (getDefaultMiddleware) =>
         getDefaultMiddleware().concat(sagaMiddleware),
 })
 

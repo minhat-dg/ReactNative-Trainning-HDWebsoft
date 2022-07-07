@@ -1,4 +1,4 @@
-import {all} from 'redux-saga/effects';
+import { all } from 'redux-saga/effects';
 import authSaga from '../features/auth/authSaga';
 import groupSaga from '../features/group/groupSaga';
 import noteSaga from '../features/note/noteSaga';

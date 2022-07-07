@@ -1,8 +1,9 @@
 import { Formik } from "formik";
 import React from "react";
-import { Alert, SafeAreaView, StyleSheet, Text } from "react-native";
+import { Alert, SafeAreaView, Text } from "react-native";
 import * as yup from 'yup';
 import { useAppDispatch } from "../../../app/hook";
+import { noteStyle } from "../../../assets/style";
 import CustomButton from "../../../components/CustomButton/CustomButton";
 import CustomButtonBorder from "../../../components/CustomButton/CustomButtonBorder";
 import CustomInput from "../../../components/CustomInput/CustomInput";
@@ -22,7 +23,7 @@ const NoteScreen = ({ route, navigation }) => {
         title: yup.string().required('Note title is required')
     })
 
-    const handleSaveNote = ({ title, content }) => {
+    const handleSaveNote = ({ title, content }: { title: string, content: string }) => {
         if (note === undefined) {
             dispatch(noteAction.addNote({
                 title: title,
@@ -59,18 +60,18 @@ const NoteScreen = ({ route, navigation }) => {
     }
 
     return (
-        <SafeAreaView style={styles.root}>
+        <SafeAreaView style={noteStyle.root}>
             <Formik initialValues={noteInfo}
                 validationSchema={noteValidationSchema}
                 onSubmit={value => { handleSaveNote(value) }}>
                 {({ handleChange, handleBlur, handleSubmit, values, errors, isValid, }) => (
                     <>
-                        <Text style={styles.header}>Title:</Text>
+                        <Text style={noteStyle.header}>Title:</Text>
                         <CustomInput placeHolder="Note title" value={values.title} onChangeText={handleChange('title')} onBlur={handleBlur('tile')} secureText={false} keyboardType='default' />
                         {errors.title &&
-                            <Text style={styles.error}>{errors.title}</Text>
+                            <Text style={noteStyle.error}>{errors.title}</Text>
                         }
-                        <Text style={styles.header}>Content:</Text>
+                        <Text style={noteStyle.header}>Content:</Text>
                         <CustomInputLarge placeHolder="Note content" value={values.content} onChangeText={handleChange('content')} onBlur={handleBlur('content')} secureText={false} keyboardType='default' />
                         <CustomButton text="Save" onPress={handleSubmit} isValid={isValid} />
                         <CustomButtonBorder text="Cancel" onPress={handelCancel} />
@@ -81,22 +82,5 @@ const NoteScreen = ({ route, navigation }) => {
         </SafeAreaView>
     )
 }
-
-const styles = StyleSheet.create({
-    root: {
-        padding: 20,
-        backgroundColor: '#06283D',
-        height: '100%',
-    },
-    header: {
-        color: "#DFF6FF",
-        fontSize: 20,
-        fontWeight: '600'
-    },
-    error: {
-        fontSize: 12,
-        color: 'red'
-    }
-})
 
 export default NoteScreen;

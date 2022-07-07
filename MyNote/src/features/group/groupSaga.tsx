@@ -1,6 +1,6 @@
 import firestore from '@react-native-firebase/firestore';
 import { PayloadAction } from "@reduxjs/toolkit";
-import { call, fork, put, take } from "redux-saga/effects";
+import { call, fork, take } from "redux-saga/effects";
 import { groupAction, GroupPayload } from "./groupSlice";
 
 function* watchAddGroup() {

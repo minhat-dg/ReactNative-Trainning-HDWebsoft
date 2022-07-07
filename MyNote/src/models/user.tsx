@@ -1,4 +1,4 @@
 export interface User {
-    uid: string,
-    email: string
+    uid: string | undefined,
+    email: string |undefined | null
 }

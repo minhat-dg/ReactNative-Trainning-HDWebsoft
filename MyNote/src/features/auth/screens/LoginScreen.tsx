@@ -1,10 +1,11 @@
 import { useNavigation } from "@react-navigation/native";
 import { Formik } from "formik";
 import React from "react";
-import { SafeAreaView, StyleSheet, Text, View } from "react-native";
+import { SafeAreaView, Text, View } from "react-native";
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import * as yup from 'yup';
 import { useAppDispatch, useAppSelector } from "../../../app/hook";
+import { loginStyle } from "../../../assets/style";
 import CustomButton from "../../../components/CustomButton/CustomButton";
 import CustomInput from "../../../components/CustomInput/CustomInput";
 import ProgressBar from "../../../components/ProgressBar/ProgressBar";
@@ -51,7 +52,7 @@ const LoginScreen = () => {
         navigation.navigate('Signup')
     }
 
-    const handleLogin = ({ email, password }) => {
+    const handleLogin = ({ email, password }: { email: string, password: string }) => {
         dispatch(authActions.login({
             type: 'email',
             email: email,
@@ -60,8 +61,8 @@ const LoginScreen = () => {
     }
 
     return (
-        <SafeAreaView style={styles.root}>
-            <Text style={styles.header}>Login</Text>
+        <SafeAreaView style={loginStyle.root}>
+            <Text style={loginStyle.header}>Login</Text>
             <Formik initialValues={loginInfo}
                 validationSchema={loginValidationSchema}
                 onSubmit={value => { handleLogin(value) }}>
@@ -69,25 +70,25 @@ const LoginScreen = () => {
                     <>
                         <CustomInput placeHolder="Email" value={values.email} onChangeText={handleChange('email')} onBlur={handleBlur('email')} secureText={false} keyboardType='email-address' />
                         {errors.email &&
-                            <Text style={styles.error}>{errors.email}</Text>
+                            <Text style={loginStyle.error}>{errors.email}</Text>
                         }
                         <CustomInput placeHolder="Password" value={values.password} onChangeText={handleChange('password')} onBlur={handleBlur('email')} secureText={true} keyboardType='default' />
                         {errors.password &&
-                            <Text style={styles.error}>{errors.password}</Text>
+                            <Text style={loginStyle.error}>{errors.password}</Text>
                         }
                         <CustomButton text="LogIn" onPress={handleSubmit} isValid={isValid} />
                     </>
 
                 )}
             </Formik>
-            <Text style={styles.caption}>or</Text>
-            <View style={styles.iconContainer}>
+            <Text style={loginStyle.caption}>or</Text>
+            <View style={loginStyle.iconContainer}>
                 <FontAwesome name="google-plus-square" color={'#1363DF'} size={30} onPress={handleGooglePress} />
                 <FontAwesome name="facebook-official" color={'#1363DF'} size={30} onPress={handleFacebookPress} />
             </View>
-            <Text style={styles.textContainer}>
-                <Text style={styles.caption}>Don't have an account? </Text>
-                <Text style={styles.signup} onPress={handleNavSignup}>SignUp</Text>
+            <Text style={loginStyle.textContainer}>
+                <Text style={loginStyle.caption}>Don't have an account? </Text>
+                <Text style={loginStyle.signup} onPress={handleNavSignup}>SignUp</Text>
             </Text>
             {isLogging ? <ProgressBar /> : <View></View>}
         </SafeAreaView>
@@ -95,43 +96,6 @@ const LoginScreen = () => {
     )
 }
 
-const styles = StyleSheet.create({
-    header: {
-        fontSize: 30,
-        marginTop: 100,
-        color: '#DFF6FF',
-        marginBottom: 30
-    },
-    root: {
-        alignItems: 'center',
-        padding: 20,
-        backgroundColor: '#06283D',
-        height: '100%',
-    },
-    caption: {
-        color: '#DFF6FF',
-        fontWeight: 'normal',
-        fontSize: 16,
-        marginBottom: 20
-    },
-    textContainer: {
-        textAlignVertical: 'bottom',
-        flex: 1,
-    },
-    signup: {
-        color: '#1363DF',
-        fontWeight: 'bold',
-        fontSize: 16
-    },
-    iconContainer: {
-        flexDirection: 'row',
-        width: '25%',
-        justifyContent: 'space-between'
-    },
-    error: {
-        fontSize: 12,
-        color: 'red'
-    }
-})
+
 
 export default LoginScreen;

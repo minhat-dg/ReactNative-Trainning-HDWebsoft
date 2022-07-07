@@ -1,4 +1,4 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit"
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 
 export interface NoteState {
@@ -25,16 +25,16 @@ const noteSlice = createSlice({
     name: 'note',
     initialState: initialState,
     reducers: {
-        addNote(state, action: PayloadAction<AddNotePayload>){
+        addNote(state, action: PayloadAction<AddNotePayload>) {
             state.loading = true;
         },
-        addSuccess(state){
+        addSuccess(state) {
             state.loading = false;
         },
-        addFailed(state){
+        addFailed(state) {
             state.loading = false;
         },
-        updateNote(state, action: PayloadAction<UpdateNotePayload>){
+        updateNote(state, action: PayloadAction<UpdateNotePayload>) {
             state.loading = true;
         }
     }
@@ -45,4 +45,4 @@ export default noteReducer;
 
 export const noteAction = noteSlice.actions;
 
-export const selectLoading = (state) => state.note.loading;
+export const selectLoading = (state: { note: { loading: boolean; }; }) => state.note.loading;

@@ -1,18 +1,18 @@
+import firestore from '@react-native-firebase/firestore';
 import { PayloadAction } from "@reduxjs/toolkit";
 import { call, fork, take } from "redux-saga/effects";
-import { noteAction, AddNotePayload, UpdateNotePayload } from "./noteSlice";
-import firestore from '@react-native-firebase/firestore';
+import { AddNotePayload, noteAction, UpdateNotePayload } from "./noteSlice";
 
 const increasement = firestore.FieldValue.increment(1);
 
-function* watchAddNote(){
-    while(true){
+function* watchAddNote() {
+    while (true) {
         const action: PayloadAction<AddNotePayload> = yield take(noteAction.addNote.type);
         yield call(handleAddNote, action.payload)
     }
 }
 
-function* handleAddNote(payload: AddNotePayload){
+function* handleAddNote(payload: AddNotePayload) {
     firestore().collection('Notes').add({
         title: payload.title,
         content: payload.content,
@@ -25,8 +25,8 @@ function* handleAddNote(payload: AddNotePayload){
     })
 }
 
-function* watchUpdateNote(){
-    while(true){
+function* watchUpdateNote() {
+    while (true) {
         const action: PayloadAction<UpdateNotePayload> = yield take(noteAction.updateNote.type);
         yield call(handleUpdateNote, action.payload)
     }

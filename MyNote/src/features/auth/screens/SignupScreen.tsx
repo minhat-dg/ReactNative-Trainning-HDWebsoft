@@ -1,8 +1,9 @@
 import { Formik } from "formik";
 import React from "react";
-import { SafeAreaView, StyleSheet, Text, View } from "react-native";
+import { SafeAreaView, Text, View } from "react-native";
 import * as yup from 'yup';
 import { useAppDispatch, useAppSelector } from "../../../app/hook";
+import { signupStyle } from "../../../assets/style";
 import CustomButton from "../../../components/CustomButton/CustomButton";
 import CustomInput from "../../../components/CustomInput/CustomInput";
 import ProgressBar from "../../../components/ProgressBar/ProgressBar";
@@ -32,7 +33,7 @@ const SignupScreen = ({ navigation }) => {
         navigation.navigate('Login')
     }
 
-    const handleSignUp = ({ email, password }) => {
+    const handleSignUp = ({ email, password }: { email: string, password: string }) => {
         dispatch(authActions.login({
             type: 'signup',
             email: email,
@@ -41,8 +42,8 @@ const SignupScreen = ({ navigation }) => {
     }
 
     return (
-        <SafeAreaView style={styles.root}>
-            <Text style={styles.header}>SignUp</Text>
+        <SafeAreaView style={signupStyle.root}>
+            <Text style={signupStyle.header}>SignUp</Text>
             <Formik initialValues={signupInfo}
                 validationSchema={signupValidationSchema}
                 onSubmit={value => { handleSignUp(value) }}>
@@ -50,58 +51,25 @@ const SignupScreen = ({ navigation }) => {
                     <>
                         <CustomInput placeHolder="Email" value={values.email} onChangeText={handleChange('email')} onBlur={handleBlur('email')} secureText={false} keyboardType='email-address' />
                         {errors.email &&
-                            <Text style={styles.error}>{errors.email}</Text>
+                            <Text style={signupStyle.error}>{errors.email}</Text>
                         }
                         <CustomInput placeHolder="Password" value={values.password} onChangeText={handleChange('password')} onBlur={handleBlur('email')} secureText={true} keyboardType='default' />
                         {errors.password &&
-                            <Text style={styles.error}>{errors.password}</Text>
+                            <Text style={signupStyle.error}>{errors.password}</Text>
                         }
                         <CustomButton text="SignUp" onPress={handleSubmit} isValid={isValid} />
                     </>
 
                 )}
             </Formik>
-            <Text style={styles.textContainer}>
-                <Text style={styles.caption}>Already have an account? </Text>
-                <Text style={styles.signup} onPress={handleNavLogIn}>LogIn</Text>
+            <Text style={signupStyle.textContainer}>
+                <Text style={signupStyle.caption}>Already have an account? </Text>
+                <Text style={signupStyle.signup} onPress={handleNavLogIn}>LogIn</Text>
             </Text>
             {isLogging ? <ProgressBar /> : <View></View>}
         </SafeAreaView>
     )
 }
 
-const styles = StyleSheet.create({
-    header: {
-        fontSize: 30,
-        marginTop: 100,
-        color: '#DFF6FF',
-        marginBottom: 30,
-    },
-    root: {
-        alignItems: 'center',
-        padding: 20,
-        backgroundColor: '#06283D',
-        height: '100%',
-        justifyContent: 'center'
-    },
-    caption: {
-        color: '#DFF6FF',
-        fontWeight: 'normal',
-        fontSize: 16,
-    },
-    textContainer: {
-        textAlignVertical: 'bottom',
-        flex: 1,
-    },
-    signup: {
-        color: '#1363DF',
-        fontWeight: 'bold',
-        fontSize: 16
-    },
-    error: {
-        fontSize: 12,
-        color: 'red'
-    }
-})
 
 export default SignupScreen;
