@@ -1,17 +1,25 @@
-import React, { useState } from "react";
+import { Formik } from "formik";
+import React from "react";
 import { Modal, Pressable, StyleSheet, Text, View } from "react-native";
-import CustomInput from "../../../components/CustomInput/CustomInput";
+import * as yup from 'yup';
 import { useAppDispatch, useAppSelector } from "../../../app/hook";
+import CustomInput from "../../../components/CustomInput/CustomInput";
 import { groupAction } from "../groupSlice";
 
 const AddGroupModal = ({ modalVisible, setModalVisible }) => {
-    const [groupName, setGroupName] = useState('')
-    const [groupDesc, setGroupDesc] = useState('')
-
     const dispatch = useAppDispatch()
     const uid = useAppSelector(state => state.auth.currentUser?.uid)
 
-    const handleAdd = () => {
+    const groupInfo = {
+        groupName: '',
+        groupDesc: ''
+    }
+
+    const groupValidationSchema = yup.object().shape({
+        groupName: yup.string().required('Group name is required')
+    })
+
+    const handleAdd = ({ groupName, groupDesc }) => {
         setModalVisible(!modalVisible)
         dispatch(groupAction.addGroup({
             name: groupName,
@@ -19,8 +27,6 @@ const AddGroupModal = ({ modalVisible, setModalVisible }) => {
             count: 0,
             uid: uid
         }))
-        setGroupName('')
-        setGroupDesc('')
     }
 
     const handleCancel = () => {
@@ -40,24 +46,37 @@ const AddGroupModal = ({ modalVisible, setModalVisible }) => {
                 <View style={styles.centeredView}>
                     <View style={styles.modalView}>
                         <Text style={styles.textModal}>Add group</Text>
-                        <CustomInput value={groupName} setValue={setGroupName} placeHolder="Group name" secureText={false} />
-                        <CustomInput value={groupDesc} setValue={setGroupDesc} placeHolder="Group description" secureText={false} />
-                        <View style={{
-                            flexDirection: 'row',
-                        }}>
-                            <Pressable
-                                style={styles.buttonCancel}
-                                onPress={handleCancel}
-                            >
-                                <Text style={styles.textButton}>Cancel</Text>
-                            </Pressable>
-                            <Pressable
-                                style={styles.buttonAdd}
-                                onPress={handleAdd}
-                            >
-                                <Text style={styles.textButton}>Add</Text>
-                            </Pressable>
-                        </View>
+                        <Formik initialValues={groupInfo}
+                            validationSchema={groupValidationSchema}
+                            onSubmit={value => { handleAdd(value) }}>
+                            {({ handleChange, handleBlur, handleSubmit, values, errors, isValid, }) => (
+                                <>
+                                    <CustomInput placeHolder="Group name" value={values.groupName} onChangeText={handleChange('groupName')} onBlur={handleBlur('groupName')} secureText={false} keyboardType='default' />
+                                    {errors.groupName &&
+                                        <Text style={styles.error}>{errors.groupName}</Text>
+                                    }
+                                    <CustomInput placeHolder="Group description" value={values.groupDesc} onChangeText={handleChange('groupDesc')} onBlur={handleBlur('groupDesc')} secureText={false} keyboardType='default' />
+                                    <View style={{
+                                        flexDirection: 'row',
+                                    }}>
+                                        <Pressable
+                                            style={styles.buttonCancel}
+                                            onPress={handleCancel}
+                                        >
+                                            <Text style={styles.textButton}>Cancel</Text>
+                                        </Pressable>
+                                        <Pressable
+                                            style={styles.buttonAdd}
+                                            onPress={handleSubmit}
+                                            disabled={!isValid}
+                                        >
+                                            <Text style={styles.textButton}>Add</Text>
+                                        </Pressable>
+                                    </View>
+                                </>
+                            )}
+                        </Formik>
+
                     </View>
                 </View>
             </Modal>
@@ -119,6 +138,10 @@ const styles = StyleSheet.create({
         elevation: 2,
         width: '30%',
         marginHorizontal: 5,
+    },
+    error: {
+        fontSize: 12,
+        color: 'red'
     }
 });
 

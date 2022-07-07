@@ -1,14 +1,16 @@
-import { StyleSheet, Text, TextInput, View } from "react-native"
 import React from "react";
+import { KeyboardTypeOptions, NativeSyntheticEvent, StyleSheet, TextInput, TextInputFocusEventData, View } from "react-native";
 
-const CustomInput = ({value, setValue, placeHolder, secureText}: {value: string, setValue: (text: string) => void, placeHolder: string, secureText: boolean}) => {
+const CustomInput = ({ value, onChangeText, onBlur, placeHolder, secureText, keyboardType }: { value: string, onChangeText: ((text: string) => void), onBlur: ((e: NativeSyntheticEvent<TextInputFocusEventData>) => void), placeHolder: string, secureText: boolean, keyboardType: KeyboardTypeOptions }) => {
     return (
         <View style={style.container}>
             <TextInput style={style.input}
                 value={value}
-                onChangeText={setValue}
+                onChangeText={onChangeText}
                 placeholder={placeHolder} placeholderTextColor='#DFF6FF'
                 secureTextEntry={secureText}
+                onBlur={onBlur}
+                keyboardType={keyboardType}
             ></TextInput>
         </View>
     )

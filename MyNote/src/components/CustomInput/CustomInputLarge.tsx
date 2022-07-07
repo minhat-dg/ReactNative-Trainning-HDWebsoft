@@ -1,15 +1,16 @@
 import { StyleSheet, Text, TextInput, View } from "react-native"
 import React from "react";
 
-const CustomInputLarge = ({value, setValue, placeHolder, secureText}: {value: string, setValue: (text: string) => void, placeHolder: string, secureText: boolean}) => {
+const CustomInputLarge = ({ value, onChangeText, onBlur, placeHolder, secureText, keyboardType }: { value: string, onChangeText: ((text: string) => void), onBlur: ((e: NativeSyntheticEvent<TextInputFocusEventData>) => void), placeHolder: string, secureText: boolean, keyboardType: KeyboardTypeOptions }) => {
     return (
         <View style={style.container}>
             <TextInput style={style.input}
                 value={value}
-                onChangeText={setValue}
+                onChangeText={onChangeText}
                 placeholder={placeHolder} placeholderTextColor='#DFF6FF'
                 secureTextEntry={secureText}
-                multiline={true}
+                onBlur={onBlur}
+                keyboardType={keyboardType}
             ></TextInput>
         </View>
     )
@@ -31,6 +32,7 @@ const style = StyleSheet.create({
         flex: 1,
         textAlign: 'left',
         textAlignVertical: 'top',
+        width: '100%'
     }
 })
 

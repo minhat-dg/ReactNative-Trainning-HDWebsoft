@@ -1,9 +1,9 @@
 import React from "react";
-import { Pressable, StyleSheet, Text, View } from "react-native";
+import { Button, Pressable, StyleSheet, Text, View } from "react-native";
 
-const CustomButton = ({text, onPress} : {text: string, onPress: ()=>void}) => {
+const CustomButton = ({text, onPress, isValid} : {text: string, onPress: ()=>void, isValid: boolean}) => {
     return(
-        <Pressable style={styles.container} onPress={onPress}>
+        <Pressable style={styles.container} onPress={onPress} disabled={!isValid}>
             <Text style={styles.text}>{text}</Text>
         </Pressable>
     )

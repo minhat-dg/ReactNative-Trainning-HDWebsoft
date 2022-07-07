@@ -1,5 +1,7 @@
-import React, { useState } from "react";
+import { Formik } from "formik";
+import React from "react";
 import { Alert, SafeAreaView, StyleSheet, Text } from "react-native";
+import * as yup from 'yup';
 import { useAppDispatch } from "../../../app/hook";
 import CustomButton from "../../../components/CustomButton/CustomButton";
 import CustomButtonBorder from "../../../components/CustomButton/CustomButtonBorder";
@@ -9,13 +11,18 @@ import { noteAction } from "../noteSlice";
 
 const NoteScreen = ({ route, navigation }) => {
     const { groupId, note } = route.params;
-
-    const [title, setTitle] = useState(note !== undefined ? note.title : '')
-    const [content, setContent] = useState(note !== undefined ? note.content : '')
-
     const dispatch = useAppDispatch();
 
-    const handleSaveNote = () => {
+    const noteInfo = {
+        title: (note !== undefined ? note.title : ''),
+        content: (note !== undefined ? note.content : '')
+    }
+
+    const noteValidationSchema = yup.object().shape({
+        title: yup.string().required('Note title is required')
+    })
+
+    const handleSaveNote = ({ title, content }) => {
         if (note === undefined) {
             dispatch(noteAction.addNote({
                 title: title,
@@ -53,12 +60,24 @@ const NoteScreen = ({ route, navigation }) => {
 
     return (
         <SafeAreaView style={styles.root}>
-            <Text style={styles.header}>Title:</Text>
-            <CustomInput placeHolder="Note title" value={title} setValue={setTitle} secureText={false} />
-            <Text style={styles.header}>Content:</Text>
-            <CustomInputLarge placeHolder="Note content" value={content} setValue={setContent} secureText={false} />
-            <CustomButton text="Save" onPress={handleSaveNote} />
-            <CustomButtonBorder text="Cancel" onPress={handelCancel} />
+            <Formik initialValues={noteInfo}
+                validationSchema={noteValidationSchema}
+                onSubmit={value => { handleSaveNote(value) }}>
+                {({ handleChange, handleBlur, handleSubmit, values, errors, isValid, }) => (
+                    <>
+                        <Text style={styles.header}>Title:</Text>
+                        <CustomInput placeHolder="Note title" value={values.title} onChangeText={handleChange('title')} onBlur={handleBlur('tile')} secureText={false} keyboardType='default' />
+                        {errors.title &&
+                            <Text style={styles.error}>{errors.title}</Text>
+                        }
+                        <Text style={styles.header}>Content:</Text>
+                        <CustomInputLarge placeHolder="Note content" value={values.content} onChangeText={handleChange('content')} onBlur={handleBlur('content')} secureText={false} keyboardType='default' />
+                        <CustomButton text="Save" onPress={handleSubmit} isValid={isValid} />
+                        <CustomButtonBorder text="Cancel" onPress={handelCancel} />
+                    </>
+                )}
+            </Formik>
+
         </SafeAreaView>
     )
 }
@@ -73,6 +92,10 @@ const styles = StyleSheet.create({
         color: "#DFF6FF",
         fontSize: 20,
         fontWeight: '600'
+    },
+    error: {
+        fontSize: 12,
+        color: 'red'
     }
 })
 
