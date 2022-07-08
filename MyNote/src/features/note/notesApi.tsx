@@ -6,7 +6,7 @@ import { Note } from '../../models/note';
 const increasement = firestore.FieldValue.increment(1);
 const decreasement = firestore.FieldValue.increment(-1);
 
-export const getAllNotes = (setNotes: { (value: SetStateAction<Note[]>): void; (arg0: Note[]): void; }, groupId: string) => {
+export const getAllNotes = (setNotes: { (value: SetStateAction<Note[]>): void; (arg0: Note[]): void; }, setFilteredNotes: { (value: SetStateAction<Note[]>): void; (arg0: Note[]): void; }, groupId: string) => {
     const subscriber = firestore()
         .collection('Notes').where('groupId', '==', groupId)
         .onSnapshot(querySnapshot => {
@@ -19,8 +19,8 @@ export const getAllNotes = (setNotes: { (value: SetStateAction<Note[]>): void; (
                     id: documentSnapshot.id
                 });
             });
-
             setNotes(notes)
+            setFilteredNotes(notes)
         });
     return () => subscriber()
 }

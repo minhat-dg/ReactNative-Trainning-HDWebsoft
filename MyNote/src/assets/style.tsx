@@ -2,7 +2,6 @@ import { StyleSheet } from "react-native"
 
 export const mainHeaderStyle = (title: string) => {
     return {
-        headerTitle: title,
         headerStyle: {
             backgroundColor: '#06283D',
         },
@@ -13,6 +12,23 @@ export const mainHeaderStyle = (title: string) => {
         },
     }
 }
+
+export const HeaderSearchBarStyle = StyleSheet.create({
+    container: {
+        width: '100%',
+        flexDirection: 'row',
+        alignItems: 'center',
+        paddingHorizontal: 10,
+        borderWidth: 1,
+        borderColor: "#1363DF",
+        borderRadius: 10
+    },
+    input: {
+        flex: 11,
+        marginTop: 10,
+        color: "#DFF6FF"
+    }
+})
 
 export const authHeaderStyle = {
     headerStyle: { backgroundColor: '#06283D' },

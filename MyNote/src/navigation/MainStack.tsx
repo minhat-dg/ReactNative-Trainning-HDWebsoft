@@ -13,7 +13,7 @@ const screens = {
     },
     Group: {
         screen: GroupScreen,
-        navigationOptions: mainHeaderStyle('All notes')
+        navigationOptions: mainHeaderStyle('')
     },
     Note: {
         screen: NoteScreen,
