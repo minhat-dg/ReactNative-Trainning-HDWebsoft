@@ -22,7 +22,8 @@ export const HeaderSearchBarStyle = StyleSheet.create({
         paddingHorizontal: 10,
         borderWidth: 1,
         borderColor: "#1363DF",
-        borderRadius: 10
+        borderRadius: 10,
+        marginBottom: 10
     },
     input: {
         flex: 11,

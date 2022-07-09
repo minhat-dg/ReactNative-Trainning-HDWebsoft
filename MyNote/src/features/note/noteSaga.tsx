@@ -16,7 +16,8 @@ function* handleAddNote(payload: AddNotePayload) {
     firestore().collection('Notes').add({
         title: payload.title,
         content: payload.content,
-        groupId: payload.groupId
+        groupId: payload.groupId,
+        timestamp: firestore.FieldValue.serverTimestamp(),
     }).then(() => {
         firestore().collection('Groups').doc(payload.groupId).update({
             count: increasement
@@ -35,7 +36,8 @@ function* watchUpdateNote() {
 function* handleUpdateNote(payload: UpdateNotePayload) {
     firestore().collection('Notes').doc(payload.id).update({
         title: payload.title,
-        content: payload.content
+        content: payload.content,
+        timestamp: firestore.FieldValue.serverTimestamp(),
     })
 }
 

@@ -1,3 +1,4 @@
+import { FirebaseFirestoreTypes } from "@react-native-firebase/firestore";
 import React, { useEffect, useState } from "react";
 import { Alert, SafeAreaView, Text, TouchableOpacity } from "react-native";
 import { SwipeListView } from "react-native-swipe-list-view";
@@ -8,19 +9,22 @@ import CustomFloatButton from "../../../components/CustomButton/CustomFloatButto
 import { Group } from "../../../models/group";
 import { authActions } from "../../auth/authSlice";
 import AddGroupModal from "../components/AddGroupModal";
-import { deleteGroup, getAllGroups } from "../groupApi";
+import { deleteGroup, getFirstPageGroups, getMoreGroups } from "../groupApi";
+
 
 const HomeScreen = ({ navigation }) => {
+    const dispatch = useAppDispatch();
     const [noteGroups, setNoteGroups] = useState<Group[]>([]);
     const [modalVisible, setModalVisible] = useState(false);
+    const [lastGroup, setLastGroup] = useState<FirebaseFirestoreTypes.QueryDocumentSnapshot<FirebaseFirestoreTypes.DocumentData>>();
+    const limitItem = 10;
+    console.log(noteGroups.length)
 
     const uid = useAppSelector(state => state.auth.currentUser?.uid)
 
     useEffect(() => {
-        getAllGroups(setNoteGroups, uid)
+        getFirstPageGroups(setNoteGroups, uid, limitItem, setLastGroup)
     }, []);
-
-    const dispatch = useAppDispatch();
 
     const handleLogOut = () => {
         console.log("LOGING OUT")
@@ -73,7 +77,7 @@ const HomeScreen = ({ navigation }) => {
             ])
     }
 
-    const renderHiddenItem = ({ item }) => {
+    const renderHiddenItem = ({ item }: { item: Group }) => {
         const handleDeleteItem = () => {
             console.log(item.name)
             createConfirmDialog(item.id);
@@ -86,10 +90,17 @@ const HomeScreen = ({ navigation }) => {
         )
     }
 
+    const handleLoadMore = () => {
+        console.log('LAST GROUP', lastGroup?.data())
+        if (lastGroup) {
+            console.log("LOAD MORE")
+            getMoreGroups(setNoteGroups, uid, limitItem, setLastGroup, lastGroup)
+        }
+    }
 
     return (
         <SafeAreaView style={homeStyle.root}>
-            <SwipeListView data={noteGroups} renderItem={renderNoteGroup} renderHiddenItem={renderHiddenItem} rightOpenValue={-75} />
+            <SwipeListView onEndReached={handleLoadMore} data={noteGroups} renderItem={renderNoteGroup} renderHiddenItem={renderHiddenItem} rightOpenValue={-75} />
             <CustomFloatButton onPress={setModalVisible} />
             <AddGroupModal modalVisible={modalVisible} setModalVisible={setModalVisible} />
         </SafeAreaView>

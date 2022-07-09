@@ -15,7 +15,8 @@ function* handleAddGroup(payload: GroupPayload) {
         name: payload.name,
         description: payload.description,
         count: payload.count,
-        uid: payload.uid
+        uid: payload.uid,
+        timestamp: firestore.FieldValue.serverTimestamp(),
     }).then(() => {
         console.log("Added group")
     })

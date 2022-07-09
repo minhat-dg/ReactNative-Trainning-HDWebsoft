@@ -1,5 +1,6 @@
+import { FirebaseFirestoreTypes } from "@react-native-firebase/firestore";
 import React, { useEffect, useRef, useState } from "react";
-import { Alert, FlatList, SafeAreaView, Text } from "react-native";
+import { Alert, FlatList, SafeAreaView } from "react-native";
 import { groupStyle } from "../../../assets/style";
 import CustomFloatButton from "../../../components/CustomButton/CustomFloatButton";
 import HeaderSearchBar from "../../../components/HeaderSearchBar/HeaderSearchBar";
@@ -8,21 +9,23 @@ import { Note } from "../../../models/note";
 import GroupMenu from "../components/GroupsMenu";
 import NoteItem from "../components/NoteItem";
 import NoteOption from "../components/NoteOption";
-import { deleteNote, getAllNotes, getGroupList, moveNote } from "../notesApi";
+import { deleteNote, getFirstPageNotes, getGroupList, getMoreNotes, moveNote } from "../notesApi";
 
 const GroupScreen = ({ route, navigation }) => {
     const { groupName, groupId } = route.params;
     const [notes, setNotes] = useState<Note[]>([]);
+    const [lastNote, setLastNote] = useState<FirebaseFirestoreTypes.QueryDocumentSnapshot<FirebaseFirestoreTypes.DocumentData>>();
     const [search, setSearch] = useState('')
     const [filteredNotes, setFilteredNotes] = useState<Note[]>([]);
     const [groups, setGroups] = useState<Group[]>([])
     const [optionVisible, setOptionVisible] = useState(false);
     const [groupMenuVisible, setGroupMenuVisible] = useState(false);
     const [currentNote, setCurrentNote] = useState<Note>()
-    const timeOutRef = useRef<ReturnType<typeof setTimeout>|null>(null)
+    const timeOutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+    const limitItem = 12;
 
     useEffect(() => {
-        const sub = getAllNotes(setNotes, setFilteredNotes, groupId);
+        const sub = getFirstPageNotes(setNotes, setFilteredNotes, groupId, limitItem, setLastNote);
         getGroupList(setGroups);
         navigation.setOptions({
             headerTitle: groupName
@@ -38,10 +41,10 @@ const GroupScreen = ({ route, navigation }) => {
     }
 
     const debounceSearch = (text: string, delay: number) => {
-        if(timeOutRef.current) {
+        if (timeOutRef.current) {
             clearTimeout(timeOutRef.current)
         }
-        timeOutRef.current = setTimeout(() =>{
+        timeOutRef.current = setTimeout(() => {
             filterNotes(text);
         }, delay);
     }
@@ -111,10 +114,18 @@ const GroupScreen = ({ route, navigation }) => {
         setGroupMenuVisible(false)
     }
 
+    const handleLoadMore = () => {
+        console.log('LAST GROUP', lastNote?.data())
+        if (lastNote) {
+            console.log("LOAD MORE")
+            getMoreNotes(setNotes, setFilteredNotes, groupId, limitItem, setLastNote, lastNote)
+        }
+    }
+
     return (
         <SafeAreaView style={groupStyle.root}>
             <HeaderSearchBar value={search} onChangeText={handleChangeSearch} />
-            <FlatList data={filteredNotes} renderItem={(item) => NoteItem(item, handleOnPress, handleOnLongPress)} numColumns={2} />
+            <FlatList onEndReached={handleLoadMore} data={filteredNotes} renderItem={(item) => NoteItem(item, handleOnPress, handleOnLongPress)} numColumns={2} />
             <CustomFloatButton onPress={navigateToNoteScreen} />
             <NoteOption modalVisible={optionVisible} setModalVisible={setOptionVisible} handleDeleteNote={handleDeleteNote} handleMoveNote={moveNoteChose} item={currentNote} />
             <GroupMenu modalVisible={groupMenuVisible} setModalVisible={setGroupMenuVisible} groups={groups} moveNote={handleMoveNote} />
