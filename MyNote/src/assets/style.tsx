@@ -10,6 +10,7 @@ export const mainHeaderStyle = (title: string) => {
             fontWeight: 'bold',
             fontSize: 20
         },
+        headerTitle: title
     }
 }
 

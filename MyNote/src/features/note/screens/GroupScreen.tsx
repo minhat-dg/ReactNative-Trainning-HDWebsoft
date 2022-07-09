@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Alert, FlatList, SafeAreaView, Text } from "react-native";
 import { groupStyle } from "../../../assets/style";
 import CustomFloatButton from "../../../components/CustomButton/CustomFloatButton";
@@ -19,17 +19,35 @@ const GroupScreen = ({ route, navigation }) => {
     const [optionVisible, setOptionVisible] = useState(false);
     const [groupMenuVisible, setGroupMenuVisible] = useState(false);
     const [currentNote, setCurrentNote] = useState<Note>()
+    const timeOutRef = useRef<ReturnType<typeof setTimeout>|null>(null)
 
     useEffect(() => {
-        getAllNotes(setNotes, setFilteredNotes, groupId);
+        const sub = getAllNotes(setNotes, setFilteredNotes, groupId);
         getGroupList(setGroups);
         navigation.setOptions({
             headerTitle: groupName
         });
+        return () => {
+            sub()
+        }
     }, [])
 
     const handleChangeSearch = (text: string) => {
         setSearch(text)
+        debounceSearch(text, 500)
+    }
+
+    const debounceSearch = (text: string, delay: number) => {
+        if(timeOutRef.current) {
+            clearTimeout(timeOutRef.current)
+        }
+        timeOutRef.current = setTimeout(() =>{
+            filterNotes(text);
+        }, delay);
+    }
+
+    const filterNotes = (text: string) => {
+        console.log(text)
         if (text !== '') {
             const newNotes = notes.filter(note => {
                 const noteData = note.title.toLocaleLowerCase();
@@ -41,6 +59,7 @@ const GroupScreen = ({ route, navigation }) => {
             setFilteredNotes(notes)
         }
     }
+
 
     const handleOnPress = (item: Note) => {
         navigation.navigate("Note", {
