@@ -9,7 +9,7 @@ import CustomFloatButton from "../../../components/CustomButton/CustomFloatButto
 import { Group } from "../../../models/group";
 import { authActions } from "../../auth/authSlice";
 import AddGroupModal from "../components/AddGroupModal";
-import { deleteGroup, getFirstPageGroups, getMoreGroups } from "../groupApi";
+import { deleteGroup, getFirstPageGroups, getMoreGroups, setNewLast } from "../groupApi";
 
 
 const HomeScreen = ({ navigation }) => {
@@ -18,12 +18,14 @@ const HomeScreen = ({ navigation }) => {
     const [modalVisible, setModalVisible] = useState(false);
     const [lastGroup, setLastGroup] = useState<FirebaseFirestoreTypes.QueryDocumentSnapshot<FirebaseFirestoreTypes.DocumentData>>();
     const limitItem = 10;
-    console.log(noteGroups.length)
 
     const uid = useAppSelector(state => state.auth.currentUser?.uid)
 
     useEffect(() => {
-        getFirstPageGroups(setNoteGroups, uid, limitItem, setLastGroup)
+        const sub = getFirstPageGroups(setNoteGroups, uid, limitItem, setLastGroup);
+        return () => {
+            sub()
+        }
     }, []);
 
     const handleLogOut = () => {
@@ -59,6 +61,22 @@ const HomeScreen = ({ navigation }) => {
         )
     }
 
+    const handleDelete = (id: string) => {
+        if (id === lastGroup?.id) {
+            const newLatsId = noteGroups[noteGroups.length - 2].id;
+            setNewLast(uid, newLatsId, setLastGroup);
+        }
+        setNoteGroups(groups => {
+            groups.forEach(item => {
+                if(item.id === id){
+                    groups.splice(groups.indexOf(item),1);
+                }
+            })
+            return groups;
+        })
+        deleteGroup(id);
+    }
+
     const createConfirmDialog = (id: string) => {
         Alert.alert(
             "Delete group?",
@@ -71,7 +89,7 @@ const HomeScreen = ({ navigation }) => {
                 },
                 {
                     text: "OK", onPress: () => {
-                        deleteGroup(id)
+                        handleDelete(id)
                     }
                 }
             ])
@@ -91,9 +109,7 @@ const HomeScreen = ({ navigation }) => {
     }
 
     const handleLoadMore = () => {
-        console.log('LAST GROUP', lastGroup?.data())
         if (lastGroup) {
-            console.log("LOAD MORE")
             getMoreGroups(setNoteGroups, uid, limitItem, setLastGroup, lastGroup)
         }
     }

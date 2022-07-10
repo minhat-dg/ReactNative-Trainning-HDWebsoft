@@ -25,7 +25,7 @@ export const getFirstPageGroups = (setNoteGroups: React.Dispatch<React.SetStateA
                 setNoteGroups(groups)
             }
         });
-    return () => subscriber()
+    return subscriber
 }
 
 export const getMoreGroups = (setNoteGroups: React.Dispatch<React.SetStateAction<Group[]>>, uid: string | undefined, limit: number, setLastGroup: React.Dispatch<SetStateAction<FirebaseFirestoreTypes.QueryDocumentSnapshot<FirebaseFirestoreTypes.DocumentData> | undefined>>, lastGroup: FirebaseFirestoreTypes.DocumentData) => {
@@ -33,7 +33,7 @@ export const getMoreGroups = (setNoteGroups: React.Dispatch<React.SetStateAction
         .collection('Groups').where('uid', '==', uid).orderBy("timestamp", "desc")
         .startAfter(lastGroup).limit(limit)
         .onSnapshot(querySnapshot => {
-            if (querySnapshot) {
+            if (querySnapshot.size > 0) {
                 const groups: Group[] = [];
                 querySnapshot.forEach(documentSnapshot => {
                     groups.push({
@@ -47,10 +47,23 @@ export const getMoreGroups = (setNoteGroups: React.Dispatch<React.SetStateAction
                 });
                 const lastGroup = querySnapshot.docs[querySnapshot.docs.length - 1];
                 setLastGroup(lastGroup)
-                setNoteGroups((listGroups) => [...listGroups, ...groups])
+                setNoteGroups((listGroups) => {
+                    groups.forEach(newItem => {
+                        let isHave = false
+                        listGroups.forEach(item => {
+                            if (item.id === newItem.id) {
+                                isHave = true;
+                                return
+                            }
+                        })
+                        if (!isHave) {
+                            listGroups.push(newItem)
+                        }
+                    })
+                    return listGroups;
+                })
             }
         })
-    return () => subscriber()
 }
 
 export const deleteGroup = (id: string) => {
@@ -63,4 +76,15 @@ export const deleteGroup = (id: string) => {
             })
             console.log('Group deleted!');
         });
+}
+
+export const setNewLast = (uid: string | undefined, newLatsId: string, setLastGroup: React.Dispatch<SetStateAction<FirebaseFirestoreTypes.QueryDocumentSnapshot<FirebaseFirestoreTypes.DocumentData> | undefined>>) => {
+    firestore()
+        .collection('Groups').where('uid', '==', uid).get().then(querySnapShot => {
+            querySnapShot.forEach(doc => {
+                if (doc.id === newLatsId) {
+                    setLastGroup(doc)
+                }
+            })
+        })
 }

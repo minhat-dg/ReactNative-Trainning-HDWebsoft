@@ -9,7 +9,7 @@ import { Note } from "../../../models/note";
 import GroupMenu from "../components/GroupsMenu";
 import NoteItem from "../components/NoteItem";
 import NoteOption from "../components/NoteOption";
-import { deleteNote, getFirstPageNotes, getGroupList, getMoreNotes, moveNote } from "../notesApi";
+import { deleteNote, getFirstPageNotes, getGroupList, getMoreNotes, moveNote, setNewLast } from "../notesApi";
 
 const GroupScreen = ({ route, navigation }) => {
     const { groupName, groupId } = route.params;
@@ -46,7 +46,7 @@ const GroupScreen = ({ route, navigation }) => {
         }
         timeOutRef.current = setTimeout(() => {
             filterNotes(text);
-        }, delay);
+        }, delay)
     }
 
     const filterNotes = (text: string) => {
@@ -76,6 +76,22 @@ const GroupScreen = ({ route, navigation }) => {
         setCurrentNote(item)
     }
 
+    const handleDelete = (id: string) => {
+        if (id === lastNote?.id) {
+            const newLatsId = notes[notes.length - 2].id;
+            setNewLast(groupId, newLatsId, setLastNote);
+        }
+        setNotes(notes => {
+            notes.forEach(item => {
+                if(item.id === id){
+                    notes.splice(notes.indexOf(item),1);
+                }
+            })
+            return notes;
+        })
+        deleteNote(id, groupId)
+    }
+
     const handleDeleteNote = (item: Note) => {
         Alert.alert(
             "Delete Note?",
@@ -89,7 +105,7 @@ const GroupScreen = ({ route, navigation }) => {
                 {
                     text: "OK", onPress: () => {
                         console.log(item.id)
-                        deleteNote(item.id, groupId)
+                        handleDelete(item.id);
                     }
                 }
             ])
@@ -115,9 +131,7 @@ const GroupScreen = ({ route, navigation }) => {
     }
 
     const handleLoadMore = () => {
-        console.log('LAST GROUP', lastNote?.data())
         if (lastNote) {
-            console.log("LOAD MORE")
             getMoreNotes(setNotes, setFilteredNotes, groupId, limitItem, setLastNote, lastNote)
         }
     }

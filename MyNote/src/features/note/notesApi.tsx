@@ -13,6 +13,7 @@ export const getFirstPageNotes = (setNotes: { (value: SetStateAction<Note[]>): v
             if (querySnapshot) {
                 const notes: Note[] = [];
                 querySnapshot.forEach(documentSnapshot => {
+                    console.log(documentSnapshot.id)
                     notes.push({
                         title: documentSnapshot.data().title,
                         content: documentSnapshot.data().content,
@@ -32,12 +33,16 @@ export const getFirstPageNotes = (setNotes: { (value: SetStateAction<Note[]>): v
     return () => subscriber()
 }
 
-export const getMoreNotes = (setNotes: { (value: SetStateAction<Note[]>): void; (arg0: Note[]): void; }, setFilteredNotes: { (value: SetStateAction<Note[]>): void; (arg0: Note[]): void; }, groupId: string, limit: number, setLastNote: React.Dispatch<SetStateAction<FirebaseFirestoreTypes.QueryDocumentSnapshot<FirebaseFirestoreTypes.DocumentData> | undefined>>, lastNote: FirebaseFirestoreTypes.DocumentData) => {
+export const getMoreNotes = (setNotes: { (value: SetStateAction<Note[]>): void; (arg0: Note[]): void; },
+    setFilteredNotes: { (value: SetStateAction<Note[]>): void; (arg0: Note[]): void; },
+    groupId: string, limit: number,
+    setLastNote: React.Dispatch<SetStateAction<FirebaseFirestoreTypes.QueryDocumentSnapshot<FirebaseFirestoreTypes.DocumentData> | undefined>>,
+    lastNote: FirebaseFirestoreTypes.DocumentData) => {
     const subscriber = firestore()
         .collection('Notes').where('groupId', '==', groupId).orderBy("timestamp", "desc")
         .startAfter(lastNote).limit(limit)
         .onSnapshot(querySnapshot => {
-            if (querySnapshot) {
+            if (querySnapshot.size > 0) {
                 const notes: Note[] = [];
                 querySnapshot.forEach(documentSnapshot => {
                     notes.push({
@@ -50,14 +55,43 @@ export const getMoreNotes = (setNotes: { (value: SetStateAction<Note[]>): void; 
                 });
                 const lastNote = querySnapshot.docs[querySnapshot.docs.length - 1];
                 setLastNote(lastNote)
-                setNotes((listNotes) => [...listNotes, ...notes])
-                setFilteredNotes((listNotes) => [...listNotes, ...notes])
+                setNotes((listNotes) => {
+                    notes.forEach(newItem => {
+                        let isHave = false
+                        listNotes.forEach(item => {
+                            if (item.id === newItem.id) {
+                                isHave = true;
+                                return
+                            }
+                        })
+                        if (!isHave) {
+                            listNotes.push(newItem)
+                        }
+                    })
+                    return listNotes;
+                })
+                setFilteredNotes((listNotes) => {
+                    notes.forEach(newItem => {
+                        let isHave = false
+                        listNotes.forEach(item => {
+                            if (item.id === newItem.id) {
+                                isHave = true;
+                                return
+                            }
+                        })
+                        if (!isHave) {
+                            listNotes.push(newItem)
+                        }
+                    })
+                    return listNotes;
+                })
             }
         });
     return () => subscriber()
 }
 
 export const deleteNote = (id: string, groupId: string) => {
+
     firestore()
         .collection('Notes').doc(id).delete().then(() => {
             console.log('Note deleted!');
@@ -65,6 +99,17 @@ export const deleteNote = (id: string, groupId: string) => {
                 count: decreasement
             })
         });
+}
+
+export const setNewLast = (groupId: string | undefined, newLatsId: string, setLastNote: React.Dispatch<SetStateAction<FirebaseFirestoreTypes.QueryDocumentSnapshot<FirebaseFirestoreTypes.DocumentData> | undefined>>) => {
+    firestore()
+        .collection('Notes').where('groupId', '==', groupId).get().then(querySnapShot => {
+            querySnapShot.forEach(doc => {
+                if (doc.id === newLatsId) {
+                    setLastNote(doc)
+                }
+            })
+        })
 }
 
 export const moveNote = (id: string | undefined, groupId: string | undefined, newGroupId: string) => {
