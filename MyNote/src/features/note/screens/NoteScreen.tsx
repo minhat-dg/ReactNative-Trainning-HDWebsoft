@@ -3,7 +3,7 @@ import React from "react";
 import { Alert, SafeAreaView, Text } from "react-native";
 import * as yup from 'yup';
 import { useAppDispatch } from "../../../app/hook";
-import { noteStyle } from "../../../assets/style";
+import { noteStyle } from "assets/style";
 import CustomButton from "../../../components/CustomButton/CustomButton";
 import CustomButtonBorder from "../../../components/CustomButton/CustomButtonBorder";
 import CustomInput from "../../../components/CustomInput/CustomInput";

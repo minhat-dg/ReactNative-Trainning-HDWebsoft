@@ -3,8 +3,8 @@ import React from "react";
 import { Modal, Pressable, Text, View } from "react-native";
 import * as yup from 'yup';
 import { useAppDispatch, useAppSelector } from "../../../app/hook";
-import { groupModalStyle } from "../../../assets/style";
-import CustomInput from "../../../components/CustomInput/CustomInput";
+import { groupModalStyle } from "assets/style";
+import CustomInput from "components/CustomInput/CustomInput";
 import { groupAction } from "../groupSlice";
 
 const AddGroupModal = ({ modalVisible, setModalVisible }) => {

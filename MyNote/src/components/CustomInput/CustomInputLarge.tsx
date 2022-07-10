@@ -1,6 +1,6 @@
 import React from "react";
 import { KeyboardTypeOptions, NativeSyntheticEvent, TextInput, TextInputFocusEventData, View } from "react-native";
-import { inputLargeStyle } from "../../assets/style";
+import { inputLargeStyle } from "assets/style";
 
 const CustomInputLarge = ({ value, onChangeText, onBlur, placeHolder, secureText, keyboardType }: { value: string, onChangeText: ((text: string) => void), onBlur: ((e: NativeSyntheticEvent<TextInputFocusEventData>) => void), placeHolder: string, secureText: boolean, keyboardType: KeyboardTypeOptions }) => {
     return (

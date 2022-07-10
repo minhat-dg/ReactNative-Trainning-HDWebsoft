@@ -1,7 +1,7 @@
 import firestore, { FirebaseFirestoreTypes } from '@react-native-firebase/firestore';
 import { SetStateAction } from 'react';
-import { Group } from '../../models/group';
-import { Note } from '../../models/note';
+import { Group } from 'models/group';
+import { Note } from 'models/note';
 
 const increasement = firestore.FieldValue.increment(1);
 const decreasement = firestore.FieldValue.increment(-1);

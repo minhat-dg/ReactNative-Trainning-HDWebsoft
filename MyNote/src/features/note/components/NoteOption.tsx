@@ -1,6 +1,6 @@
 import React from "react";
 import { Modal, Text, TouchableOpacity, View } from "react-native";
-import { noteOptionStyle } from "../../../assets/style";
+import { noteOptionStyle } from "assets/style";
 
 const NoteOption = ({ modalVisible, setModalVisible, handleDeleteNote, handleMoveNote, item }) => {
     return (

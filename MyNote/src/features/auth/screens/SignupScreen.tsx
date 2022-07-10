@@ -3,10 +3,10 @@ import React from "react";
 import { SafeAreaView, Text, View } from "react-native";
 import * as yup from 'yup';
 import { useAppDispatch, useAppSelector } from "../../../app/hook";
-import { signupStyle } from "../../../assets/style";
-import CustomButton from "../../../components/CustomButton/CustomButton";
-import CustomInput from "../../../components/CustomInput/CustomInput";
-import ProgressBar from "../../../components/ProgressBar/ProgressBar";
+import { signupStyle } from "assets/style";
+import CustomButton from "components/CustomButton/CustomButton";
+import CustomInput from "components/CustomInput/CustomInput";
+import ProgressBar from "components/ProgressBar/ProgressBar";
 import { authActions } from "../authSlice";
 
 const SignupScreen = ({ navigation }) => {

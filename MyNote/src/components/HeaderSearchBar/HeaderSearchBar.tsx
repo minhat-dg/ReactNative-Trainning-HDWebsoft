@@ -1,7 +1,7 @@
 import React from "react";
 import { TextInput, View } from "react-native";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
-import { HeaderSearchBarStyle } from "../../assets/style";
+import { HeaderSearchBarStyle } from "assets/style";
 
 const HeaderSearchBar = ({value, onChangeText}:{value: string, onChangeText: (value: string) => void}) => {
     return (

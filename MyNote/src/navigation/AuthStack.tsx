@@ -1,6 +1,6 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import React from "react";
-import { authHeaderStyle } from '../assets/style';
+import { authHeaderStyle } from 'assets/style';
 import LoginScreen from "../features/auth/screens/LoginScreen";
 import SignupScreen from "../features/auth/screens/SignupScreen";
 

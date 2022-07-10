@@ -1,6 +1,6 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import React from "react";
-import { mainHeaderStyle } from '../assets/style';
+import { mainHeaderStyle } from 'assets/style';
 import HomeScreen from "../features/group/screen/HomeScreen";
 import GroupScreen from "../features/note/screens/GroupScreen";
 import NoteScreen from '../features/note/screens/NoteScreen';

@@ -1,7 +1,7 @@
 import React from "react";
 import { Modal, ScrollView, Text, TouchableOpacity, View } from "react-native";
-import { groupMenuStyle } from "../../../assets/style";
-import { Group } from "../../../models/group";
+import { groupMenuStyle } from "assets/style";
+import { Group } from "models/group";
 
 const GroupMenu = ({ modalVisible, setModalVisible, groups, moveNote }) => {
     return (

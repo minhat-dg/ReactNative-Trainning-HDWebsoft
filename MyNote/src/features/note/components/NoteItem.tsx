@@ -1,6 +1,6 @@
 import React from "react";
 import { Text, TouchableOpacity, View } from "react-native";
-import { noteItemStyle } from "../../../assets/style";
+import { noteItemStyle } from "assets/style";
 
 const NoteItem = ({ item }, handleOnPress, handleOnLongPress) => {
 

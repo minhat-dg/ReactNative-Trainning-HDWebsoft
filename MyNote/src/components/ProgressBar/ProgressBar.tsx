@@ -1,7 +1,7 @@
 import React from "react";
 import { Text, View } from "react-native";
 import { Circle } from "react-native-progress";
-import { progressBarStyle } from "../../assets/style";
+import { progressBarStyle } from "assets/style";
 
 const ProgressBar = () => {
     return (

@@ -1,6 +1,6 @@
 import React from "react";
 import { Pressable, Text } from "react-native";
-import { customButtonStyle } from "../../assets/style";
+import { customButtonStyle } from 'assets/style';
 
 const CustomButton = ({ text, onPress, isValid }: { text: string, onPress: () => void, isValid: boolean }) => {
     return (

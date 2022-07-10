@@ -4,11 +4,11 @@ import React from "react";
 import { SafeAreaView, Text, View } from "react-native";
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import * as yup from 'yup';
-import { useAppDispatch, useAppSelector } from "../../../app/hook";
-import { loginStyle } from "../../../assets/style";
-import CustomButton from "../../../components/CustomButton/CustomButton";
-import CustomInput from "../../../components/CustomInput/CustomInput";
-import ProgressBar from "../../../components/ProgressBar/ProgressBar";
+import { useAppDispatch, useAppSelector } from "app/hook";
+import { loginStyle } from "assets/style";
+import CustomButton from "components/CustomButton/CustomButton";
+import CustomInput from "components/CustomInput/CustomInput";
+import ProgressBar from "components/ProgressBar/ProgressBar";
 import { authActions } from "../authSlice";
 
 const LoginScreen = () => {

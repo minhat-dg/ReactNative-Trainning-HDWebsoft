@@ -4,7 +4,7 @@ import { Alert, SafeAreaView, Text, TouchableOpacity } from "react-native";
 import { SwipeListView } from "react-native-swipe-list-view";
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { useAppDispatch, useAppSelector } from "../../../app/hook";
-import { homeStyle } from "../../../assets/style";
+import { homeStyle } from "assets/style";
 import CustomFloatButton from "../../../components/CustomButton/CustomFloatButton";
 import { Group } from "../../../models/group";
 import { authActions } from "../../auth/authSlice";

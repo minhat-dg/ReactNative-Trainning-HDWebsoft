@@ -1,7 +1,7 @@
 import { FirebaseFirestoreTypes } from "@react-native-firebase/firestore";
 import React, { useEffect, useRef, useState } from "react";
 import { Alert, FlatList, SafeAreaView } from "react-native";
-import { groupStyle } from "../../../assets/style";
+import { groupStyle } from "assets/style";
 import CustomFloatButton from "../../../components/CustomButton/CustomFloatButton";
 import HeaderSearchBar from "../../../components/HeaderSearchBar/HeaderSearchBar";
 import { Group } from "../../../models/group";
