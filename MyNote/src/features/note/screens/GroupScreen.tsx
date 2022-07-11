@@ -1,7 +1,9 @@
 import { FirebaseFirestoreTypes } from "@react-native-firebase/firestore";
-import React, { useEffect, useRef, useState } from "react";
-import { Alert, FlatList, SafeAreaView } from "react-native";
+import { NativeStackScreenProps } from "@react-navigation/native-stack/lib/typescript/src/types";
 import { groupStyle } from "assets/style";
+import RootStackParamList from "constants/type";
+import React, { useEffect, useRef, useState } from "react";
+import { Alert, FlatList, SafeAreaView, View } from "react-native";
 import CustomFloatButton from "../../../components/CustomButton/CustomFloatButton";
 import HeaderSearchBar from "../../../components/HeaderSearchBar/HeaderSearchBar";
 import { Group } from "../../../models/group";
@@ -11,7 +13,10 @@ import NoteItem from "../components/NoteItem";
 import NoteOption from "../components/NoteOption";
 import { deleteNote, getFirstPageNotes, getGroupList, getMoreNotes, moveNote, setNewLast } from "../notesApi";
 
-const GroupScreen = ({ route, navigation }) => {
+type HomeGroupScreenProps = NativeStackScreenProps<RootStackParamList, 'Group'>
+
+
+const GroupScreen = ({ route, navigation }: { navigation: HomeGroupScreenProps['navigation'], route: HomeGroupScreenProps['route'] }) => {
     const { groupName, groupId } = route.params;
     const [notes, setNotes] = useState<Note[]>([]);
     const [lastNote, setLastNote] = useState<FirebaseFirestoreTypes.QueryDocumentSnapshot<FirebaseFirestoreTypes.DocumentData>>();
@@ -83,8 +88,8 @@ const GroupScreen = ({ route, navigation }) => {
         }
         setNotes(notes => {
             notes.forEach(item => {
-                if(item.id === id){
-                    notes.splice(notes.indexOf(item),1);
+                if (item.id === id) {
+                    notes.splice(notes.indexOf(item), 1);
                 }
             })
             return notes;
@@ -141,7 +146,7 @@ const GroupScreen = ({ route, navigation }) => {
             <HeaderSearchBar value={search} onChangeText={handleChangeSearch} />
             <FlatList onEndReached={handleLoadMore} data={filteredNotes} renderItem={(item) => NoteItem(item, handleOnPress, handleOnLongPress)} numColumns={2} />
             <CustomFloatButton onPress={navigateToNoteScreen} />
-            <NoteOption modalVisible={optionVisible} setModalVisible={setOptionVisible} handleDeleteNote={handleDeleteNote} handleMoveNote={moveNoteChose} item={currentNote} />
+            {currentNote !== undefined ? <NoteOption modalVisible={optionVisible} setModalVisible={setOptionVisible} handleDeleteNote={handleDeleteNote} handleMoveNote={moveNoteChose} item={currentNote} /> : <View />}
             <GroupMenu modalVisible={groupMenuVisible} setModalVisible={setGroupMenuVisible} groups={groups} moveNote={handleMoveNote} />
         </SafeAreaView>
     )

@@ -1,23 +1,32 @@
+import { NativeStackScreenProps } from "@react-navigation/native-stack/lib/typescript/src/types";
+import { noteStyle } from "assets/style";
+import RootStackParamList from "constants/type";
 import { Formik } from "formik";
-import React from "react";
+import React, { useEffect } from "react";
 import { Alert, SafeAreaView, Text } from "react-native";
 import * as yup from 'yup';
 import { useAppDispatch } from "../../../app/hook";
-import { noteStyle } from "assets/style";
 import CustomButton from "../../../components/CustomButton/CustomButton";
 import CustomButtonBorder from "../../../components/CustomButton/CustomButtonBorder";
 import CustomInput from "../../../components/CustomInput/CustomInput";
 import CustomInputLarge from "../../../components/CustomInput/CustomInputLarge";
 import { noteAction } from "../noteSlice";
 
-const NoteScreen = ({ route, navigation }) => {
+type NoteGroupScreenProps = NativeStackScreenProps<RootStackParamList, 'Note'>
+const NoteScreen = ({ route, navigation }: { navigation: NoteGroupScreenProps['navigation'], route: NoteGroupScreenProps['route'] }) => {
     const { groupId, note } = route.params;
     const dispatch = useAppDispatch();
-
     const noteInfo = {
         title: (note !== undefined ? note.title : ''),
         content: (note !== undefined ? note.content : '')
     }
+
+    useEffect(() => {
+        navigation.setOptions({
+            headerTitle: noteInfo.title
+        });
+
+    }, [navigation])
 
     const noteValidationSchema = yup.object().shape({
         title: yup.string().required('Note title is required')

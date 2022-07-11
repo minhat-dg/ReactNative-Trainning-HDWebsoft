@@ -1,13 +1,13 @@
+import { useAppDispatch, useAppSelector } from "app/hook";
+import { groupModalStyle } from "assets/style";
+import CustomInput from "components/CustomInput/CustomInput";
 import { Formik } from "formik";
 import React from "react";
 import { Modal, Pressable, Text, View } from "react-native";
 import * as yup from 'yup';
-import { useAppDispatch, useAppSelector } from "../../../app/hook";
-import { groupModalStyle } from "assets/style";
-import CustomInput from "components/CustomInput/CustomInput";
 import { groupAction } from "../groupSlice";
 
-const AddGroupModal = ({ modalVisible, setModalVisible }) => {
+const AddGroupModal = ({ modalVisible, setModalVisible }: { modalVisible: boolean, setModalVisible: React.Dispatch<React.SetStateAction<boolean>> }) => {
     const dispatch = useAppDispatch()
     const uid = useAppSelector(state => state.auth.currentUser?.uid)
 

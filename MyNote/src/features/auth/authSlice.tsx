@@ -51,5 +51,5 @@ export default authReducer;
 export const authActions = authSlice.actions;
 
 //Selectors
-export const selectIsLoggedIn = (state) => state.auth.isLoggedIn;
-export const selectIsLogging = (state) => state.auth.isLogging;
+export const selectIsLoggedIn = (state: { auth: { isLoggedIn: boolean; }; }) => state.auth.isLoggedIn;
+export const selectIsLogging = (state: { auth: { isLogging: boolean; }; }) => state.auth.isLogging;

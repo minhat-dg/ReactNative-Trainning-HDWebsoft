@@ -1,6 +1,6 @@
 import firestore, { FirebaseFirestoreTypes } from '@react-native-firebase/firestore';
-import { SetStateAction } from 'react';
 import { Group } from 'models/group';
+import { SetStateAction } from 'react';
 
 export const getFirstPageGroups = (setNoteGroups: React.Dispatch<React.SetStateAction<Group[]>>, uid: string | undefined, limit: number, setLastGroup: React.Dispatch<SetStateAction<FirebaseFirestoreTypes.QueryDocumentSnapshot<FirebaseFirestoreTypes.DocumentData> | undefined>>) => {
     const subscriber = firestore()

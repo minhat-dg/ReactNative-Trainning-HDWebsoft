@@ -1,7 +1,7 @@
 import firestore, { FirebaseFirestoreTypes } from '@react-native-firebase/firestore';
-import { SetStateAction } from 'react';
 import { Group } from 'models/group';
 import { Note } from 'models/note';
+import { SetStateAction } from 'react';
 
 const increasement = firestore.FieldValue.increment(1);
 const decreasement = firestore.FieldValue.increment(-1);
@@ -13,7 +13,6 @@ export const getFirstPageNotes = (setNotes: { (value: SetStateAction<Note[]>): v
             if (querySnapshot) {
                 const notes: Note[] = [];
                 querySnapshot.forEach(documentSnapshot => {
-                    console.log(documentSnapshot.id)
                     notes.push({
                         title: documentSnapshot.data().title,
                         content: documentSnapshot.data().content,
@@ -30,7 +29,7 @@ export const getFirstPageNotes = (setNotes: { (value: SetStateAction<Note[]>): v
                 setFilteredNotes(notes)
             }
         });
-    return () => subscriber()
+    return subscriber
 }
 
 export const getMoreNotes = (setNotes: { (value: SetStateAction<Note[]>): void; (arg0: Note[]): void; },

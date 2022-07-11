@@ -1,36 +1,21 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import React from "react";
 import { mainHeaderStyle } from 'assets/style';
+import RootStackParamList from 'constants/type';
+import React from "react";
 import HomeScreen from "../features/group/screen/HomeScreen";
 import GroupScreen from "../features/note/screens/GroupScreen";
 import NoteScreen from '../features/note/screens/NoteScreen';
 
-
-const screens = {
-    Home: {
-        screen: HomeScreen,
-        navigationOptions: mainHeaderStyle('All groups')
-    },
-    Group: {
-        screen: GroupScreen,
-        navigationOptions: mainHeaderStyle('')
-    },
-    Note: {
-        screen: NoteScreen,
-        navigationOptions: mainHeaderStyle('Note')
-    }
-}
-
-const Stack = createNativeStackNavigator();
+const Stack = createNativeStackNavigator<RootStackParamList>();
 
 
 const MainStack = () => {
 
     return (
         <Stack.Navigator screenOptions={{ headerShown: true }} initialRouteName={"Home"}>
-            <Stack.Screen name="Home" component={HomeScreen} options={screens.Home.navigationOptions} />
-            <Stack.Screen name="Group" component={GroupScreen} options={screens.Group.navigationOptions} />
-            <Stack.Screen name="Note" component={NoteScreen} options={screens.Note.navigationOptions} />
+            <Stack.Screen name="Home" component={HomeScreen} options={mainHeaderStyle} />
+            <Stack.Screen name="Group" component={GroupScreen} options={mainHeaderStyle} />
+            <Stack.Screen name="Note" component={NoteScreen} options={mainHeaderStyle} />
         </Stack.Navigator>
     )
 }

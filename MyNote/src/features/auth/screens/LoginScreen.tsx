@@ -1,18 +1,23 @@
 import { useNavigation } from "@react-navigation/native";
-import { Formik } from "formik";
-import React from "react";
-import { SafeAreaView, Text, View } from "react-native";
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
-import * as yup from 'yup';
+import { NativeStackNavigationProp } from "@react-navigation/native-stack/lib/typescript/src/types";
 import { useAppDispatch, useAppSelector } from "app/hook";
 import { loginStyle } from "assets/style";
 import CustomButton from "components/CustomButton/CustomButton";
 import CustomInput from "components/CustomInput/CustomInput";
 import ProgressBar from "components/ProgressBar/ProgressBar";
+import RootStackParamList from "constants/type";
+import { Formik } from "formik";
+import React from "react";
+import { SafeAreaView, Text, View } from "react-native";
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import * as yup from 'yup';
 import { authActions } from "../authSlice";
 
+
+type LoginScreenProps = NativeStackNavigationProp<RootStackParamList, 'Login'>
+
 const LoginScreen = () => {
-    const navigation = useNavigation();
+    const navigation = useNavigation<LoginScreenProps>();
     const dispatch = useAppDispatch();
     const isLogging = useAppSelector(state => state.auth.logging)
 
@@ -49,7 +54,7 @@ const LoginScreen = () => {
     }
 
     const handleNavSignup = () => {
-        navigation.navigate('Signup')
+        navigation.navigate('SignUp')
     }
 
     const handleLogin = ({ email, password }: { email: string, password: string }) => {

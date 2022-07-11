@@ -1,18 +1,21 @@
 import { FirebaseFirestoreTypes } from "@react-native-firebase/firestore";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack/lib/typescript/src/types";
+import { homeStyle } from "assets/style";
+import RootStackParamList from "constants/type";
 import React, { useEffect, useState } from "react";
 import { Alert, SafeAreaView, Text, TouchableOpacity } from "react-native";
 import { SwipeListView } from "react-native-swipe-list-view";
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { useAppDispatch, useAppSelector } from "../../../app/hook";
-import { homeStyle } from "assets/style";
 import CustomFloatButton from "../../../components/CustomButton/CustomFloatButton";
 import { Group } from "../../../models/group";
 import { authActions } from "../../auth/authSlice";
 import AddGroupModal from "../components/AddGroupModal";
 import { deleteGroup, getFirstPageGroups, getMoreGroups, setNewLast } from "../groupApi";
 
+type HomeScreenProps = NativeStackNavigationProp<RootStackParamList, 'Home'>
 
-const HomeScreen = ({ navigation }) => {
+const HomeScreen = ({ navigation }: { navigation: HomeScreenProps }) => {
     const dispatch = useAppDispatch();
     const [noteGroups, setNoteGroups] = useState<Group[]>([]);
     const [modalVisible, setModalVisible] = useState(false);
@@ -23,10 +26,13 @@ const HomeScreen = ({ navigation }) => {
 
     useEffect(() => {
         const sub = getFirstPageGroups(setNoteGroups, uid, limitItem, setLastGroup);
+        navigation.setOptions({
+            headerTitle: "All groups"
+        });
         return () => {
             sub()
         }
-    }, []);
+    }, [navigation]);
 
     const handleLogOut = () => {
         console.log("LOGING OUT")
@@ -68,8 +74,8 @@ const HomeScreen = ({ navigation }) => {
         }
         setNoteGroups(groups => {
             groups.forEach(item => {
-                if(item.id === id){
-                    groups.splice(groups.indexOf(item),1);
+                if (item.id === id) {
+                    groups.splice(groups.indexOf(item), 1);
                 }
             })
             return groups;

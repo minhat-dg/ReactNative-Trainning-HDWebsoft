@@ -1,8 +1,9 @@
+import { noteOptionStyle } from "assets/style";
+import { Note } from "models/note";
 import React from "react";
 import { Modal, Text, TouchableOpacity, View } from "react-native";
-import { noteOptionStyle } from "assets/style";
 
-const NoteOption = ({ modalVisible, setModalVisible, handleDeleteNote, handleMoveNote, item }) => {
+const NoteOption = ({ modalVisible, setModalVisible, handleDeleteNote, handleMoveNote, item }: { modalVisible: boolean, setModalVisible: React.Dispatch<React.SetStateAction<boolean>>, handleDeleteNote: (item: Note) => void, handleMoveNote: () => void, item: Note }) => {
     return (
         <View style={noteOptionStyle.centeredView}>
             <Modal

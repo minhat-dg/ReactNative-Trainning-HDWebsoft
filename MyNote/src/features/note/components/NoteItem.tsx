@@ -1,8 +1,9 @@
+import { noteItemStyle } from "assets/style";
+import { Note } from "models/note";
 import React from "react";
 import { Text, TouchableOpacity, View } from "react-native";
-import { noteItemStyle } from "assets/style";
 
-const NoteItem = ({ item }, handleOnPress, handleOnLongPress) => {
+const NoteItem = ({ item }: { item: Note }, handleOnPress: (item: Note) => void, handleOnLongPress: (item: Note) => void) => {
 
     return (
         <TouchableOpacity style={noteItemStyle.itemContainer} onPress={() => handleOnPress(item)} onLongPress={() => handleOnLongPress(item)}>

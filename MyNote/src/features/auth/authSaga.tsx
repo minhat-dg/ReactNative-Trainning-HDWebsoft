@@ -1,7 +1,8 @@
-import auth from "@react-native-firebase/auth";
+import auth, { FirebaseAuthTypes } from "@react-native-firebase/auth";
 import { GoogleSignin } from "@react-native-google-signin/google-signin";
 import { PayloadAction } from "@reduxjs/toolkit";
-import { AccessToken, LoginManager } from "react-native-fbsdk-next";
+import { AccessToken, LoginManager, LoginResult } from "react-native-fbsdk-next";
+import FBAccessToken from "react-native-fbsdk-next/lib/typescript/src/FBAccessToken";
 import { call, fork, put, take } from "redux-saga/effects";
 import { authActions, LogginPayload } from "./authSlice";
 
@@ -31,7 +32,11 @@ function* loginWithEmail(email: string, password: string) {
             email: auth().currentUser?.email
         }))
     } catch (error) {
-        yield put(authActions.loginFailed(error.message));
+        let errorMessage = "Failed to Login with email";
+        if (error instanceof Error) {
+            errorMessage = error.message;
+        }
+        console.log(errorMessage);
     }
 }
 
@@ -41,39 +46,48 @@ function* loginWithGoogle() {
     });
     try {
         const { idToken } = yield call([GoogleSignin, 'signIn']);
-        const googleCredential = yield call([auth.GoogleAuthProvider, 'credential'], idToken);
+        const googleCredential: FirebaseAuthTypes.AuthCredential = yield call([auth.GoogleAuthProvider, 'credential'], idToken);
         yield call([auth(), 'signInWithCredential'], googleCredential);
         yield put(authActions.loginSuccess({
             uid: auth().currentUser?.uid,
             email: auth().currentUser?.email
         }))
-    } catch (error) {
-        yield put(authActions.loginFailed(error.message));
+    } catch (error: FirebaseAuthTypes.NativeFirebaseAuthError | unknown) {
+        let errorMessage = "Failed to Login with Google";
+        if (error instanceof Error) {
+            errorMessage = error.message;
+        }
+        console.log(errorMessage);
     }
 }
 
 function* loginWithFacebook() {
     try {
-        const result = yield call([LoginManager, 'logInWithPermissions'], (['public_profile', 'email']));
+        const result: LoginResult = yield call([LoginManager, 'logInWithPermissions'], (['public_profile', 'email']));
 
         if (result.isCancelled) {
             throw 'User cancelled the login process';
         }
 
-        const data = yield call([AccessToken, 'getCurrentAccessToken']);
+        const data: FBAccessToken = yield call([AccessToken, 'getCurrentAccessToken']);
 
         if (!data) {
             throw 'Something went wrong obtaining access token';
         }
 
-        const facebookCredential = yield call([auth.FacebookAuthProvider, 'credential'], data.accessToken);
+
+        const facebookCredential: FirebaseAuthTypes.AuthCredential = yield call([auth.FacebookAuthProvider, 'credential'], data.accessToken);
         yield call([auth(), 'signInWithCredential'], facebookCredential);
         yield put(authActions.loginSuccess({
             uid: auth().currentUser?.uid,
             email: auth().currentUser?.email
         }))
     } catch (error) {
-        yield put(authActions.loginFailed(error.message));
+        let errorMessage = "Failed to Login with Facebook";
+        if (error instanceof Error) {
+            errorMessage = error.message;
+        }
+        console.log(errorMessage);
     }
 }
 
@@ -85,7 +99,11 @@ function* signUp(email: string, password: string) {
             email: auth().currentUser?.email
         }))
     } catch (error) {
-        yield put(authActions.loginFailed(error.message));
+        let errorMessage = "Failed to SignUp";
+        if (error instanceof Error) {
+            errorMessage = error.message;
+        }
+        console.log(errorMessage);
     }
 }
 

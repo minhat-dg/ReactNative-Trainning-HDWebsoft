@@ -1,9 +1,9 @@
-import React from "react";
-import { Modal, ScrollView, Text, TouchableOpacity, View } from "react-native";
 import { groupMenuStyle } from "assets/style";
 import { Group } from "models/group";
+import React from "react";
+import { Modal, ScrollView, Text, TouchableOpacity, View } from "react-native";
 
-const GroupMenu = ({ modalVisible, setModalVisible, groups, moveNote }) => {
+const GroupMenu = ({ modalVisible, setModalVisible, groups, moveNote }: { modalVisible: boolean, setModalVisible: React.Dispatch<React.SetStateAction<boolean>>, groups: Group[], moveNote: (newGroupId: string) => void }) => {
     return (
         <Modal
             animationType="slide"

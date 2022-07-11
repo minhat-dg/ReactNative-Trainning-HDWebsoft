@@ -1,17 +1,15 @@
+import { NativeStackNavigationOptions } from "@react-navigation/native-stack"
 import { StyleSheet } from "react-native"
 
-export const mainHeaderStyle = (title: string) => {
-    return {
-        headerStyle: {
-            backgroundColor: '#06283D',
-        },
-        headerTintColor: "#DFF6FF",
-        headerTitleStyle: {
-            fontWeight: 'bold',
-            fontSize: 20
-        },
-        headerTitle: title
-    }
+export const mainHeaderStyle: NativeStackNavigationOptions = {
+    headerStyle: {
+        backgroundColor: '#06283D',
+    },
+    headerTintColor: "#DFF6FF",
+    headerTitleStyle: {
+        fontWeight: 'bold',
+        fontSize: 20
+    },
 }
 
 export const HeaderSearchBarStyle = StyleSheet.create({

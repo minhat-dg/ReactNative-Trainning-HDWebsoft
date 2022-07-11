@@ -1,15 +1,19 @@
+import { NativeStackNavigationProp } from "@react-navigation/native-stack/lib/typescript/src/types";
+import { signupStyle } from "assets/style";
+import CustomButton from "components/CustomButton/CustomButton";
+import CustomInput from "components/CustomInput/CustomInput";
+import ProgressBar from "components/ProgressBar/ProgressBar";
+import RootStackParamList from "constants/type";
 import { Formik } from "formik";
 import React from "react";
 import { SafeAreaView, Text, View } from "react-native";
 import * as yup from 'yup';
 import { useAppDispatch, useAppSelector } from "../../../app/hook";
-import { signupStyle } from "assets/style";
-import CustomButton from "components/CustomButton/CustomButton";
-import CustomInput from "components/CustomInput/CustomInput";
-import ProgressBar from "components/ProgressBar/ProgressBar";
 import { authActions } from "../authSlice";
 
-const SignupScreen = ({ navigation }) => {
+type SignUpScreenProps = NativeStackNavigationProp<RootStackParamList, 'SignUp'>
+
+const SignupScreen = ({ navigation }: { navigation: SignUpScreenProps }) => {
     const dispatch = useAppDispatch();
     const isLogging = useAppSelector(state => state.auth.logging)
 
