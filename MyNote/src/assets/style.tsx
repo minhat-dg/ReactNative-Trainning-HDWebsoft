@@ -124,7 +124,6 @@ export const progressBarStyle = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         backgroundColor: '#06283D',
-        padding: 10,
         width: '100%',
         height: '100%'
     },
@@ -144,9 +143,9 @@ export const loginStyle = StyleSheet.create({
     },
     root: {
         alignItems: 'center',
-        padding: 20,
         backgroundColor: '#06283D',
         height: '100%',
+        paddingHorizontal: 20
     },
     caption: {
         color: '#DFF6FF',
@@ -157,6 +156,7 @@ export const loginStyle = StyleSheet.create({
     textContainer: {
         textAlignVertical: 'bottom',
         flex: 1,
+        marginBottom: 20
     },
     signup: {
         color: '#1363DF',
@@ -183,7 +183,7 @@ export const signupStyle = StyleSheet.create({
     },
     root: {
         alignItems: 'center',
-        padding: 20,
+        paddingHorizontal: 20,
         backgroundColor: '#06283D',
         height: '100%',
         justifyContent: 'center'
@@ -196,11 +196,13 @@ export const signupStyle = StyleSheet.create({
     textContainer: {
         textAlignVertical: 'bottom',
         flex: 1,
+        marginBottom: 20
     },
     signup: {
         color: '#1363DF',
         fontWeight: 'bold',
-        fontSize: 16
+        fontSize: 16,
+
     },
     error: {
         fontSize: 12,

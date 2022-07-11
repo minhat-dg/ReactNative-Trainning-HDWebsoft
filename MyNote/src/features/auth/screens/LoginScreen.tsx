@@ -67,6 +67,7 @@ const LoginScreen = () => {
 
     return (
         <SafeAreaView style={loginStyle.root}>
+
             <Text style={loginStyle.header}>Login</Text>
             <Formik initialValues={loginInfo}
                 validationSchema={loginValidationSchema}
@@ -92,7 +93,7 @@ const LoginScreen = () => {
                 <FontAwesome name="facebook-official" color={'#1363DF'} size={30} onPress={handleFacebookPress} />
             </View>
             <Text style={loginStyle.textContainer}>
-                <Text style={loginStyle.caption}>Don't have an account? </Text>
+                <Text style={loginStyle.caption}>Do not have an account? </Text>
                 <Text style={loginStyle.signup} onPress={handleNavSignup}>SignUp</Text>
             </Text>
             {isLogging ? <ProgressBar /> : <View></View>}

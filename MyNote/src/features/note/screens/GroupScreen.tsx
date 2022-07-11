@@ -10,7 +10,7 @@ import { Group } from "../../../models/group";
 import { Note } from "../../../models/note";
 import GroupMenu from "../components/GroupsMenu";
 import NoteItem from "../components/NoteItem";
-import NoteOption from "../components/NoteOption";
+import NoteOption from '../components/NoteOption';
 import { deleteNote, getFirstPageNotes, getGroupList, getMoreNotes, moveNote, setNewLast } from "../notesApi";
 
 type HomeGroupScreenProps = NativeStackScreenProps<RootStackParamList, 'Group'>
@@ -20,13 +20,13 @@ const GroupScreen = ({ route, navigation }: { navigation: HomeGroupScreenProps['
     const { groupName, groupId } = route.params;
     const [notes, setNotes] = useState<Note[]>([]);
     const [lastNote, setLastNote] = useState<FirebaseFirestoreTypes.QueryDocumentSnapshot<FirebaseFirestoreTypes.DocumentData>>();
-    const [search, setSearch] = useState('')
+    const [search, setSearch] = useState('');
     const [filteredNotes, setFilteredNotes] = useState<Note[]>([]);
-    const [groups, setGroups] = useState<Group[]>([])
+    const [groups, setGroups] = useState<Group[]>([]);
     const [optionVisible, setOptionVisible] = useState(false);
     const [groupMenuVisible, setGroupMenuVisible] = useState(false);
-    const [currentNote, setCurrentNote] = useState<Note>()
-    const timeOutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+    const [currentNote, setCurrentNote] = useState<Note>();
+    const timeOutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
     const limitItem = 12;
 
     useEffect(() => {
