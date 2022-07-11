@@ -56,8 +56,6 @@ const NoteScreen = ({ route, navigation }: { navigation: NoteGroupScreenProps['n
             [
                 {
                     text: "Cancel",
-                    onPress: () => {
-                    },
                     style: "cancel"
                 },
                 {
