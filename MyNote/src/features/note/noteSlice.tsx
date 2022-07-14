@@ -9,12 +9,14 @@ export interface AddNotePayload {
     title: string,
     content: string,
     groupId: string,
+    lock: boolean
 }
 
 export interface UpdateNotePayload {
     title: string,
     content: string,
     id: string,
+    lock: boolean
 }
 
 const initialState: NoteState = {

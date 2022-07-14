@@ -114,7 +114,8 @@ export const inputLargeStyle = StyleSheet.create({
         flex: 1,
         textAlign: 'left',
         textAlignVertical: 'top',
-        width: '100%'
+        width: '100%',
+        height: '100%',
     }
 })
 
@@ -212,10 +213,11 @@ export const signupStyle = StyleSheet.create({
 
 export const groupModalStyle = StyleSheet.create({
     centeredView: {
-        flex: 1,
-        justifyContent: "center",
+        position: 'absolute',
+        justifyContent: 'center',
         alignItems: "center",
-        marginTop: 22,
+        width: '100%',
+        marginTop: '40%'
     },
     modalView: {
         margin: 20,
@@ -369,7 +371,8 @@ export const noteItemStyle = StyleSheet.create({
         height: 150,
         width: '100%',
         alignItems: 'center',
-        padding: 5
+        padding: 5,
+        flexDirection: 'column'
     },
     itemTextName: {
         color: '#DFF6FF',
@@ -377,12 +380,19 @@ export const noteItemStyle = StyleSheet.create({
         fontWeight: '500',
     },
     itemTextDescription: {
+        flex: 9.5,
         color: '#06283D',
         fontSize: 16,
         fontWeight: 'normal',
         marginTop: 5,
-        flexShrink: 1
+        flexShrink: 1,
     },
+    icon: {
+        flex: 2.5,
+        width: '100%',
+        alignItems: 'flex-end',
+        paddingHorizontal: 5
+    }
 })
 
 export const noteOptionStyle = StyleSheet.create({

@@ -11,7 +11,7 @@ function* watchAddGroup() {
 }
 
 function* handleAddGroup(payload: GroupPayload) {
-    firestore().collection('Groups').add({
+    yield firestore().collection('Groups').add({
         name: payload.name,
         description: payload.description,
         count: payload.count,

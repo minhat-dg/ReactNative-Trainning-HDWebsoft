@@ -2,14 +2,17 @@ import { NativeStackScreenProps } from "@react-navigation/native-stack/lib/types
 import { noteStyle } from "assets/style";
 import RootStackParamList from "constants/type";
 import { Formik } from "formik";
-import React, { useEffect } from "react";
-import { Alert, SafeAreaView, Text } from "react-native";
+import React, { useEffect, useState } from "react";
+import { Alert, SafeAreaView, Text, TouchableOpacity } from "react-native";
+import FontAwesome from "react-native-vector-icons/FontAwesome";
 import * as yup from 'yup';
 import { useAppDispatch } from "../../../app/hook";
 import CustomButton from "../../../components/CustomButton/CustomButton";
 import CustomButtonBorder from "../../../components/CustomButton/CustomButtonBorder";
 import CustomInput from "../../../components/CustomInput/CustomInput";
 import CustomInputLarge from "../../../components/CustomInput/CustomInputLarge";
+import LockNoteModal from "../components/LockNoteModal";
+import UnlockModal from "../components/UnlockModal";
 import { noteAction } from "../noteSlice";
 
 type NoteGroupScreenProps = NativeStackScreenProps<RootStackParamList, 'Note'>
@@ -18,15 +21,33 @@ const NoteScreen = ({ route, navigation }: { navigation: NoteGroupScreenProps['n
     const dispatch = useAppDispatch();
     const noteInfo = {
         title: (note !== undefined ? note.title : ''),
-        content: (note !== undefined ? note.content : '')
+        content: (note !== undefined ? note.content : ''),
+        lock: (note !== undefined ? note.lock : false)
     }
+    const [lock, setLock] = useState(noteInfo.lock)
+    const [modalVisible, setModalVisible] = useState(false)
+    const [unlockVisible, setUnlockVisible] = useState(noteInfo.lock)
 
     useEffect(() => {
         navigation.setOptions({
-            headerTitle: noteInfo.title
+            headerBackVisible: false,
+            headerTitle: noteInfo.title === '' ? 'New Note' : noteInfo.title,
+            headerRight() {
+                return (
+                    <TouchableOpacity onPress={() => handleLock()}>
+                        {!lock
+                            ? <FontAwesome name="unlock" color={'#DFF6FF'} size={25} />
+                            : <FontAwesome name="lock" color={'#DFF6FF'} size={25} />
+                        }
+                    </TouchableOpacity>
+                )
+            },
         });
+    }, [lock])
 
-    }, [navigation])
+    const handleLock = () => {
+        setModalVisible(true)
+    }
 
     const noteValidationSchema = yup.object().shape({
         title: yup.string().required('Note title is required')
@@ -38,12 +59,14 @@ const NoteScreen = ({ route, navigation }: { navigation: NoteGroupScreenProps['n
                 title: title,
                 content: content,
                 groupId: groupId,
+                lock: lock
             }))
         } else {
             dispatch(noteAction.updateNote({
                 title: title,
                 content: content,
-                id: note.id
+                id: note.id,
+                lock: lock
             }))
         }
         navigation.goBack();
@@ -68,24 +91,27 @@ const NoteScreen = ({ route, navigation }: { navigation: NoteGroupScreenProps['n
 
     return (
         <SafeAreaView style={noteStyle.root}>
-            <Formik initialValues={noteInfo}
-                validationSchema={noteValidationSchema}
-                onSubmit={value => { handleSaveNote(value) }}>
-                {({ handleChange, handleBlur, handleSubmit, values, errors, isValid, }) => (
-                    <>
-                        <Text style={noteStyle.header}>Title:</Text>
-                        <CustomInput placeHolder="Note title" value={values.title} onChangeText={handleChange('title')} onBlur={handleBlur('tile')} secureText={false} keyboardType='default' />
-                        {errors.title &&
-                            <Text style={noteStyle.error}>{errors.title}</Text>
-                        }
-                        <Text style={noteStyle.header}>Content:</Text>
-                        <CustomInputLarge placeHolder="Note content" value={values.content} onChangeText={handleChange('content')} onBlur={handleBlur('content')} secureText={false} keyboardType='default' />
-                        <CustomButton text="Save" onPress={handleSubmit} isValid={isValid} />
-                        <CustomButtonBorder text="Cancel" onPress={handelCancel} />
-                    </>
-                )}
-            </Formik>
-
+            {unlockVisible
+                ? <UnlockModal modalVisible={unlockVisible} setModalVisible={setUnlockVisible} lock={lock} setLock={setLock} handleCancel={handelCancel} />
+                : <Formik initialValues={noteInfo}
+                    validationSchema={noteValidationSchema}
+                    onSubmit={value => { handleSaveNote(value) }}>
+                    {({ handleChange, handleBlur, handleSubmit, values, errors, isValid, }) => (
+                        <>
+                            <Text style={noteStyle.header}>Title:</Text>
+                            <CustomInput placeHolder="Note title" value={values.title} onChangeText={handleChange('title')} onBlur={handleBlur('tile')} secureText={false} keyboardType='default' />
+                            {errors.title &&
+                                <Text style={noteStyle.error}>{errors.title}</Text>
+                            }
+                            <Text style={noteStyle.header}>Content:</Text>
+                            <CustomInputLarge placeHolder="Note content" value={values.content} onChangeText={handleChange('content')} onBlur={handleBlur('content')} secureText={false} keyboardType='default' />
+                            <CustomButton text="Save" onPress={handleSubmit} isValid={isValid} />
+                            <CustomButtonBorder text="Cancel" onPress={handelCancel} />
+                        </>
+                    )}
+                </Formik>
+            }
+            {modalVisible ? <LockNoteModal modalVisible={modalVisible} setModalVisible={setModalVisible} note={note} lock={lock} setLock={setLock} /> : <></>}
         </SafeAreaView>
     )
 }

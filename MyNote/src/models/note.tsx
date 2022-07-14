@@ -5,5 +5,6 @@ export interface Note {
     content: string,
     id: string,
     groupId: string,
-    timestamp: FirebaseFirestoreTypes.FieldValue
+    timestamp: FirebaseFirestoreTypes.FieldValue,
+    lock: boolean,
 }

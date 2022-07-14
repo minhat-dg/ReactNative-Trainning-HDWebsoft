@@ -1,3 +1,4 @@
+import auth from "@react-native-firebase/auth";
 import firestore, { FirebaseFirestoreTypes } from '@react-native-firebase/firestore';
 import { Group } from 'models/group';
 import { Note } from 'models/note';
@@ -18,7 +19,8 @@ export const getFirstPageNotes = (setNotes: { (value: SetStateAction<Note[]>): v
                         content: documentSnapshot.data().content,
                         groupId: documentSnapshot.data().groupId,
                         id: documentSnapshot.id,
-                        timestamp: documentSnapshot.data().timestamp
+                        timestamp: documentSnapshot.data().timestamp,
+                        lock: documentSnapshot.data().lock
                     });
                 });
                 if (querySnapshot.docs.length === limit) {
@@ -49,8 +51,10 @@ export const getMoreNotes = (setNotes: { (value: SetStateAction<Note[]>): void; 
                         content: documentSnapshot.data().content,
                         groupId: documentSnapshot.data().groupId,
                         id: documentSnapshot.id,
-                        timestamp: documentSnapshot.data().timestamp
+                        timestamp: documentSnapshot.data().timestamp,
+                        lock: documentSnapshot.data().lock
                     });
+                    console.log(documentSnapshot.data().title)
                 });
                 const lastNote = querySnapshot.docs[querySnapshot.docs.length - 1];
                 setLastNote(lastNote)
@@ -142,5 +146,15 @@ export const getGroupList = async (setGroups: { (value: SetStateAction<Group[]>)
             setGroups(groups)
         }
     });
+}
 
+export const checkPassword = (password: string) => {
+    const user = auth().currentUser;
+    if (user?.email) {
+        const cred = auth.EmailAuthProvider.credential(user.email, password);
+        return user.reauthenticateWithCredential(cred).then(() => { return true }).catch(error => {
+            console.log(error.message);
+            return false
+        });
+    }
 }

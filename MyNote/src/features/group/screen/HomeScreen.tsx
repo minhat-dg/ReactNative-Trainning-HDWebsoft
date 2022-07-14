@@ -32,7 +32,7 @@ const HomeScreen = ({ navigation }: { navigation: HomeScreenProps }) => {
         return () => {
             sub()
         }
-    }, [navigation]);
+    }, []);
 
     const handleLogOut = () => {
         console.log("LOGING OUT")
