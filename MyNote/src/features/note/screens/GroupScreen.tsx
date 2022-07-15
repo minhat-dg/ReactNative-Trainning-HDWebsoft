@@ -55,7 +55,6 @@ const GroupScreen = ({ route, navigation }: { navigation: HomeGroupScreenProps['
     }
 
     const filterNotes = (text: string) => {
-        console.log(text)
         if (text !== '') {
             const newNotes = notes.filter(note => {
                 const noteData = note.title.toLocaleLowerCase();
@@ -109,7 +108,6 @@ const GroupScreen = ({ route, navigation }: { navigation: HomeGroupScreenProps['
                 },
                 {
                     text: "OK", onPress: () => {
-                        console.log(item.id)
                         handleDelete(item.id);
                     }
                 }
@@ -130,7 +128,6 @@ const GroupScreen = ({ route, navigation }: { navigation: HomeGroupScreenProps['
     }
 
     const handleMoveNote = (newGroupId: string) => {
-        console.log(currentNote)
         moveNote(currentNote?.id, currentNote?.groupId, newGroupId)
         setGroupMenuVisible(false)
     }

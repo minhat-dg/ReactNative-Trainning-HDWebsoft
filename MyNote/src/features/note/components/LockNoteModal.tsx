@@ -26,7 +26,7 @@ const LockNoteModal = ({ modalVisible, setModalVisible, note, lock, setLock }: {
             setLock(!lock)
             setModalVisible(!modalVisible)
             ToastAndroid.showWithGravity(
-                lock ? "Unlocked" : "Locked",
+                "Locked",
                 ToastAndroid.SHORT,
                 ToastAndroid.CENTER
             );
@@ -51,7 +51,7 @@ const LockNoteModal = ({ modalVisible, setModalVisible, note, lock, setLock }: {
             >
                 <View style={groupModalStyle.centeredView}>
                     <View style={groupModalStyle.modalView}>
-                        <Text style={groupModalStyle.textModal}>{lock ? 'Unlock ' : 'Lock '} {note === undefined ? 'this note' : note.title}?</Text>
+                        <Text style={groupModalStyle.textModal}>Lock {note === undefined ? 'this note' : note.title}?</Text>
                         <Formik initialValues={initialValues}
                             onSubmit={value => { handleLock(value.password) }}
                             validationSchema={validationSchema}>
@@ -75,7 +75,7 @@ const LockNoteModal = ({ modalVisible, setModalVisible, note, lock, setLock }: {
                                             onPress={handleSubmit}
                                             disabled={!isValid}
                                         >
-                                            <Text style={groupModalStyle.textButton}>{lock ? 'Unlock' : 'Lock'}</Text>
+                                            <Text style={groupModalStyle.textButton}>Lock</Text>
                                         </Pressable>
                                     </View>
                                 </>

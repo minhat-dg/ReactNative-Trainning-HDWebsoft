@@ -54,7 +54,6 @@ export const getMoreNotes = (setNotes: { (value: SetStateAction<Note[]>): void; 
                         timestamp: documentSnapshot.data().timestamp,
                         lock: documentSnapshot.data().lock
                     });
-                    console.log(documentSnapshot.data().title)
                 });
                 const lastNote = querySnapshot.docs[querySnapshot.docs.length - 1];
                 setLastNote(lastNote)
@@ -97,7 +96,6 @@ export const deleteNote = (id: string, groupId: string) => {
 
     firestore()
         .collection('Notes').doc(id).delete().then(() => {
-            console.log('Note deleted!');
             firestore().collection('Groups').doc(groupId).update({
                 count: decreasement
             })

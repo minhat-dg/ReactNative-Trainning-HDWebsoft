@@ -7,7 +7,7 @@ import * as yup from 'yup';
 import { checkPassword } from "../notesApi";
 
 
-const UnlockModal = ({ modalVisible, setModalVisible, lock, setLock, handleCancel }: { modalVisible: boolean, setModalVisible: React.Dispatch<React.SetStateAction<boolean>>, lock: boolean, setLock: React.Dispatch<React.SetStateAction<boolean>>, handleCancel: () => void }) => {
+const UnlockModal = ({ modalVisible, setModalVisible, handleCancel }: { modalVisible: boolean, setModalVisible: React.Dispatch<React.SetStateAction<boolean>>, handleCancel: () => void }) => {
 
     const initialValues = {
         password: ''

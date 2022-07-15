@@ -46,7 +46,11 @@ const NoteScreen = ({ route, navigation }: { navigation: NoteGroupScreenProps['n
     }, [lock])
 
     const handleLock = () => {
-        setModalVisible(true)
+        if (!lock) {
+            setModalVisible(true)
+        } else {
+            setLock(!lock)
+        }
     }
 
     const noteValidationSchema = yup.object().shape({
@@ -92,7 +96,7 @@ const NoteScreen = ({ route, navigation }: { navigation: NoteGroupScreenProps['n
     return (
         <SafeAreaView style={noteStyle.root}>
             {unlockVisible
-                ? <UnlockModal modalVisible={unlockVisible} setModalVisible={setUnlockVisible} lock={lock} setLock={setLock} handleCancel={handelCancel} />
+                ? <UnlockModal modalVisible={unlockVisible} setModalVisible={setUnlockVisible} handleCancel={handelCancel} />
                 : <Formik initialValues={noteInfo}
                     validationSchema={noteValidationSchema}
                     onSubmit={value => { handleSaveNote(value) }}>
