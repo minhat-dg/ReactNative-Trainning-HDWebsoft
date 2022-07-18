@@ -1,5 +1,9 @@
 import { NativeStackScreenProps } from "@react-navigation/native-stack/lib/typescript/src/types";
 import { noteStyle } from "assets/style";
+import CustomButton from "components/CustomButton/CustomButton";
+import CustomButtonBorder from "components/CustomButton/CustomButtonBorder";
+import CustomInput from "components/CustomInput/CustomInput";
+import CustomInputLarge from "components/CustomInput/CustomInputLarge";
 import RootStackParamList from "constants/type";
 import { Formik } from "formik";
 import React, { useEffect, useState } from "react";
@@ -7,10 +11,6 @@ import { Alert, SafeAreaView, Text, TouchableOpacity } from "react-native";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import * as yup from 'yup';
 import { useAppDispatch } from "../../../app/hook";
-import CustomButton from "../../../components/CustomButton/CustomButton";
-import CustomButtonBorder from "../../../components/CustomButton/CustomButtonBorder";
-import CustomInput from "../../../components/CustomInput/CustomInput";
-import CustomInputLarge from "../../../components/CustomInput/CustomInputLarge";
 import LockNoteModal from "../components/LockNoteModal";
 import UnlockModal from "../components/UnlockModal";
 import { noteAction } from "../noteSlice";
@@ -22,7 +22,8 @@ const NoteScreen = ({ route, navigation }: { navigation: NoteGroupScreenProps['n
     const noteInfo = {
         title: (note !== undefined ? note.title : ''),
         content: (note !== undefined ? note.content : ''),
-        lock: (note !== undefined ? note.lock : false)
+        lock: (note !== undefined ? note.lock : false),
+        pin: (note !== undefined ? note.pin : false),
     }
     const [lock, setLock] = useState(noteInfo.lock)
     const [modalVisible, setModalVisible] = useState(false)
@@ -63,14 +64,16 @@ const NoteScreen = ({ route, navigation }: { navigation: NoteGroupScreenProps['n
                 title: title,
                 content: content,
                 groupId: groupId,
-                lock: lock
+                lock: lock,
+                pin: noteInfo.pin
             }))
         } else {
             dispatch(noteAction.updateNote({
                 title: title,
                 content: content,
                 id: note.id,
-                lock: lock
+                lock: lock,
+                pin: noteInfo.pin
             }))
         }
         navigation.goBack();

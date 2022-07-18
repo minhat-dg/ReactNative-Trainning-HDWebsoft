@@ -3,7 +3,7 @@ import { NativeStackScreenProps } from "@react-navigation/native-stack/lib/types
 import { groupStyle } from "assets/style";
 import RootStackParamList from "constants/type";
 import React, { useEffect, useRef, useState } from "react";
-import { Alert, FlatList, SafeAreaView, View } from "react-native";
+import { Alert, FlatList, SafeAreaView, Text, View } from "react-native";
 import CustomFloatButton from "../../../components/CustomButton/CustomFloatButton";
 import HeaderSearchBar from "../../../components/HeaderSearchBar/HeaderSearchBar";
 import { Group } from "../../../models/group";
@@ -22,6 +22,7 @@ const GroupScreen = ({ route, navigation }: { navigation: HomeGroupScreenProps['
     const [lastNote, setLastNote] = useState<FirebaseFirestoreTypes.QueryDocumentSnapshot<FirebaseFirestoreTypes.DocumentData>>();
     const [search, setSearch] = useState('');
     const [filteredNotes, setFilteredNotes] = useState<Note[]>([]);
+    const [pinnedNode, setPinnedNote] = useState<Note[]>([]);
     const [groups, setGroups] = useState<Group[]>([]);
     const [optionVisible, setOptionVisible] = useState(false);
     const [groupMenuVisible, setGroupMenuVisible] = useState(false);
@@ -32,6 +33,7 @@ const GroupScreen = ({ route, navigation }: { navigation: HomeGroupScreenProps['
     useEffect(() => {
         const sub = getFirstPageNotes(setNotes, setFilteredNotes, groupId, limitItem, setLastNote);
         getGroupList(setGroups);
+
         navigation.setOptions({
             headerTitle: groupName
         });
@@ -39,6 +41,17 @@ const GroupScreen = ({ route, navigation }: { navigation: HomeGroupScreenProps['
             sub()
         }
     }, [])
+
+    useEffect(() => {
+        updatePinnedNote();
+    }, [notes])
+
+    const updatePinnedNote = () => {
+        const newPinnedNote = notes.filter(note => note.pin)
+        const newNotes = notes.filter(note => !newPinnedNote.includes(note))
+        setFilteredNotes(newNotes)
+        setPinnedNote(newPinnedNote)
+    }
 
     const handleChangeSearch = (text: string) => {
         setSearch(text)
@@ -138,9 +151,22 @@ const GroupScreen = ({ route, navigation }: { navigation: HomeGroupScreenProps['
         }
     }
 
+    const onSearchFocus = () => {
+        setPinnedNote([]);
+        setFilteredNotes(notes)
+    }
+
     return (
         <SafeAreaView style={groupStyle.root}>
-            <HeaderSearchBar value={search} onChangeText={handleChangeSearch} />
+            <HeaderSearchBar value={search} onChangeText={handleChangeSearch} onSearchFocus={onSearchFocus} />
+            {pinnedNode.length > 0 ?
+                <View style={groupStyle.pinContainer}>
+                    <Text style={groupStyle.header}>Pinned:</Text>
+                    <FlatList onEndReached={handleLoadMore} data={pinnedNode} renderItem={(item) => NoteItem(item, handleOnPress, handleOnLongPress)} numColumns={2} />
+                </View>
+                : <></>
+            }
+            <Text style={groupStyle.header}>Notes:</Text>
             <FlatList onEndReached={handleLoadMore} data={filteredNotes} renderItem={(item) => NoteItem(item, handleOnPress, handleOnLongPress)} numColumns={2} />
             <CustomFloatButton onPress={navigateToNoteScreen} />
             {currentNote !== undefined ? <NoteOption modalVisible={optionVisible} setModalVisible={setOptionVisible} handleDeleteNote={handleDeleteNote} handleMoveNote={moveNoteChose} item={currentNote} /> : <View />}

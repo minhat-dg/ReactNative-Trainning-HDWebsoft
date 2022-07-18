@@ -380,18 +380,23 @@ export const noteItemStyle = StyleSheet.create({
         fontWeight: '500',
     },
     itemTextDescription: {
-        flex: 9.5,
+        flex: 9,
         color: '#06283D',
         fontSize: 16,
         fontWeight: 'normal',
         marginTop: 5,
         flexShrink: 1,
     },
-    icon: {
-        flex: 2.5,
+    iconContainer: {
+        flex: 2,
+        flexDirection: 'row-reverse',
         width: '100%',
-        alignItems: 'flex-end',
         paddingHorizontal: 5
+    },
+    icon: {
+        flex: 0.2,
+        textAlign: 'right',
+        alignItems: 'flex-end'
     }
 })
 
@@ -436,9 +441,9 @@ export const groupStyle = StyleSheet.create({
     },
     header: {
         fontWeight: '500',
-        fontSize: 25,
+        fontSize: 20,
         color: '#DFF6FF',
-        marginBottom: 20
+        marginStart: 10
     },
     itemContainer: {
         flex: 0.5,
@@ -465,6 +470,11 @@ export const groupStyle = StyleSheet.create({
         marginTop: 5,
         flexShrink: 1
     },
+    pinContainer: {
+        height: '40%',
+        borderBottomWidth: 1,
+        borderColor: '#06283D'
+    }
 })
 
 export const noteStyle = StyleSheet.create({

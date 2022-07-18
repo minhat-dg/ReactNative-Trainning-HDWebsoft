@@ -7,4 +7,5 @@ export interface Note {
     groupId: string,
     timestamp: FirebaseFirestoreTypes.FieldValue,
     lock: boolean,
+    pin: boolean
 }

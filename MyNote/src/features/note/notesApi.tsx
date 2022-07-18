@@ -20,7 +20,8 @@ export const getFirstPageNotes = (setNotes: { (value: SetStateAction<Note[]>): v
                         groupId: documentSnapshot.data().groupId,
                         id: documentSnapshot.id,
                         timestamp: documentSnapshot.data().timestamp,
-                        lock: documentSnapshot.data().lock
+                        lock: documentSnapshot.data().lock,
+                        pin: documentSnapshot.data().pin
                     });
                 });
                 if (querySnapshot.docs.length === limit) {
@@ -52,7 +53,8 @@ export const getMoreNotes = (setNotes: { (value: SetStateAction<Note[]>): void; 
                         groupId: documentSnapshot.data().groupId,
                         id: documentSnapshot.id,
                         timestamp: documentSnapshot.data().timestamp,
-                        lock: documentSnapshot.data().lock
+                        lock: documentSnapshot.data().lock,
+                        pin: documentSnapshot.data().pin
                     });
                 });
                 const lastNote = querySnapshot.docs[querySnapshot.docs.length - 1];
@@ -124,6 +126,13 @@ export const moveNote = (id: string | undefined, groupId: string | undefined, ne
             firestore().collection('Groups').doc(newGroupId).update({
                 count: increasement
             })
+        })
+}
+
+export const pinNote = (id: string, pin: boolean) => {
+    firestore()
+        .collection('Notes').doc(id).update({
+            pin: !pin
         })
 }
 
