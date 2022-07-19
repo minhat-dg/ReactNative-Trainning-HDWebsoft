@@ -1,5 +1,5 @@
 import { NativeStackNavigationOptions } from "@react-navigation/native-stack"
-import { StyleSheet } from "react-native"
+import { Dimensions, StyleSheet } from "react-native"
 
 export const mainHeaderStyle: NativeStackNavigationOptions = {
     headerStyle: {
@@ -361,7 +361,7 @@ export const groupMenuStyle = StyleSheet.create({
 
 export const noteItemStyle = StyleSheet.create({
     itemContainer: {
-        flex: 0.5,
+        width: Dimensions.get('screen').width / 2 - 10,
         alignItems: 'center',
         padding: 10
     },
@@ -387,13 +387,66 @@ export const noteItemStyle = StyleSheet.create({
         marginTop: 5,
         flexShrink: 1,
     },
+    iconLarge: {
+        flex: 9,
+        color: '#06283D',
+        marginTop: 10,
+        flexShrink: 1,
+    },
     iconContainer: {
         flex: 2,
         flexDirection: 'row-reverse',
         width: '100%',
         paddingHorizontal: 5
     },
-    icon: {
+    iconSmall: {
+        flex: 0.2,
+        textAlign: 'right',
+        alignItems: 'flex-end'
+    }
+})
+
+export const noteItemHorizontalStyle = StyleSheet.create({
+    itemContainer: {
+        alignItems: 'center',
+        padding: 10,
+        width: Dimensions.get('screen').width / 2 - 10
+    },
+    itemCard: {
+        backgroundColor: '#47B5FF',
+        borderRadius: 10,
+        height: 150,
+        width: '100%',
+        alignItems: 'center',
+        padding: 5,
+        flexDirection: 'column'
+    },
+    itemTextName: {
+        color: '#DFF6FF',
+        fontSize: 20,
+        fontWeight: '500',
+    },
+    itemTextDescription: {
+        flex: 9,
+        color: '#06283D',
+        fontSize: 16,
+        fontWeight: 'normal',
+        marginTop: 5,
+        flexShrink: 1,
+    },
+    iconLarge: {
+        flex: 9,
+        color: '#06283D',
+        marginTop: 10,
+        flexShrink: 1,
+    },
+    iconContainer: {
+        flex: 2,
+        flexDirection: 'row-reverse',
+        width: '100%',
+        paddingHorizontal: 5
+    },
+    iconSmall: {
         flex: 0.2,
         textAlign: 'right',
         alignItems: 'flex-end'
@@ -471,10 +524,10 @@ export const groupStyle = StyleSheet.create({
         flexShrink: 1
     },
     pinContainer: {
-        height: '40%',
+        height: '35%',
         borderBottomWidth: 1,
-        borderColor: '#06283D'
-    }
+        borderColor: '#47B5FF'
+    },
 })
 
 export const noteStyle = StyleSheet.create({

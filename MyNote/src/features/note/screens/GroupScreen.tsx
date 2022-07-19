@@ -10,6 +10,7 @@ import { Group } from "../../../models/group";
 import { Note } from "../../../models/note";
 import GroupMenu from "../components/GroupsMenu";
 import NoteItem from "../components/NoteItem";
+import NoteItemHorizontal from "../components/NoteItemHorizontal";
 import NoteOption from '../components/NoteOption';
 import { deleteNote, getFirstPageNotes, getGroupList, getMoreNotes, moveNote, setNewLast } from "../notesApi";
 
@@ -22,7 +23,7 @@ const GroupScreen = ({ route, navigation }: { navigation: HomeGroupScreenProps['
     const [lastNote, setLastNote] = useState<FirebaseFirestoreTypes.QueryDocumentSnapshot<FirebaseFirestoreTypes.DocumentData>>();
     const [search, setSearch] = useState('');
     const [filteredNotes, setFilteredNotes] = useState<Note[]>([]);
-    const [pinnedNode, setPinnedNote] = useState<Note[]>([]);
+    const [pinnedNotes, setPinnedNote] = useState<Note[]>([]);
     const [groups, setGroups] = useState<Group[]>([]);
     const [optionVisible, setOptionVisible] = useState(false);
     const [groupMenuVisible, setGroupMenuVisible] = useState(false);
@@ -43,14 +44,22 @@ const GroupScreen = ({ route, navigation }: { navigation: HomeGroupScreenProps['
     }, [])
 
     useEffect(() => {
-        updatePinnedNote();
+        getPinnedNotes();
     }, [notes])
 
-    const updatePinnedNote = () => {
+
+    const getPinnedNotes = () => {
         const newPinnedNote = notes.filter(note => note.pin)
         const newNotes = notes.filter(note => !newPinnedNote.includes(note))
         setFilteredNotes(newNotes)
         setPinnedNote(newPinnedNote)
+    }
+
+    const updatePinnedNotes = (newNotes: Note[]) => {
+        const pinnedNotes = newNotes.filter(note => note.pin)
+        const newFilterd = newNotes.filter(note => !pinnedNotes.includes(note))
+        setFilteredNotes(newFilterd)
+        setPinnedNote(pinnedNotes)
     }
 
     const handleChangeSearch = (text: string) => {
@@ -68,16 +77,15 @@ const GroupScreen = ({ route, navigation }: { navigation: HomeGroupScreenProps['
     }
 
     const filterNotes = (text: string) => {
+        let newNotes = notes
         if (text !== '') {
-            const newNotes = notes.filter(note => {
+            newNotes = notes.filter(note => {
                 const noteData = note.title.toLocaleLowerCase();
                 const textData = text.toLowerCase();
                 return noteData.indexOf(textData) > -1;
             })
-            setFilteredNotes(newNotes)
-        } else {
-            setFilteredNotes(notes)
         }
+        updatePinnedNotes(newNotes);
     }
 
 
@@ -151,18 +159,14 @@ const GroupScreen = ({ route, navigation }: { navigation: HomeGroupScreenProps['
         }
     }
 
-    const onSearchFocus = () => {
-        setPinnedNote([]);
-        setFilteredNotes(notes)
-    }
 
     return (
         <SafeAreaView style={groupStyle.root}>
-            <HeaderSearchBar value={search} onChangeText={handleChangeSearch} onSearchFocus={onSearchFocus} />
-            {pinnedNode.length > 0 ?
+            <HeaderSearchBar value={search} onChangeText={handleChangeSearch} />
+            {pinnedNotes.length > 0 ?
                 <View style={groupStyle.pinContainer}>
                     <Text style={groupStyle.header}>Pinned:</Text>
-                    <FlatList onEndReached={handleLoadMore} data={pinnedNode} renderItem={(item) => NoteItem(item, handleOnPress, handleOnLongPress)} numColumns={2} />
+                    <FlatList onEndReached={handleLoadMore} data={pinnedNotes} renderItem={(item) => NoteItemHorizontal(item, handleOnPress, handleOnLongPress)} horizontal={true} />
                 </View>
                 : <></>
             }

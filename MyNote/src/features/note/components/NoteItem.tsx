@@ -13,16 +13,15 @@ const NoteItem = ({ item }: { item: Note }, handleOnPress: (item: Note) => void,
     return (
         <TouchableOpacity style={noteItemStyle.itemContainer} onPress={() => handleOnPress(item)} onLongPress={() => handleOnLongPress(item)}>
             <View style={noteItemStyle.itemCard}>
-                <Text style={noteItemStyle.itemTextDescription}>{item.content}</Text>
 
+                {item.lock ?
+                    <FontAwesome name="lock" color={'#06283D'} size={50} style={noteItemStyle.iconLarge} />
+                    : <Text style={noteItemStyle.itemTextDescription}>{item.content}</Text>
+                }
                 <View style={noteItemStyle.iconContainer}>
-                    <TouchableOpacity style={noteItemStyle.icon} onPress={handlePinNote}>
+                    <TouchableOpacity style={noteItemStyle.iconSmall} onPress={handlePinNote}>
                         <FontAwesome name="paperclip" color={'#06283D'} size={25} />
                     </TouchableOpacity>
-                    {item.lock ?
-                        <FontAwesome name="lock" color={'#06283D'} size={25} style={noteItemStyle.icon} />
-                        : <View />
-                    }
                 </View>
 
             </View>
