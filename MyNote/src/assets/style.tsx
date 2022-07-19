@@ -1,6 +1,8 @@
 import { NativeStackNavigationOptions } from "@react-navigation/native-stack"
 import { Dimensions, StyleSheet } from "react-native"
 
+const screenWidth = Dimensions.get('screen').width
+
 export const mainHeaderStyle: NativeStackNavigationOptions = {
     headerStyle: {
         backgroundColor: '#06283D',
@@ -359,9 +361,9 @@ export const groupMenuStyle = StyleSheet.create({
     }
 });
 
-export const noteItemStyle = StyleSheet.create({
+export const noteItemStyle = (numColumn: number) => StyleSheet.create({
     itemContainer: {
-        width: Dimensions.get('screen').width / 2 - 10,
+        width: screenWidth / numColumn - 10,
         alignItems: 'center',
         padding: 10
     },
@@ -496,7 +498,8 @@ export const groupStyle = StyleSheet.create({
         fontWeight: '500',
         fontSize: 20,
         color: '#DFF6FF',
-        marginStart: 10
+        marginStart: 10,
+        marginBottom: 5,
     },
     itemContainer: {
         flex: 0.5,
