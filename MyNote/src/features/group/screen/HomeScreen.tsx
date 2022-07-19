@@ -35,8 +35,21 @@ const HomeScreen = ({ navigation }: { navigation: HomeScreenProps }) => {
     }, []);
 
     const handleLogOut = () => {
-        console.log("LOGING OUT")
-        dispatch(authActions.logOut())
+        Alert.alert(
+            "Log out?",
+            "Are you sure to log out?",
+            [
+                {
+                    text: "Cancel",
+                    onPress: () => console.log("Cancel Pressed"),
+                    style: "cancel"
+                },
+                {
+                    text: "OK", onPress: () => {
+                        dispatch(authActions.logOut())
+                    }
+                }
+            ])
     }
 
     React.useLayoutEffect(() => {
