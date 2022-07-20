@@ -1,6 +1,7 @@
-import firestore, { FirebaseFirestoreTypes } from '@react-native-firebase/firestore';
+import { default as firestore, FirebaseFirestoreTypes } from '@react-native-firebase/firestore';
 import { Group } from 'models/group';
 import { SetStateAction } from 'react';
+
 
 export const getFirstPageGroups = (setNoteGroups: React.Dispatch<React.SetStateAction<Group[]>>, uid: string | undefined, limit: number, setLastGroup: React.Dispatch<SetStateAction<FirebaseFirestoreTypes.QueryDocumentSnapshot<FirebaseFirestoreTypes.DocumentData> | undefined>>) => {
     const subscriber = firestore()
@@ -18,6 +19,8 @@ export const getFirstPageGroups = (setNoteGroups: React.Dispatch<React.SetStateA
                         timestamp: documentSnapshot.data().timestamp
                     });
                 });
+                const source = querySnapshot.metadata.fromCache ? "cache" : "server";
+                console.log("Data from ", source);
                 if (querySnapshot.docs.length === limit) {
                     const lastGroup = querySnapshot.docs[querySnapshot.docs.length - 1];
                     setLastGroup(lastGroup)

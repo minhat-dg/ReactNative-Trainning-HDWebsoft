@@ -7,6 +7,7 @@ import { SetStateAction } from 'react';
 const increasement = firestore.FieldValue.increment(1);
 const decreasement = firestore.FieldValue.increment(-1);
 
+
 export const getFirstPageNotes = (setNotes: { (value: SetStateAction<Note[]>): void; (arg0: Note[]): void; }, setFilteredNotes: { (value: SetStateAction<Note[]>): void; (arg0: Note[]): void; }, groupId: string, limit: number, setLastNote: React.Dispatch<SetStateAction<FirebaseFirestoreTypes.QueryDocumentSnapshot<FirebaseFirestoreTypes.DocumentData> | undefined>>) => {
     const subscriber = firestore()
         .collection('Notes').where('groupId', '==', groupId).limit(limit).orderBy("timestamp", "desc")
@@ -24,6 +25,8 @@ export const getFirstPageNotes = (setNotes: { (value: SetStateAction<Note[]>): v
                         pin: documentSnapshot.data().pin
                     });
                 });
+                const source = querySnapshot.metadata.fromCache ? "cache" : "server";
+                console.log("Data from ", source);
                 if (querySnapshot.docs.length === limit) {
                     const lastNote = querySnapshot.docs[querySnapshot.docs.length - 1];
                     setLastNote(lastNote)
