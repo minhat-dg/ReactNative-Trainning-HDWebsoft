@@ -18,6 +18,7 @@ import { noteAction } from "../noteSlice";
 type NoteGroupScreenProps = NativeStackScreenProps<RootStackParamList, 'Note'>
 const NoteScreen = ({ route, navigation }: { navigation: NoteGroupScreenProps['navigation'], route: NoteGroupScreenProps['route'] }) => {
     const { groupId, note } = route.params;
+
     const dispatch = useAppDispatch();
     const noteInfo = {
         title: (note !== undefined ? note.title : ''),

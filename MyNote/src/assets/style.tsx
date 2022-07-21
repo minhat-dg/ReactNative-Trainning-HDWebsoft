@@ -393,7 +393,7 @@ export const noteItemStyle = (numColumn: number) => StyleSheet.create({
         flex: 9,
         color: '#06283D',
         marginTop: 10,
-        flexShrink: 1,
+        textAlignVertical: 'center'
     },
     iconContainer: {
         flex: 2,

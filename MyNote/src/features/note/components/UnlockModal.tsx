@@ -48,9 +48,6 @@ const UnlockModal = ({ modalVisible, setModalVisible, handleCancel }: { modalVis
                 animationType="slide"
                 transparent={true}
                 visible={modalVisible}
-                onRequestClose={() => {
-                    setModalVisible(!modalVisible);
-                }}
             >
                 <View style={groupModalStyle.centeredView}>
                     <View style={groupModalStyle.modalView}>
