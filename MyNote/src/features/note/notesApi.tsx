@@ -162,9 +162,8 @@ export const checkPassword = (password: string) => {
     const user = auth().currentUser;
     if (user?.email) {
         const cred = auth.EmailAuthProvider.credential(user.email, password);
-        return user.reauthenticateWithCredential(cred).then(() => { return true }).catch(error => {
-            console.log(error.message);
-            return false
+        return user.reauthenticateWithCredential(cred).then(() => { return 'OK' }).catch(error => {
+            return error.code
         });
     }
 }

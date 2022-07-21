@@ -19,14 +19,26 @@ const UnlockModal = ({ modalVisible, setModalVisible, handleCancel }: { modalVis
 
 
     const handleValid = async (password: string) => {
-        if (await checkPassword(password)) {
+        const respone = await checkPassword(password)
+        if (respone === 'OK') {
             setModalVisible(!modalVisible)
-        } else {
+            return;
+        }
+        if (respone === 'auth/wrong-password') {
             ToastAndroid.showWithGravity(
                 "Password are incorrect",
                 ToastAndroid.SHORT,
                 ToastAndroid.CENTER
             );
+            return;
+        }
+        if (respone === 'auth/network-request-failed') {
+            ToastAndroid.showWithGravity(
+                "Please check the internet connection",
+                ToastAndroid.SHORT,
+                ToastAndroid.CENTER
+            );
+            return;
         }
     }
 

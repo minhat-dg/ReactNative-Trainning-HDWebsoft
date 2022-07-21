@@ -22,7 +22,8 @@ const LockNoteModal = ({ modalVisible, setModalVisible, note, lock, setLock }: {
     }
 
     const handleLock = async (password: string) => {
-        if (await checkPassword(password)) {
+        const respone = await checkPassword(password)
+        if (respone === 'OK') {
             setLock(!lock)
             setModalVisible(!modalVisible)
             ToastAndroid.showWithGravity(
@@ -30,12 +31,23 @@ const LockNoteModal = ({ modalVisible, setModalVisible, note, lock, setLock }: {
                 ToastAndroid.SHORT,
                 ToastAndroid.CENTER
             );
-        } else {
+            return;
+        }
+        if (respone === 'auth/wrong-password') {
             ToastAndroid.showWithGravity(
                 "Password are incorrect",
                 ToastAndroid.SHORT,
                 ToastAndroid.CENTER
             );
+            return;
+        }
+        if (respone === 'auth/network-request-failed') {
+            ToastAndroid.showWithGravity(
+                "Please check the internet connection",
+                ToastAndroid.SHORT,
+                ToastAndroid.CENTER
+            );
+            return;
         }
     }
 
