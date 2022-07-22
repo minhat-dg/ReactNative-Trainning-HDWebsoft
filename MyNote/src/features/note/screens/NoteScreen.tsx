@@ -27,6 +27,7 @@ const NoteScreen = ({ route, navigation }: { navigation: NoteGroupScreenProps['n
         pin: (note !== undefined ? note.pin : false),
     }
     const [lock, setLock] = useState(noteInfo.lock)
+    const [password, setPassword] = useState('')
     const [modalVisible, setModalVisible] = useState(false)
     const [unlockVisible, setUnlockVisible] = useState(noteInfo.lock)
 
@@ -66,7 +67,8 @@ const NoteScreen = ({ route, navigation }: { navigation: NoteGroupScreenProps['n
                 content: content,
                 groupId: groupId,
                 lock: lock,
-                pin: noteInfo.pin
+                pin: noteInfo.pin,
+                password: password
             }))
         } else {
             dispatch(noteAction.updateNote({
@@ -74,7 +76,8 @@ const NoteScreen = ({ route, navigation }: { navigation: NoteGroupScreenProps['n
                 content: content,
                 id: note.id,
                 lock: lock,
-                pin: noteInfo.pin
+                pin: noteInfo.pin,
+                password: password
             }))
         }
         navigation.goBack();
@@ -100,7 +103,7 @@ const NoteScreen = ({ route, navigation }: { navigation: NoteGroupScreenProps['n
     return (
         <SafeAreaView style={noteStyle.root}>
             {unlockVisible
-                ? <UnlockModal modalVisible={unlockVisible} setModalVisible={setUnlockVisible} handleCancel={handelCancel} />
+                ? <UnlockModal modalVisible={unlockVisible} setModalVisible={setUnlockVisible} handleCancel={handelCancel} password={note?.password} />
                 : <Formik initialValues={noteInfo}
                     validationSchema={noteValidationSchema}
                     onSubmit={value => { handleSaveNote(value) }}>
@@ -119,7 +122,7 @@ const NoteScreen = ({ route, navigation }: { navigation: NoteGroupScreenProps['n
                     )}
                 </Formik>
             }
-            {modalVisible ? <LockNoteModal modalVisible={modalVisible} setModalVisible={setModalVisible} note={note} lock={lock} setLock={setLock} /> : <></>}
+            {modalVisible ? <LockNoteModal modalVisible={modalVisible} setModalVisible={setModalVisible} note={note} lock={lock} setLock={setLock} setPassword={setPassword} /> : <></>}
         </SafeAreaView>
     )
 }

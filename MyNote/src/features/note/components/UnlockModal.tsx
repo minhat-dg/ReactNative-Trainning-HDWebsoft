@@ -4,10 +4,9 @@ import { Formik } from "formik";
 import React from "react";
 import { Modal, Pressable, Text, ToastAndroid, View } from "react-native";
 import * as yup from 'yup';
-import { checkPassword } from "../notesApi";
 
 
-const UnlockModal = ({ modalVisible, setModalVisible, handleCancel }: { modalVisible: boolean, setModalVisible: React.Dispatch<React.SetStateAction<boolean>>, handleCancel: () => void }) => {
+const UnlockModal = ({ modalVisible, setModalVisible, handleCancel, password }: { modalVisible: boolean, setModalVisible: React.Dispatch<React.SetStateAction<boolean>>, handleCancel: () => void, password: string | undefined }) => {
 
     const initialValues = {
         password: ''
@@ -18,27 +17,16 @@ const UnlockModal = ({ modalVisible, setModalVisible, handleCancel }: { modalVis
     })
 
 
-    const handleValid = async (password: string) => {
-        const respone = await checkPassword(password)
-        if (respone === 'OK') {
+    const handleValid = (newPassword: string) => {
+        if (newPassword === password) {
             setModalVisible(!modalVisible)
-            return;
-        }
-        if (respone === 'auth/wrong-password') {
+
+        } else {
             ToastAndroid.showWithGravity(
-                "Password are incorrect",
+                "Password are incorrect!",
                 ToastAndroid.SHORT,
                 ToastAndroid.CENTER
             );
-            return;
-        }
-        if (respone === 'auth/network-request-failed') {
-            ToastAndroid.showWithGravity(
-                "Please check the internet connection",
-                ToastAndroid.SHORT,
-                ToastAndroid.CENTER
-            );
-            return;
         }
     }
 

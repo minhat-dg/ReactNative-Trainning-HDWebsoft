@@ -22,9 +22,11 @@ export const getFirstPageNotes = (setNotes: { (value: SetStateAction<Note[]>): v
                         id: documentSnapshot.id,
                         timestamp: documentSnapshot.data().timestamp,
                         lock: documentSnapshot.data().lock,
-                        pin: documentSnapshot.data().pin
+                        pin: documentSnapshot.data().pin,
+                        password: documentSnapshot.data().password
                     });
                 });
+
                 const source = querySnapshot.metadata.fromCache ? "cache" : "server";
                 console.log("Data from ", source);
                 if (querySnapshot.docs.length === limit) {
@@ -57,7 +59,8 @@ export const getMoreNotes = (setNotes: { (value: SetStateAction<Note[]>): void; 
                         id: documentSnapshot.id,
                         timestamp: documentSnapshot.data().timestamp,
                         lock: documentSnapshot.data().lock,
-                        pin: documentSnapshot.data().pin
+                        pin: documentSnapshot.data().pin,
+                        password: documentSnapshot.data().password
                     });
                 });
                 const lastNote = querySnapshot.docs[querySnapshot.docs.length - 1];

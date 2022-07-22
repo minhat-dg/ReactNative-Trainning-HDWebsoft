@@ -17,9 +17,10 @@ function* handleAddNote(payload: AddNotePayload) {
         title: payload.title,
         content: payload.content,
         groupId: payload.groupId,
-        timestamp: firestore.FieldValue.serverTimestamp(),
+        timestamp: firestore.Timestamp.now(),
         lock: payload.lock,
-        pin: payload.pin
+        pin: payload.pin,
+        password: payload.password
     }).then(() => {
         firestore().collection('Groups').doc(payload.groupId).update({
             count: increasement
@@ -39,9 +40,10 @@ function* handleUpdateNote(payload: UpdateNotePayload) {
     yield firestore().collection('Notes').doc(payload.id).update({
         title: payload.title,
         content: payload.content,
-        timestamp: firestore.FieldValue.serverTimestamp(),
+        timestamp: firestore.Timestamp.now(),
         lock: payload.lock,
-        pin: payload.pin
+        pin: payload.pin,
+        password: payload.password
     })
 }
 

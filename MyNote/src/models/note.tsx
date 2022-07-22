@@ -7,5 +7,6 @@ export interface Note {
     groupId: string,
     timestamp: Timestamp,
     lock: boolean,
-    pin: boolean
+    pin: boolean,
+    password: string
 }
