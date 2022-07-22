@@ -1,16 +1,17 @@
 import { FirebaseFirestoreTypes } from "@react-native-firebase/firestore";
 import { NativeStackScreenProps } from "@react-navigation/native-stack/lib/typescript/src/types";
 import { groupStyle } from "assets/style";
+import CustomFloatButton from "components/CustomButton/CustomFloatButton";
+import HeaderSearchBar from "components/HeaderSearchBar/HeaderSearchBar";
 import RootStackParamList from "constants/type";
+import { Group } from "models/group";
+import { Note } from "models/note";
 import React, { useEffect, useRef, useState } from "react";
 import { Alert, FlatList, SafeAreaView, Text, TouchableOpacity, View } from "react-native";
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
-import CustomFloatButton from "../../../components/CustomButton/CustomFloatButton";
-import HeaderSearchBar from "../../../components/HeaderSearchBar/HeaderSearchBar";
-import { Group } from "../../../models/group";
-import { Note } from "../../../models/note";
 import GroupMenu from "../components/GroupsMenu";
 import NoteItem from "../components/NoteItem";
+import NoteItemList from "../components/NoteItemList";
 import NoteOption from '../components/NoteOption';
 import { deleteNote, getFirstPageNotes, getGroupList, getMoreNotes, moveNote, setNewLast } from "../notesApi";
 
@@ -19,7 +20,7 @@ type HomeGroupScreenProps = NativeStackScreenProps<RootStackParamList, 'Group'>
 
 const GroupScreen = ({ route, navigation }: { navigation: HomeGroupScreenProps['navigation'], route: HomeGroupScreenProps['route'] }) => {
     const { groupName, groupId } = route.params;
-    const [numColumn, setNumColumn] = useState(2)
+    const [listView, setListView] = useState(false)
     const [notes, setNotes] = useState<Note[]>([]);
     const [lastNote, setLastNote] = useState<FirebaseFirestoreTypes.QueryDocumentSnapshot<FirebaseFirestoreTypes.DocumentData>>();
     const [search, setSearch] = useState('');
@@ -30,7 +31,7 @@ const GroupScreen = ({ route, navigation }: { navigation: HomeGroupScreenProps['
     const [groupMenuVisible, setGroupMenuVisible] = useState(false);
     const [currentNote, setCurrentNote] = useState<Note>();
     const timeOutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-    const limitItem = 12;
+    const limitItem = 10;
 
     useEffect(() => {
         const sub = getFirstPageNotes(setNotes, setFilteredNotes, groupId, limitItem, setLastNote);
@@ -52,7 +53,7 @@ const GroupScreen = ({ route, navigation }: { navigation: HomeGroupScreenProps['
                 return (
                     <TouchableOpacity onPress={() => handleChangeView()}>
                         {
-                            numColumn === 1 ?
+                            listView ?
                                 <FontAwesome name="table" color={'#DFF6FF'} size={20} />
                                 : <FontAwesome name="list" color={'#DFF6FF'} size={20} />
                         }
@@ -61,14 +62,10 @@ const GroupScreen = ({ route, navigation }: { navigation: HomeGroupScreenProps['
                 )
             }
         });
-    }, [numColumn])
+    }, [listView])
 
     const handleChangeView = () => {
-        if (numColumn === 1) {
-            setNumColumn(2);
-        } else {
-            setNumColumn(1)
-        }
+        setListView(!listView)
     }
 
     const getPinnedNotes = () => {
@@ -189,12 +186,18 @@ const GroupScreen = ({ route, navigation }: { navigation: HomeGroupScreenProps['
             {pinnedNotes.length > 0 ?
                 <View style={groupStyle.pinContainer}>
                     <Text style={groupStyle.header}>Pinned:</Text>
-                    <FlatList key={numColumn} onEndReached={handleLoadMore} data={pinnedNotes} renderItem={(item) => NoteItem(item, handleOnPress, handleOnLongPress, numColumn)} numColumns={numColumn} />
+                    {listView ?
+                        <FlatList key={1} data={pinnedNotes} renderItem={(item) => NoteItemList(item, handleOnPress, handleOnLongPress)} numColumns={1} />
+                        : <FlatList key={2} data={pinnedNotes} renderItem={(item) => NoteItem(item, handleOnPress, handleOnLongPress)} numColumns={2} />
+                    }
                 </View>
                 : <></>
             }
             <Text style={groupStyle.header}>Notes:</Text>
-            <FlatList key={numColumn} onEndReached={handleLoadMore} data={filteredNotes} renderItem={(item) => NoteItem(item, handleOnPress, handleOnLongPress, numColumn)} numColumns={numColumn} />
+            {listView ?
+                <FlatList onEndReached={handleLoadMore} key={1} data={filteredNotes} renderItem={(item) => NoteItemList(item, handleOnPress, handleOnLongPress)} numColumns={1} />
+                : <FlatList onEndReached={handleLoadMore} key={2} data={filteredNotes} renderItem={(item) => NoteItem(item, handleOnPress, handleOnLongPress)} numColumns={2} />
+            }
             <CustomFloatButton onPress={navigateToNoteScreen} />
             {currentNote !== undefined ? <NoteOption modalVisible={optionVisible} setModalVisible={setOptionVisible} handleDeleteNote={handleDeleteNote} handleMoveNote={moveNoteChose} item={currentNote} /> : <View />}
             <GroupMenu modalVisible={groupMenuVisible} setModalVisible={setGroupMenuVisible} groups={groups} moveNote={handleMoveNote} />

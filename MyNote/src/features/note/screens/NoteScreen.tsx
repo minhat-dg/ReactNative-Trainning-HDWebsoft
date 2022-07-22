@@ -1,4 +1,5 @@
 import { NativeStackScreenProps } from "@react-navigation/native-stack/lib/typescript/src/types";
+import { useAppDispatch } from "app/hook";
 import { noteStyle } from "assets/style";
 import CustomButton from "components/CustomButton/CustomButton";
 import CustomButtonBorder from "components/CustomButton/CustomButtonBorder";
@@ -10,7 +11,6 @@ import React, { useEffect, useState } from "react";
 import { Alert, SafeAreaView, Text, TouchableOpacity } from "react-native";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import * as yup from 'yup';
-import { useAppDispatch } from "../../../app/hook";
 import LockNoteModal from "../components/LockNoteModal";
 import UnlockModal from "../components/UnlockModal";
 import { noteAction } from "../noteSlice";

@@ -380,9 +380,10 @@ export const noteItemStyle = (numColumn: number) => StyleSheet.create({
         color: '#DFF6FF',
         fontSize: 20,
         fontWeight: '500',
+        flexWrap: 'wrap'
     },
     itemTextDescription: {
-        flex: 9,
+        flex: 8,
         color: '#06283D',
         fontSize: 16,
         fontWeight: 'normal',
@@ -396,62 +397,51 @@ export const noteItemStyle = (numColumn: number) => StyleSheet.create({
         textAlignVertical: 'center'
     },
     iconContainer: {
-        flex: 2,
-        flexDirection: 'row-reverse',
+        flex: 4,
         width: '100%',
-        paddingHorizontal: 5
+        flexDirection: 'row',
+        paddingHorizontal: 5,
+        alignItems: 'center'
     },
     iconSmall: {
-        flex: 0.2,
+        flex: 3,
         textAlign: 'right',
         alignItems: 'flex-end'
+    },
+    timestamp: {
+        flex: 9,
+        fontSize: 15,
     }
 })
 
-export const noteItemHorizontalStyle = StyleSheet.create({
-    itemContainer: {
-        alignItems: 'center',
+export const noteItemListStyle = StyleSheet.create({
+    container: {
+        flexDirection: 'row',
+        borderBottomColor: '#000000',
+        borderBottomWidth: 1,
         padding: 10,
-        width: Dimensions.get('screen').width / 2 - 10
+        marginHorizontal: 5,
     },
-    itemCard: {
-        backgroundColor: '#47B5FF',
-        borderRadius: 10,
-        height: 150,
-        width: '100%',
-        alignItems: 'center',
-        padding: 5,
-        flexDirection: 'column'
+    mainContainer: {
+        flexDirection: 'column',
+        flex: 8
     },
-    itemTextName: {
-        color: '#DFF6FF',
-        fontSize: 20,
-        fontWeight: '500',
+    title: {
+        color: '#47B5FF',
+        fontSize: 24,
+        flex: 8
     },
-    itemTextDescription: {
-        flex: 9,
-        color: '#06283D',
-        fontSize: 16,
-        fontWeight: 'normal',
-        marginTop: 5,
-        flexShrink: 1,
+    timestamp: {
+        fontSize: 15,
+        color: '#DFF6FF'
     },
-    iconLarge: {
-        flex: 9,
-        color: '#06283D',
-        marginTop: 10,
-        flexShrink: 1,
+    iconTouch: {
+        flex: 1.5,
     },
-    iconContainer: {
-        flex: 2,
-        flexDirection: 'row-reverse',
-        width: '100%',
-        paddingHorizontal: 5
-    },
-    iconSmall: {
-        flex: 0.2,
+    icon: {
+        flex: 1,
         textAlign: 'right',
-        alignItems: 'flex-end'
+        textAlignVertical: 'center'
     }
 })
 
@@ -483,7 +473,7 @@ export const noteOptionStyle = StyleSheet.create({
     },
     textModal: {
         textAlign: "center",
-        color: 'white',
+        color: '#DFF6FF',
         fontSize: 15,
     },
 });
@@ -527,7 +517,7 @@ export const groupStyle = StyleSheet.create({
         flexShrink: 1
     },
     pinContainer: {
-        height: '35%',
+        maxHeight: '35%',
         borderBottomWidth: 1,
         borderColor: '#47B5FF'
     },

@@ -11,7 +11,8 @@ module.exports = {
           "src": "./src",
           "components": "./src/components",
           "assets": "./src/assets",
-          "app": "./src/app"
+          "app": "./src/app",
+          "features": "./src/features"
         }
       }
     ]

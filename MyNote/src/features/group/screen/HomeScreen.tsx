@@ -1,14 +1,14 @@
 import { FirebaseFirestoreTypes } from "@react-native-firebase/firestore";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack/lib/typescript/src/types";
+import { useAppDispatch, useAppSelector } from "app/hook";
 import { homeStyle } from "assets/style";
+import CustomFloatButton from "components/CustomButton/CustomFloatButton";
 import RootStackParamList from "constants/type";
+import { Group } from "models/group";
 import React, { useEffect, useState } from "react";
 import { Alert, SafeAreaView, Text, TouchableOpacity } from "react-native";
 import { SwipeListView } from "react-native-swipe-list-view";
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
-import { useAppDispatch, useAppSelector } from "../../../app/hook";
-import CustomFloatButton from "../../../components/CustomButton/CustomFloatButton";
-import { Group } from "../../../models/group";
 import { authActions } from "../../auth/authSlice";
 import AddGroupModal from "../components/AddGroupModal";
 import { deleteGroup, getFirstPageGroups, getMoreGroups, setNewLast } from "../groupApi";
