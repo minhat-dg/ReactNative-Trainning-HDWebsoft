@@ -8,5 +8,6 @@ export interface Note {
     timestamp: Timestamp,
     lock: boolean,
     pin: boolean,
-    password: string
+    password: string,
+    image: string
 }

@@ -11,7 +11,8 @@ export interface AddNotePayload {
     groupId: string,
     lock: boolean,
     pin: boolean,
-    password: string
+    password: string,
+    image: string
 }
 
 export interface UpdateNotePayload {
@@ -20,7 +21,8 @@ export interface UpdateNotePayload {
     id: string,
     lock: boolean,
     pin: boolean,
-    password: string
+    password: string,
+    image: string
 }
 
 const initialState: NoteState = {

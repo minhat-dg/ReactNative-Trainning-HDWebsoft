@@ -51,7 +51,7 @@ export const customButtonStyle = StyleSheet.create({
     text: {
         fontWeight: 'bold',
         fontSize: 15,
-        color: '#DFF6FF'
+        color: '#DFF6FF',
     }
 })
 
@@ -411,6 +411,7 @@ export const noteItemStyle = (numColumn: number) => StyleSheet.create({
     timestamp: {
         flex: 9,
         fontSize: 15,
+        color: '#06283D'
     }
 })
 
@@ -537,5 +538,30 @@ export const noteStyle = StyleSheet.create({
     error: {
         fontSize: 12,
         color: 'red'
+    },
+    imageContainer: {
+        width: '100%',
+        height: '30%',
+        justifyContent: 'center',
+        alignItems: 'center',
+        paddingBottom: 10
+    },
+    icon: {
+        borderWidth: 1,
+        borderColor: '#1363DF',
+        borderRadius: 10,
+        height: '100%',
+        width: '100%',
+        textAlign: 'center',
+        textAlignVertical: 'center',
+        padding: 5,
+    },
+    image: {
+        borderWidth: 1,
+        borderColor: '#1363DF',
+        borderRadius: 10,
+        height: '100%',
+        width: '100%',
+        resizeMode: 'contain',
     }
 })

@@ -1,5 +1,6 @@
 import auth from "@react-native-firebase/auth";
 import firestore, { FirebaseFirestoreTypes } from '@react-native-firebase/firestore';
+import storage from '@react-native-firebase/storage';
 import { Group } from 'models/group';
 import { Note } from 'models/note';
 import { SetStateAction } from 'react';
@@ -23,7 +24,8 @@ export const getFirstPageNotes = (setNotes: { (value: SetStateAction<Note[]>): v
                         timestamp: documentSnapshot.data().timestamp,
                         lock: documentSnapshot.data().lock,
                         pin: documentSnapshot.data().pin,
-                        password: documentSnapshot.data().password
+                        password: documentSnapshot.data().password,
+                        image: documentSnapshot.data().image
                     });
                 });
 
@@ -60,7 +62,8 @@ export const getMoreNotes = (setNotes: { (value: SetStateAction<Note[]>): void; 
                         timestamp: documentSnapshot.data().timestamp,
                         lock: documentSnapshot.data().lock,
                         pin: documentSnapshot.data().pin,
-                        password: documentSnapshot.data().password
+                        password: documentSnapshot.data().password,
+                        image: documentSnapshot.data().image
                     });
                 });
                 const lastNote = querySnapshot.docs[querySnapshot.docs.length - 1];
@@ -168,5 +171,22 @@ export const checkPassword = (password: string) => {
         return user.reauthenticateWithCredential(cred).then(() => { return 'OK' }).catch(error => {
             return error.code
         });
+    }
+}
+
+export const uploadImage = async (title: string, uri: string | undefined) => {
+    if (uri !== undefined) {
+        console.log('Uploading image of ', title)
+        const task = storage().ref(title).putFile(uri)
+        try {
+            await task;
+            return await storage().ref(title).getDownloadURL();
+        } catch (e) {
+            console.error(e);
+            return ''
+        }
+    } else {
+        console.log("Image not found!")
+        return ''
     }
 }
