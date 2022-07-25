@@ -44,9 +44,8 @@ export const customButtonStyle = StyleSheet.create({
         width: '100%',
         marginVertical: 10,
         padding: 15,
-
         alignItems: 'center',
-        borderRadius: 5
+        borderRadius: 5,
     },
     text: {
         fontWeight: 'bold',
@@ -63,7 +62,7 @@ export const customButtonBorderStyle = StyleSheet.create({
         marginVertical: 0,
         padding: 15,
         alignItems: 'center',
-        borderRadius: 5
+        borderRadius: 5,
     },
     text: {
         fontWeight: 'bold',
@@ -103,12 +102,13 @@ export const inputStyle = StyleSheet.create({
 export const inputLargeStyle = StyleSheet.create({
     container: {
         width: '100%',
-        marginVertical: 5,
+        marginBottom: 10,
         borderColor: '#1363DF',
         borderWidth: 1,
         borderRadius: 5,
         paddingHorizontal: 10,
         flex: 1,
+        height: 120,
         alignItems: 'flex-start'
     },
     input: {
@@ -219,7 +219,7 @@ export const groupModalStyle = StyleSheet.create({
         justifyContent: 'center',
         alignItems: "center",
         width: '100%',
-        marginTop: '40%'
+        marginTop: '40%',
     },
     modalView: {
         margin: 20,
@@ -526,14 +526,16 @@ export const groupStyle = StyleSheet.create({
 
 export const noteStyle = StyleSheet.create({
     root: {
-        padding: 20,
+        paddingHorizontal: 20,
+        paddingVertical: 10,
         backgroundColor: '#06283D',
         height: '100%',
     },
     header: {
         color: "#DFF6FF",
         fontSize: 20,
-        fontWeight: '600'
+        fontWeight: '600',
+        marginBottom: 10
     },
     error: {
         fontSize: 12,
@@ -541,7 +543,7 @@ export const noteStyle = StyleSheet.create({
     },
     imageContainer: {
         width: '100%',
-        height: '30%',
+        height: 200,
         justifyContent: 'center',
         alignItems: 'center',
         paddingBottom: 10

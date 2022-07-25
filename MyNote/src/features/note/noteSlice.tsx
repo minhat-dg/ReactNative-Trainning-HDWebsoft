@@ -35,6 +35,7 @@ const noteSlice = createSlice({
     reducers: {
         addNote(state, action: PayloadAction<AddNotePayload>) {
             state.loading = true;
+            action;
         },
         addSuccess(state) {
             state.loading = false;
@@ -44,6 +45,7 @@ const noteSlice = createSlice({
         },
         updateNote(state, action: PayloadAction<UpdateNotePayload>) {
             state.loading = true;
+            action;
         }
     }
 })

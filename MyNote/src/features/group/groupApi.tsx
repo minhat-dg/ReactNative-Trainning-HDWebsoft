@@ -32,7 +32,7 @@ export const getFirstPageGroups = (setNoteGroups: React.Dispatch<React.SetStateA
 }
 
 export const getMoreGroups = (setNoteGroups: React.Dispatch<React.SetStateAction<Group[]>>, uid: string | undefined, limit: number, setLastGroup: React.Dispatch<SetStateAction<FirebaseFirestoreTypes.QueryDocumentSnapshot<FirebaseFirestoreTypes.DocumentData> | undefined>>, lastGroup: FirebaseFirestoreTypes.DocumentData) => {
-    const subscriber = firestore()
+    firestore()
         .collection('Groups').where('uid', '==', uid).orderBy("timestamp", "desc")
         .startAfter(lastGroup).limit(limit)
         .onSnapshot(querySnapshot => {

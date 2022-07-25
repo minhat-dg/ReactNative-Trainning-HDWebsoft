@@ -25,6 +25,7 @@ const authSlice = createSlice({
     reducers: {
         login(state, action: PayloadAction<LogginPayload>) {
             state.logging = true;
+            action;
         },
         loginSuccess(state, action: PayloadAction<User>) {
             state.isLoggedIn = true;
@@ -33,6 +34,7 @@ const authSlice = createSlice({
         },
         loginFailed(state, action: PayloadAction<string>) {
             state.logging = false
+            action;
         },
         logOut(state) {
             state.isLoggedIn = false;

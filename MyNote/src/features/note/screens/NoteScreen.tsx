@@ -5,6 +5,7 @@ import CustomButton from "components/CustomButton/CustomButton";
 import CustomButtonBorder from "components/CustomButton/CustomButtonBorder";
 import CustomInput from "components/CustomInput/CustomInput";
 import CustomInputLarge from "components/CustomInput/CustomInputLarge";
+import KeyboardAvoidingWrapper from "components/KeyboardAvoiding/KeyboardAvoidingWrapper";
 import RootStackParamList from "constants/type";
 import { Formik } from "formik";
 import React, { useEffect, useState } from "react";
@@ -170,40 +171,44 @@ const NoteScreen = ({ route, navigation }: { navigation: NoteGroupScreenProps['n
     }
 
     return (
-        <SafeAreaView style={noteStyle.root}>
-            {unlockVisible
-                ? <UnlockModal modalVisible={unlockVisible} setModalVisible={setUnlockVisible} handleCancel={handelCancel} password={note?.password} />
-                :
-                <Formik initialValues={noteInfo}
-                    validationSchema={noteValidationSchema}
-                    onSubmit={value => { handleSaveNote(value) }}>
-                    {({ handleChange, handleBlur, handleSubmit, values, errors, isValid, }) => (
-                        <>
-                            <Text style={noteStyle.header}>Image:</Text>
-                            <TouchableOpacity style={noteStyle.imageContainer} onPress={selectImage}>
-                                {
-                                    imageUri === '' ?
-                                        <FontAwesome name="camera" color={'#DFF6FF'} size={70} style={noteStyle.icon} />
-                                        : <Image style={noteStyle.image} source={{
-                                            uri: imageUri,
-                                        }} />
-                                }
+        <SafeAreaView style={noteStyle.root} >
+            <KeyboardAvoidingWrapper>
+                <>
+                    {unlockVisible
+                        ? <UnlockModal modalVisible={unlockVisible} setModalVisible={setUnlockVisible} handleCancel={handelCancel} password={note?.password} />
+                        :
+                        <Formik initialValues={noteInfo}
+                            validationSchema={noteValidationSchema}
+                            onSubmit={value => { handleSaveNote(value) }}>
+                            {({ handleChange, handleBlur, handleSubmit, values, errors, isValid, }) => (
+                                <>
+                                    <Text style={noteStyle.header}>Image:</Text>
+                                    <TouchableOpacity style={noteStyle.imageContainer} onPress={selectImage}>
+                                        {
+                                            imageUri === '' ?
+                                                <FontAwesome name="camera" color={'#DFF6FF'} size={70} style={noteStyle.icon} />
+                                                : <Image style={noteStyle.image} source={{
+                                                    uri: imageUri,
+                                                }} />
+                                        }
 
-                            </TouchableOpacity>
-                            <Text style={noteStyle.header}>Title:</Text>
-                            <CustomInput placeHolder="Note title" value={values.title} onChangeText={handleChange('title')} onBlur={handleBlur('tile')} secureText={false} keyboardType='default' />
-                            {errors.title &&
-                                <Text style={noteStyle.error}>{errors.title}</Text>
-                            }
-                            <Text style={noteStyle.header}>Content:</Text>
-                            <CustomInputLarge placeHolder="Note content" value={values.content} onChangeText={handleChange('content')} onBlur={handleBlur('content')} secureText={false} keyboardType='default' />
-                            <CustomButton text="Save" onPress={handleSubmit} isValid={isValid} />
-                            <CustomButtonBorder text="Cancel" onPress={handelCancel} />
-                        </>
-                    )}
-                </Formik>
-            }
-            {modalVisible ? <LockNoteModal modalVisible={modalVisible} setModalVisible={setModalVisible} note={note} lock={lock} setLock={setLock} setPassword={setPassword} /> : <></>}
+                                    </TouchableOpacity>
+                                    <Text style={noteStyle.header}>Title:</Text>
+                                    <CustomInput placeHolder="Note title" value={values.title} onChangeText={handleChange('title')} onBlur={handleBlur('tile')} secureText={false} keyboardType='default' />
+                                    {errors.title &&
+                                        <Text style={noteStyle.error}>{errors.title}</Text>
+                                    }
+                                    <Text style={noteStyle.header}>Content:</Text>
+                                    <CustomInputLarge placeHolder="Note content" value={values.content} onChangeText={handleChange('content')} onBlur={handleBlur('content')} secureText={false} keyboardType='default' />
+                                    <CustomButton text="Save" onPress={handleSubmit} isValid={isValid} />
+                                    <CustomButtonBorder text="Cancel" onPress={handelCancel} />
+                                </>
+                            )}
+                        </Formik>
+                    }
+                    {modalVisible ? <LockNoteModal modalVisible={modalVisible} setModalVisible={setModalVisible} note={note} lock={lock} setLock={setLock} setPassword={setPassword} /> : <></>}
+                </>
+            </KeyboardAvoidingWrapper>
         </SafeAreaView>
     )
 }

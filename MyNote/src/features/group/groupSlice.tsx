@@ -22,6 +22,7 @@ const groupSlice = createSlice({
     reducers: {
         addGroup(state, action: PayloadAction<GroupPayload>) {
             state.loading = true;
+            action;
         },
         addSuccess(state) {
             state.loading = false;
