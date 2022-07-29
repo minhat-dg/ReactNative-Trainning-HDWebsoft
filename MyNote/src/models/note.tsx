@@ -9,5 +9,6 @@ export interface Note {
     lock: boolean,
     pin: boolean,
     password: string,
-    image: string
+    image: string,
+    order: number
 }

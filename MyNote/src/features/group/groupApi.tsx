@@ -20,7 +20,7 @@ export const getFirstPageGroups = (setNoteGroups: React.Dispatch<React.SetStateA
                     });
                 });
                 const source = querySnapshot.metadata.fromCache ? "cache" : "server";
-                console.log("Data from ", source);
+                console.log("Data GROUP from ", source);
                 if (querySnapshot.docs.length === limit) {
                     const lastGroup = querySnapshot.docs[querySnapshot.docs.length - 1];
                     setLastGroup(lastGroup)

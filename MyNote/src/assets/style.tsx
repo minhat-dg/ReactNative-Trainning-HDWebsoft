@@ -420,7 +420,8 @@ export const noteItemListStyle = StyleSheet.create({
         flexDirection: 'row',
         borderBottomColor: '#000000',
         borderBottomWidth: 1,
-        padding: 10,
+        paddingHorizontal: 10,
+        paddingVertical: 5,
         marginHorizontal: 5,
     },
     mainContainer: {
@@ -437,20 +438,25 @@ export const noteItemListStyle = StyleSheet.create({
         color: '#DFF6FF'
     },
     iconTouch: {
-        flex: 1.5,
+        flex: 1,
+        marginHorizontal: 2
     },
     icon: {
         flex: 1,
         textAlign: 'right',
-        textAlignVertical: 'center'
+        textAlignVertical: 'center',
+        justifyContent: 'center',
     }
 })
 
 export const noteOptionStyle = StyleSheet.create({
     centeredView: {
-        flex: 1,
+        position: 'absolute',
+        width: '100%',
         justifyContent: "center",
         alignItems: "center",
+        alignSelf: 'center',
+        bottom: '50%'
     },
     modalView: {
         backgroundColor: "#06283D",
@@ -484,13 +490,14 @@ export const groupStyle = StyleSheet.create({
         padding: 10,
         backgroundColor: '#06283D',
         height: '100%',
+        flexDirection: 'column'
     },
     header: {
         fontWeight: '500',
         fontSize: 20,
         color: '#DFF6FF',
         marginStart: 10,
-        marginBottom: 5,
+        marginBottom: 5
     },
     itemContainer: {
         flex: 0.5,
@@ -520,8 +527,16 @@ export const groupStyle = StyleSheet.create({
     pinContainer: {
         maxHeight: '35%',
         borderBottomWidth: 1,
-        borderColor: '#47B5FF'
+        borderColor: '#47B5FF',
+        backgroundColor: '#06283D',
     },
+    noteContainer: {
+        flex: 7,
+        backgroundColor: '#06283D',
+    },
+    listContainer: {
+        height: '90%'
+    }
 })
 
 export const noteStyle = StyleSheet.create({

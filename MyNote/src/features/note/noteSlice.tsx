@@ -12,7 +12,7 @@ export interface AddNotePayload {
     lock: boolean,
     pin: boolean,
     password: string,
-    image: string
+    image: string,
 }
 
 export interface UpdateNotePayload {

@@ -11,7 +11,7 @@ const decreasement = firestore.FieldValue.increment(-1);
 
 export const getFirstPageNotes = (setNotes: { (value: SetStateAction<Note[]>): void; (arg0: Note[]): void; }, setFilteredNotes: { (value: SetStateAction<Note[]>): void; (arg0: Note[]): void; }, groupId: string, limit: number, setLastNote: React.Dispatch<SetStateAction<FirebaseFirestoreTypes.QueryDocumentSnapshot<FirebaseFirestoreTypes.DocumentData> | undefined>>) => {
     const subscriber = firestore()
-        .collection('Notes').where('groupId', '==', groupId).limit(limit).orderBy("timestamp", "desc")
+        .collection('Notes').where('groupId', '==', groupId).limit(limit).orderBy("order", "desc")
         .onSnapshot(querySnapshot => {
             if (querySnapshot) {
                 const notes: Note[] = [];
@@ -25,7 +25,8 @@ export const getFirstPageNotes = (setNotes: { (value: SetStateAction<Note[]>): v
                         lock: documentSnapshot.data().lock,
                         pin: documentSnapshot.data().pin,
                         password: documentSnapshot.data().password,
-                        image: documentSnapshot.data().image
+                        image: documentSnapshot.data().image,
+                        order: documentSnapshot.data().order
                     });
                 });
 
@@ -38,6 +39,9 @@ export const getFirstPageNotes = (setNotes: { (value: SetStateAction<Note[]>): v
                 setNotes(notes)
                 setFilteredNotes(notes)
             }
+            querySnapshot.docChanges().forEach(change => {
+                console.log(change.newIndex)
+            })
         });
     return subscriber
 }
@@ -48,7 +52,7 @@ export const getMoreNotes = (setNotes: { (value: SetStateAction<Note[]>): void; 
     setLastNote: React.Dispatch<SetStateAction<FirebaseFirestoreTypes.QueryDocumentSnapshot<FirebaseFirestoreTypes.DocumentData> | undefined>>,
     lastNote: FirebaseFirestoreTypes.DocumentData) => {
     const subscriber = firestore()
-        .collection('Notes').where('groupId', '==', groupId).orderBy("timestamp", "desc")
+        .collection('Notes').where('groupId', '==', groupId).orderBy("order", "desc")
         .startAfter(lastNote).limit(limit)
         .onSnapshot(querySnapshot => {
             if (querySnapshot.size > 0) {
@@ -63,7 +67,8 @@ export const getMoreNotes = (setNotes: { (value: SetStateAction<Note[]>): void; 
                         lock: documentSnapshot.data().lock,
                         pin: documentSnapshot.data().pin,
                         password: documentSnapshot.data().password,
-                        image: documentSnapshot.data().image
+                        image: documentSnapshot.data().image,
+                        order: documentSnapshot.data().order
                     });
                 });
                 const lastNote = querySnapshot.docs[querySnapshot.docs.length - 1];

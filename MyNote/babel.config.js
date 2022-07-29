@@ -14,7 +14,9 @@ module.exports = {
           "app": "./src/app",
           "features": "./src/features"
         }
-      }
-    ]
+      },
+
+    ],
+    'react-native-reanimated/plugin',
   ]
 };

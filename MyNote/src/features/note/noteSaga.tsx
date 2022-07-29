@@ -5,6 +5,12 @@ import { AddNotePayload, noteAction, UpdateNotePayload } from "./noteSlice";
 
 const increasement = firestore.FieldValue.increment(1);
 
+function* getCount(groupId: string) {
+    yield firestore().collection('Groups').doc(groupId).get().then(ds => {
+        return ds.get('count')
+    })
+}
+
 function* watchAddNote() {
     while (true) {
         const action: PayloadAction<AddNotePayload> = yield take(noteAction.addNote.type);
@@ -13,6 +19,7 @@ function* watchAddNote() {
 }
 
 function* handleAddNote(payload: AddNotePayload) {
+    const count: number = yield getCount(payload.groupId).next().value
     yield firestore().collection('Notes').add({
         title: payload.title,
         content: payload.content,
@@ -21,7 +28,8 @@ function* handleAddNote(payload: AddNotePayload) {
         lock: payload.lock,
         pin: payload.pin,
         password: payload.password,
-        image: payload.image
+        image: payload.image,
+        order: count
     }).then(() => {
         firestore().collection('Groups').doc(payload.groupId).update({
             count: increasement
