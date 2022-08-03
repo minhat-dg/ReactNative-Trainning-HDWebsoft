@@ -275,6 +275,49 @@ export const groupModalStyle = StyleSheet.create({
     }
 });
 
+export const voiceModalStyle = StyleSheet.create({
+    centeredView: {
+        position: 'absolute',
+        justifyContent: 'center',
+        alignItems: "center",
+        width: '100%',
+        marginTop: '50%'
+    },
+    modalView: {
+        backgroundColor: "#06283D",
+        borderRadius: 20,
+        borderColor: '#000000',
+        borderWidth: 1,
+        padding: 10,
+        alignItems: "center",
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 2
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 4,
+        elevation: 5,
+        width: '80%',
+        flex: 1
+    },
+    textModal: {
+        textAlign: "center",
+        color: 'white',
+        fontSize: 20,
+        marginVertical: 20
+    },
+    textButton: {
+        textAlign: "center",
+        color: 'white',
+        fontSize: 15
+    },
+    buttonContainer: {
+        alignItems: 'center',
+        marginHorizontal: 20,
+    }
+});
+
 export const homeStyle = StyleSheet.create({
     root: {
         padding: 20,
@@ -550,7 +593,6 @@ export const noteStyle = StyleSheet.create({
         color: "#DFF6FF",
         fontSize: 20,
         fontWeight: '600',
-        marginBottom: 10
     },
     error: {
         fontSize: 12,
@@ -580,5 +622,21 @@ export const noteStyle = StyleSheet.create({
         height: '100%',
         width: '100%',
         resizeMode: 'contain',
+    },
+    contentCtn: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        paddingVertical: 5,
+        paddingEnd: 10,
+        alignItems: 'center',
+        marginBottom: 5
+    },
+    text: {
+        color: "#DFF6FF",
+        fontSize: 15,
+        fontWeight: '400',
+        textAlign: 'right',
+        flex: 1,
+        marginEnd: 10
     }
 })

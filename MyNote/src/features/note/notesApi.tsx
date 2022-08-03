@@ -38,10 +38,11 @@ export const getFirstPageNotes = (setNotes: { (value: SetStateAction<Note[]>): v
                 }
                 setNotes(notes)
                 setFilteredNotes(notes)
+                querySnapshot.docChanges().forEach(change => {
+                    console.log(change.newIndex)
+                })
             }
-            querySnapshot.docChanges().forEach(change => {
-                console.log(change.newIndex)
-            })
+
         });
     return subscriber
 }
