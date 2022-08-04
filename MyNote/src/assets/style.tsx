@@ -118,6 +118,7 @@ export const inputLargeStyle = StyleSheet.create({
         textAlignVertical: 'top',
         width: '100%',
         height: '100%',
+        flexWrap: 'wrap',
     }
 })
 
@@ -415,9 +416,17 @@ export const noteItemStyle = (numColumn: number) => StyleSheet.create({
         borderRadius: 10,
         height: 150,
         width: '100%',
-        alignItems: 'center',
         padding: 5,
         flexDirection: 'column'
+    },
+    iconContainer: {
+        flex: 2,
+        flexDirection: 'row-reverse',
+
+    },
+    contentContainer: {
+        flex: 8,
+        flexDirection: 'row'
     },
     itemTextName: {
         color: '#DFF6FF',
@@ -432,30 +441,25 @@ export const noteItemStyle = (numColumn: number) => StyleSheet.create({
         fontWeight: 'normal',
         marginTop: 5,
         flexShrink: 1,
-    },
-    iconLarge: {
-        flex: 9,
-        color: '#06283D',
-        marginTop: 10,
-        textAlignVertical: 'center'
-    },
-    iconContainer: {
-        flex: 4,
-        width: '100%',
-        flexDirection: 'row',
-        paddingHorizontal: 5,
-        alignItems: 'center'
-    },
-    iconSmall: {
-        flex: 3,
-        textAlign: 'right',
-        alignItems: 'flex-end'
+        flexWrap: 'wrap',
+        textAlign: 'center'
     },
     timestamp: {
-        flex: 9,
-        fontSize: 15,
-        color: '#06283D'
-    }
+        flex: 2,
+        fontSize: 12,
+        color: '#06283D',
+        textAlign: 'center'
+    },
+    iconLarge: {
+        flex: 8,
+        color: '#06283D',
+        textAlignVertical: 'center',
+        textAlign: 'center'
+    },
+    iconSmall: {
+        textAlign: 'right',
+        marginHorizontal: 5
+    },
 })
 
 export const noteItemListStyle = StyleSheet.create({

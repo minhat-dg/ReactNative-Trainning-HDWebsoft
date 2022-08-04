@@ -34,6 +34,9 @@ const VoiceModal = ({ modalVisible, setModalVisible }: { modalVisible: boolean, 
     const onSpeechResults = (e: SpeechResultsEvent) => {
         console.log("Result: ", e.value)
         setResult(e.value?.[0])
+        const oldValue = form.values.content;
+        const newValue = oldValue + " " + e.value?.[0]
+        form.setFieldValue('content', newValue)
     };
 
     const onSpeechPartialResults = (e: SpeechResultsEvent) => {
@@ -42,22 +45,20 @@ const VoiceModal = ({ modalVisible, setModalVisible }: { modalVisible: boolean, 
     };
 
     const startSpeechRecognizing = async () => {
-        console.log("Start recording")
-        setPartialResults("Listening...")
-        setStarted(true)
         try {
             await Voice.start('en-US');
+            console.log("Start recording")
+            setPartialResults("Listening...")
+            setStarted(true)
+            setResult('')
         } catch (e) {
             console.error("Error: ", e);
         }
     };
 
     const stopSpeechRecognizing = async () => {
-        console.log('Stop recording')
-        const oldValue = form.values.content;
-        const newValue = oldValue + " " + result
-        form.setFieldValue('content', newValue)
         try {
+            console.log('Stop recording')
             handleCloseModal();
             await Voice.stop();
         } catch (e) {

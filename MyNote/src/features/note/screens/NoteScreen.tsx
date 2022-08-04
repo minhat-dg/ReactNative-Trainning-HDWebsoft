@@ -181,7 +181,6 @@ const NoteScreen = ({ route, navigation }: { navigation: NoteGroupScreenProps['n
                         <Formik initialValues={noteInfo}
                             validationSchema={noteValidationSchema}
                             onSubmit={value => { handleSaveNote(value) }}>
-
                             {({ handleChange, handleBlur, handleSubmit, values, errors, isValid, }) => {
                                 return (
                                     <>

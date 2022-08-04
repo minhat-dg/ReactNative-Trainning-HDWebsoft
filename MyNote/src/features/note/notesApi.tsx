@@ -29,20 +29,13 @@ export const getFirstPageNotes = (setNotes: { (value: SetStateAction<Note[]>): v
                         order: documentSnapshot.data().order
                     });
                 });
-
-                const source = querySnapshot.metadata.fromCache ? "cache" : "server";
-                console.log("Data from ", source);
                 if (querySnapshot.docs.length === limit) {
                     const lastNote = querySnapshot.docs[querySnapshot.docs.length - 1];
                     setLastNote(lastNote)
                 }
                 setNotes(notes)
                 setFilteredNotes(notes)
-                querySnapshot.docChanges().forEach(change => {
-                    console.log(change.newIndex)
-                })
             }
-
         });
     return subscriber
 }
@@ -53,7 +46,7 @@ export const getMoreNotes = (setNotes: { (value: SetStateAction<Note[]>): void; 
     setLastNote: React.Dispatch<SetStateAction<FirebaseFirestoreTypes.QueryDocumentSnapshot<FirebaseFirestoreTypes.DocumentData> | undefined>>,
     lastNote: FirebaseFirestoreTypes.DocumentData) => {
     const subscriber = firestore()
-        .collection('Notes').where('groupId', '==', groupId).orderBy("order", "desc")
+        .collection('Notes').where('groupId', '==', groupId).orderBy("order", "desc").orderBy("timestamp", "desc")
         .startAfter(lastNote).limit(limit)
         .onSnapshot(querySnapshot => {
             if (querySnapshot.size > 0) {
@@ -195,4 +188,20 @@ export const uploadImage = async (title: string, uri: string | undefined) => {
         console.log("Image not found!")
         return ''
     }
+}
+
+export const updateOrder = (id: string, order: number) => {
+
+    firestore()
+        .collection('Notes').doc(id).update({
+            order: order
+        })
+}
+
+export const autoUpdateOrder = (id: string, asc: boolean) => {
+    const setValue = asc ? increasement : decreasement
+    firestore()
+        .collection('Notes').doc(id).update({
+            order: setValue
+        })
 }
