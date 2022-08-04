@@ -13,18 +13,27 @@ interface NoteField {
 const VoiceModal = ({ modalVisible, setModalVisible }: { modalVisible: boolean, setModalVisible: React.Dispatch<React.SetStateAction<boolean>> }) => {
     const [started, setStarted] = useState(false);
     const [partialResults, setPartialResults] = useState<string | undefined>('');
-    const [result, setResult] = useState<string | undefined>('');
     const form = useFormikContext<NoteField>();
+
+    useEffect(() => {
+        setPartialResults('Tap play to start listening');
+
+    }, [])
+
     useEffect(() => {
         Voice.onSpeechStart = onSpeechStart;
+        Voice.onSpeechEnd = onSpeechEnd;
         Voice.onSpeechResults = onSpeechResults;
         Voice.onSpeechPartialResults = onSpeechPartialResults;
-        setPartialResults('Tap play to start listening')
         return () => {
             Voice.destroy().then(Voice.removeAllListeners)
         }
-    }, [])
+    }, [modalVisible])
 
+
+    const onSpeechEnd = () => {
+        console.log("END")
+    }
 
 
     const onSpeechStart = (e: SpeechStartEvent) => {
@@ -33,9 +42,9 @@ const VoiceModal = ({ modalVisible, setModalVisible }: { modalVisible: boolean, 
 
     const onSpeechResults = (e: SpeechResultsEvent) => {
         console.log("Result: ", e.value)
-        setResult(e.value?.[0])
         const oldValue = form.values.content;
         const newValue = oldValue + " " + e.value?.[0]
+        console.log("Old: ", oldValue, " --- New: ", newValue)
         form.setFieldValue('content', newValue)
     };
 
@@ -50,7 +59,6 @@ const VoiceModal = ({ modalVisible, setModalVisible }: { modalVisible: boolean, 
             console.log("Start recording")
             setPartialResults("Listening...")
             setStarted(true)
-            setResult('')
         } catch (e) {
             console.error("Error: ", e);
         }

@@ -440,9 +440,9 @@ export const noteItemStyle = (numColumn: number) => StyleSheet.create({
         fontSize: 16,
         fontWeight: 'normal',
         marginTop: 5,
-        flexShrink: 1,
         flexWrap: 'wrap',
-        textAlign: 'center'
+        textAlign: 'center',
+        paddingHorizontal: 5
     },
     timestamp: {
         flex: 2,

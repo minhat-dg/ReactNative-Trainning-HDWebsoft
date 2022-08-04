@@ -38,7 +38,7 @@ const NoteItem = ({ item }: { item: Note }, handleOnPress: (item: Note) => void,
                 </View>
                 {item.lock ?
                     <FontAwesome name="lock" color={'#06283D'} size={40} style={style.iconLarge} />
-                    : <Text style={style.itemTextDescription}>{item.content}</Text>
+                    : <Text numberOfLines={4} style={style.itemTextDescription}>{item.content}</Text>
                 }
                 <Text style={style.timestamp}>{date.toLocaleTimeString()} - {date.toDateString()}</Text>
             </View>
