@@ -9,6 +9,7 @@ import { Note } from "models/note";
 import React, { useEffect, useRef, useState } from "react";
 import { Alert, SafeAreaView, Text, TouchableOpacity, View } from "react-native";
 import DraggableFlatList, { DragEndParams } from "react-native-draggable-flatlist";
+import Tts from 'react-native-tts';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import GroupMenu from "../components/GroupsMenu";
 import NoteItem from "../components/NoteItem";
@@ -199,8 +200,8 @@ const GroupScreen = ({ route, navigation }: { navigation: HomeGroupScreenProps['
                     <Text style={groupStyle.header}>Pinned:</Text>
 
                     {listView ?
-                        <DraggableFlatList containerStyle={groupStyle.listContainer} key={1} onEndReached={handleLoadMore} numColumns={1} data={pinnedNotes} onDragEnd={(params: DragEndParams<Note>) => updateOrderList(params.data)} keyExtractor={(item) => item.id} renderItem={item => NoteItemList(item, handleOnPress)} />
-                        : <DraggableFlatList containerStyle={groupStyle.listContainer} key={2} onEndReached={handleLoadMore} numColumns={2} data={pinnedNotes} onDragEnd={(params: DragEndParams<Note>) => updateOrderList(params.data)} keyExtractor={(item) => item.id} renderItem={item => NoteItem(item, handleOnPress, handleOnLongPress)} />
+                        <DraggableFlatList containerStyle={groupStyle.listContainer} key={1} onEndReached={handleLoadMore} numColumns={1} data={pinnedNotes} onDragEnd={(params: DragEndParams<Note>) => updateOrderList(params.data)} keyExtractor={(item) => item.id} renderItem={item => NoteItemList(item, handleOnPress, Tts)} />
+                        : <DraggableFlatList containerStyle={groupStyle.listContainer} key={2} onEndReached={handleLoadMore} numColumns={2} data={pinnedNotes} onDragEnd={(params: DragEndParams<Note>) => updateOrderList(params.data)} keyExtractor={(item) => item.id} renderItem={item => NoteItem(item, handleOnPress, handleOnLongPress, Tts)} />
                     }
                 </View>
                 : <></>
@@ -208,8 +209,8 @@ const GroupScreen = ({ route, navigation }: { navigation: HomeGroupScreenProps['
             <View style={groupStyle.noteContainer}>
                 <Text style={groupStyle.header}>Notes:</Text>
                 {listView ?
-                    <DraggableFlatList key={1} onEndReached={handleLoadMore} containerStyle={groupStyle.listContainer} numColumns={1} data={filteredNotes} onDragEnd={(params: DragEndParams<Note>) => { setFilteredNotes(params.data); updateOrderList(params.data) }} keyExtractor={(item) => item.id} renderItem={item => NoteItemList(item, handleOnPress)} />
-                    : <DraggableFlatList key={2} onEndReached={handleLoadMore} containerStyle={groupStyle.listContainer} numColumns={2} data={filteredNotes} onDragEnd={(params: DragEndParams<Note>) => updateOrderList(params.data)} keyExtractor={(item) => item.id} renderItem={item => NoteItem(item, handleOnPress, handleOnLongPress)} />
+                    <DraggableFlatList key={1} onEndReached={handleLoadMore} containerStyle={groupStyle.listContainer} numColumns={1} data={filteredNotes} onDragEnd={(params: DragEndParams<Note>) => { setFilteredNotes(params.data); updateOrderList(params.data) }} keyExtractor={(item) => item.id} renderItem={item => NoteItemList(item, handleOnPress, Tts)} />
+                    : <DraggableFlatList key={2} onEndReached={handleLoadMore} containerStyle={groupStyle.listContainer} numColumns={2} data={filteredNotes} onDragEnd={(params: DragEndParams<Note>) => updateOrderList(params.data)} keyExtractor={(item) => item.id} renderItem={item => NoteItem(item, handleOnPress, handleOnLongPress, Tts)} />
                 }
             </View>
             <CustomFloatButton onPress={navigateToNoteScreen} />

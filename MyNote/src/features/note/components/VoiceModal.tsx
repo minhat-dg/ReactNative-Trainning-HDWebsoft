@@ -17,7 +17,6 @@ const VoiceModal = ({ modalVisible, setModalVisible }: { modalVisible: boolean, 
 
     useEffect(() => {
         setPartialResults('Tap play to start listening');
-
     }, [])
 
     useEffect(() => {

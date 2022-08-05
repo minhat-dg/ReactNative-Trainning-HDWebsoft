@@ -2,17 +2,18 @@ import { noteItemStyle } from "assets/style";
 import { Note } from "models/note";
 import React from "react";
 import { Text, TouchableOpacity, View } from "react-native";
-import Tts from 'react-native-tts';
+import { ReactNativeTts } from "react-native-tts";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import { pinNote } from "../notesApi";
 
 
-const NoteItem = ({ item }: { item: Note }, handleOnPress: (item: Note) => void, handleOnLongPress: (item: Note) => void) => {
+const NoteItem = ({ item }: { item: Note }, handleOnPress: (item: Note) => void, handleOnLongPress: (item: Note) => void, Tts: ReactNativeTts) => {
     const handlePinNote = () => {
         pinNote(item.id, item.pin)
     }
 
     const handleReadNote = () => {
+        Tts.stop()
         if (item.lock) {
             Tts.speak("This note is lock. Please unlock to read")
         } else {

@@ -1,12 +1,12 @@
-import React from "react";
-import { Pressable, Text } from "react-native";
 import { customButtonStyle } from 'assets/style';
+import React from "react";
+import { Text, TouchableOpacity } from "react-native";
 
 const CustomButton = ({ text, onPress, isValid }: { text: string, onPress: () => void, isValid: boolean }) => {
     return (
-        <Pressable style={customButtonStyle.container} onPress={onPress} disabled={!isValid}>
+        <TouchableOpacity style={customButtonStyle.container} onPress={onPress} disabled={!isValid}>
             <Text style={customButtonStyle.text}>{text}</Text>
-        </Pressable>
+        </TouchableOpacity>
     )
 }
 

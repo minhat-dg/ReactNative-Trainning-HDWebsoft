@@ -4,16 +4,17 @@ import React from "react";
 import { Text, TouchableOpacity, View } from "react-native";
 import { ScaleDecorator } from "react-native-draggable-flatlist";
 import { RenderItemParams } from "react-native-draggable-flatlist/lib/types";
-import Tts from 'react-native-tts';
+import { ReactNativeTts } from "react-native-tts";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import { pinNote } from "../notesApi";
 
-const NoteItemList = ({ item, drag, isActive }: RenderItemParams<Note>, handleOnPress: (item: Note) => void) => {
+const NoteItemList = ({ item, drag, isActive }: RenderItemParams<Note>, handleOnPress: (item: Note) => void, Tts: ReactNativeTts) => {
     const handlePinNote = () => {
         pinNote(item.id, item.pin)
     }
 
     const handleReadNote = () => {
+        Tts.stop()
         if (item.lock) {
             Tts.speak("This note is lock. Please unlock to read")
         } else {

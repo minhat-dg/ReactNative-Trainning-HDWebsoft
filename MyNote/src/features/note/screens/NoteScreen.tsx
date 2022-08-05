@@ -16,9 +16,10 @@ import FontAwesome from "react-native-vector-icons/FontAwesome";
 import * as yup from 'yup';
 import LockNoteModal from "../components/LockNoteModal";
 import UnlockModal from "../components/UnlockModal";
-import VoiceModal from '../components/VoiceModal';
+import VoiceModal from "../components/VoiceModal";
 import { uploadImage } from "../notesApi";
 import { noteAction } from "../noteSlice";
+
 
 type NoteGroupScreenProps = NativeStackScreenProps<RootStackParamList, 'Note'>
 const NoteScreen = ({ route, navigation }: { navigation: NoteGroupScreenProps['navigation'], route: NoteGroupScreenProps['route'] }) => {
