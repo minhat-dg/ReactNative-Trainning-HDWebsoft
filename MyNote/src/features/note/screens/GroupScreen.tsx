@@ -32,16 +32,16 @@ const GroupScreen = ({ route, navigation }: { navigation: HomeGroupScreenProps['
     const [groupMenuVisible, setGroupMenuVisible] = useState(false);
     const [currentNote, setCurrentNote] = useState<Note>();
     const timeOutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+    const [changingOrder, setChangingOrder] = useState(false);
     const limitItem = 10;
 
     useEffect(() => {
+        if (changingOrder) return;
+        console.log("Sub")
         const sub = getFirstPageNotes(setNotes, setFilteredNotes, groupId, limitItem, setLastNote);
         getGroupList(setGroups);
-
-        return () => {
-            sub()
-        }
-    }, [])
+        return sub;
+    }, [changingOrder])
 
     useEffect(() => {
         getPinnedNotes();
@@ -185,10 +185,17 @@ const GroupScreen = ({ route, navigation }: { navigation: HomeGroupScreenProps['
         }
     }
 
-    const updateOrderList = (data: Note[]) => {
-        data.reverse().forEach(item => {
-            updateOrder(item.id, data.indexOf(item))
-        })
+    const updateOrderList = async (data: Note[]) => {
+        setChangingOrder(true);
+        const respones = [];
+        await Promise.all(
+            data.reverse().map(async item => {
+                const respone = await updateOrder(item.id, data.indexOf(item))
+                respones.push(respone)
+            })
+        )
+        console.log("Update completed")
+        setChangingOrder(false)
     }
 
 
@@ -209,7 +216,7 @@ const GroupScreen = ({ route, navigation }: { navigation: HomeGroupScreenProps['
             <View style={groupStyle.noteContainer}>
                 <Text style={groupStyle.header}>Notes:</Text>
                 {listView ?
-                    <DraggableFlatList key={1} onEndReached={handleLoadMore} containerStyle={groupStyle.listContainer} numColumns={1} data={filteredNotes} onDragEnd={(params: DragEndParams<Note>) => { setFilteredNotes(params.data); updateOrderList(params.data) }} keyExtractor={(item) => item.id} renderItem={item => NoteItemList(item, handleOnPress, Tts)} />
+                    <DraggableFlatList key={1} onEndReached={handleLoadMore} containerStyle={groupStyle.listContainer} numColumns={1} data={filteredNotes} onDragEnd={(params: DragEndParams<Note>) => { setNotes(params.data); updateOrderList(params.data) }} keyExtractor={(item) => item.id} renderItem={item => NoteItemList(item, handleOnPress, Tts)} />
                     : <DraggableFlatList key={2} onEndReached={handleLoadMore} containerStyle={groupStyle.listContainer} numColumns={2} data={filteredNotes} onDragEnd={(params: DragEndParams<Note>) => updateOrderList(params.data)} keyExtractor={(item) => item.id} renderItem={item => NoteItem(item, handleOnPress, handleOnLongPress, Tts)} />
                 }
             </View>

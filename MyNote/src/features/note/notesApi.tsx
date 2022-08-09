@@ -9,11 +9,13 @@ const increasement = firestore.FieldValue.increment(1);
 const decreasement = firestore.FieldValue.increment(-1);
 
 
+
 export const getFirstPageNotes = (setNotes: { (value: SetStateAction<Note[]>): void; (arg0: Note[]): void; }, setFilteredNotes: { (value: SetStateAction<Note[]>): void; (arg0: Note[]): void; }, groupId: string, limit: number, setLastNote: React.Dispatch<SetStateAction<FirebaseFirestoreTypes.QueryDocumentSnapshot<FirebaseFirestoreTypes.DocumentData> | undefined>>) => {
     const subscriber = firestore()
         .collection('Notes').where('groupId', '==', groupId).limit(limit).orderBy("order", "desc")
         .onSnapshot(querySnapshot => {
             if (querySnapshot) {
+                console.log("Update")
                 const notes: Note[] = [];
                 querySnapshot.forEach(documentSnapshot => {
                     notes.push({
@@ -99,7 +101,7 @@ export const getMoreNotes = (setNotes: { (value: SetStateAction<Note[]>): void; 
                 })
             }
         });
-    return () => subscriber()
+    return subscriber;
 }
 
 export const deleteNote = (id: string, groupId: string) => {
@@ -190,12 +192,12 @@ export const uploadImage = async (title: string, uri: string | undefined) => {
     }
 }
 
-export const updateOrder = (id: string, order: number) => {
-
-    firestore()
+export const updateOrder = async (id: string, order: number) => {
+    await firestore()
         .collection('Notes').doc(id).update({
             order: order
         })
+    console.log("Updated item ", order)
 }
 
 export const autoUpdateOrder = (id: string, asc: boolean) => {

@@ -24,6 +24,7 @@ const VoiceModal = ({ modalVisible, setModalVisible }: { modalVisible: boolean, 
         Voice.onSpeechEnd = onSpeechEnd;
         Voice.onSpeechResults = onSpeechResults;
         Voice.onSpeechPartialResults = onSpeechPartialResults;
+        aaa();
         return () => {
             Voice.destroy().then(Voice.removeAllListeners)
         }
@@ -32,6 +33,10 @@ const VoiceModal = ({ modalVisible, setModalVisible }: { modalVisible: boolean, 
 
     const onSpeechEnd = () => {
         console.log("END")
+    }
+
+    const aaa = async () => {
+        console.log(await Voice.getSpeechRecognitionServices());
     }
 
 
