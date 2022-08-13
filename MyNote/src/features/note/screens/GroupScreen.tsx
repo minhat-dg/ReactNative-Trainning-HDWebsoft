@@ -185,19 +185,25 @@ const GroupScreen = ({ route, navigation }: { navigation: HomeGroupScreenProps['
         }
     }
 
-    const updateOrderList = async (data: Note[]) => {
+    const updateOrderList = async (data: Note[], from: number, to: number) => {
         setChangingOrder(true);
-        const respones = [];
+        if (from === to) return
+        from > to ? ([from, to] = [to, from]) : false
         await Promise.all(
-            data.reverse().map(async item => {
-                const respone = await updateOrder(item.id, data.indexOf(item))
-                respones.push(respone)
+            data.map(item => {
+                const idx = data.indexOf(item);
+                if (idx >= from && idx <= to) {
+                    console.log("Updating ", item.title)
+                    return updateOrder(item.id, data.length - data.indexOf(item) - 1)
+                }
             })
+            // for(let i = (from<to?from:to); i <= (from>to?from:to); i++){
+            //     return updateOrder(data[i].id, i)
+            // }
         )
         console.log("Update completed")
         setChangingOrder(false)
     }
-
 
     return (
         <SafeAreaView style={groupStyle.root}>
@@ -207,8 +213,8 @@ const GroupScreen = ({ route, navigation }: { navigation: HomeGroupScreenProps['
                     <Text style={groupStyle.header}>Pinned:</Text>
 
                     {listView ?
-                        <DraggableFlatList containerStyle={groupStyle.listContainer} key={1} onEndReached={handleLoadMore} numColumns={1} data={pinnedNotes} onDragEnd={(params: DragEndParams<Note>) => updateOrderList(params.data)} keyExtractor={(item) => item.id} renderItem={item => NoteItemList(item, handleOnPress, Tts)} />
-                        : <DraggableFlatList containerStyle={groupStyle.listContainer} key={2} onEndReached={handleLoadMore} numColumns={2} data={pinnedNotes} onDragEnd={(params: DragEndParams<Note>) => updateOrderList(params.data)} keyExtractor={(item) => item.id} renderItem={item => NoteItem(item, handleOnPress, handleOnLongPress, Tts)} />
+                        <DraggableFlatList containerStyle={groupStyle.listContainer} key={1} onEndReached={handleLoadMore} numColumns={1} data={pinnedNotes} onDragEnd={(params: DragEndParams<Note>) => updateOrderList(params.data, params.from, params.to)} keyExtractor={(item) => item.id} renderItem={item => NoteItemList(item, handleOnPress, Tts)} />
+                        : <DraggableFlatList containerStyle={groupStyle.listContainer} key={2} onEndReached={handleLoadMore} numColumns={2} data={pinnedNotes} onDragEnd={(params: DragEndParams<Note>) => updateOrderList(params.data, params.from, params.to)} keyExtractor={(item) => item.id} renderItem={item => NoteItem(item, handleOnPress, handleOnLongPress, Tts)} />
                     }
                 </View>
                 : <></>
@@ -216,8 +222,8 @@ const GroupScreen = ({ route, navigation }: { navigation: HomeGroupScreenProps['
             <View style={groupStyle.noteContainer}>
                 <Text style={groupStyle.header}>Notes:</Text>
                 {listView ?
-                    <DraggableFlatList key={1} onEndReached={handleLoadMore} containerStyle={groupStyle.listContainer} numColumns={1} data={filteredNotes} onDragEnd={(params: DragEndParams<Note>) => { setNotes(params.data); updateOrderList(params.data) }} keyExtractor={(item) => item.id} renderItem={item => NoteItemList(item, handleOnPress, Tts)} />
-                    : <DraggableFlatList key={2} onEndReached={handleLoadMore} containerStyle={groupStyle.listContainer} numColumns={2} data={filteredNotes} onDragEnd={(params: DragEndParams<Note>) => updateOrderList(params.data)} keyExtractor={(item) => item.id} renderItem={item => NoteItem(item, handleOnPress, handleOnLongPress, Tts)} />
+                    <DraggableFlatList key={1} onEndReached={handleLoadMore} containerStyle={groupStyle.listContainer} numColumns={1} data={filteredNotes} onDragEnd={(params: DragEndParams<Note>) => { setNotes(params.data); updateOrderList(params.data, params.from, params.to) }} keyExtractor={(item) => item.id} renderItem={item => NoteItemList(item, handleOnPress, Tts)} />
+                    : <DraggableFlatList key={2} onEndReached={handleLoadMore} containerStyle={groupStyle.listContainer} numColumns={2} data={filteredNotes} onDragEnd={(params: DragEndParams<Note>) => updateOrderList(params.data, params.from, params.to)} keyExtractor={(item) => item.id} renderItem={item => NoteItem(item, handleOnPress, handleOnLongPress, Tts)} />
                 }
             </View>
             <CustomFloatButton onPress={navigateToNoteScreen} />

@@ -15,7 +15,6 @@ export const getFirstPageNotes = (setNotes: { (value: SetStateAction<Note[]>): v
         .collection('Notes').where('groupId', '==', groupId).limit(limit).orderBy("order", "desc")
         .onSnapshot(querySnapshot => {
             if (querySnapshot) {
-                console.log("Update")
                 const notes: Note[] = [];
                 querySnapshot.forEach(documentSnapshot => {
                     notes.push({
@@ -197,7 +196,6 @@ export const updateOrder = async (id: string, order: number) => {
         .collection('Notes').doc(id).update({
             order: order
         })
-    console.log("Updated item ", order)
 }
 
 export const autoUpdateOrder = (id: string, asc: boolean) => {
